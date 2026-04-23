@@ -39,7 +39,7 @@ export async function refreshShiprocketTracking(localOrderId) {
     return fail("Tracking refresh is not available until Supabase is connected.");
   }
 
-  const { data, error } = await supabase.functions.invoke("refresh-shiprocket-tracking", {
+  const { data, error } = await supabase.functions.invoke("refresh-tracking", {
     body: {
       localOrderId
     }

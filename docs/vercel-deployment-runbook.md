@@ -67,7 +67,7 @@ Deploy these Supabase Edge Functions:
 supabase functions deploy create-razorpay-order
 supabase functions deploy verify-razorpay-payment
 supabase functions deploy lookup-order-tracking
-supabase functions deploy refresh-shiprocket-tracking
+supabase functions deploy refresh-tracking
 supabase functions deploy shiprocket-webhook
 ```
 
@@ -129,7 +129,7 @@ You need:
 
 Tracking can work in two ways:
 
-- manual refresh from admin using `refresh-shiprocket-tracking`
+- manual refresh from admin using `refresh-tracking`
 - automatic updates through `shiprocket-webhook`
 
 If using webhook mode, configure Shiprocket to call your deployed Supabase function URL and send the same token as `x-api-key`.

@@ -31,7 +31,7 @@ This checklist outlines the exact manual steps required from your side to take t
   supabase functions deploy create-razorpay-order
   supabase functions deploy verify-razorpay-payment
   supabase functions deploy lookup-order-tracking
-  supabase functions deploy refresh-shiprocket-tracking
+  supabase functions deploy refresh-tracking
   supabase functions deploy shiprocket-webhook
   ```
 

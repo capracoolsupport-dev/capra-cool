@@ -32,7 +32,7 @@ supabase secrets set SHIPROCKET_WEBHOOK_SECRET=optional-webhook-token
 
 ```bash
 supabase functions deploy lookup-order-tracking
-supabase functions deploy refresh-shiprocket-tracking
+supabase functions deploy refresh-tracking
 supabase functions deploy shiprocket-webhook
 ```
 
