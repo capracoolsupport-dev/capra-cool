@@ -1,3 +1,4 @@
+import { normalizeFunctionError } from "./functionErrors.js";
 import { supabase } from "./supabase.js";
 
 const razorpayScriptId = "razorpay-checkout-script";
@@ -8,22 +9,6 @@ function fail(message) {
     ok: false,
     message
   };
-}
-
-function normalizeFunctionError(error, fallback) {
-  if (!error) {
-    return fallback;
-  }
-
-  if (typeof error === "string") {
-    return error;
-  }
-
-  if (error.message) {
-    return error.message;
-  }
-
-  return fallback;
 }
 
 function injectScript(src, scriptId) {
@@ -63,7 +48,7 @@ export async function createRazorpayOrder(payload) {
   });
 
   if (error) {
-    return fail(normalizeFunctionError(error, "We could not create the payment order."));
+    return fail(await normalizeFunctionError(error, "We could not create the payment order."));
   }
 
   return data?.ok ? data : fail(data?.message || "We could not create the payment order.");
@@ -79,7 +64,7 @@ export async function verifyRazorpayPayment(payload) {
   });
 
   if (error) {
-    return fail(normalizeFunctionError(error, "We could not verify the payment."));
+    return fail(await normalizeFunctionError(error, "We could not verify the payment."));
   }
 
   return data?.ok ? data : fail(data?.message || "We could not verify the payment.");
@@ -106,7 +91,7 @@ export async function launchRazorpayCheckout({
   try {
     RazorpayConstructor = await injectScript(razorpayScriptUrl, razorpayScriptId);
   } catch (error) {
-    return fail(normalizeFunctionError(error, "We could not open Razorpay checkout."));
+    return fail(await normalizeFunctionError(error, "We could not open Razorpay checkout."));
   }
 
   if (!RazorpayConstructor) {

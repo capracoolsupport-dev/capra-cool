@@ -1,3 +1,4 @@
+import { normalizeFunctionError } from "./functionErrors.js";
 import { supabase } from "./supabase.js";
 
 function fail(message) {
@@ -5,14 +6,6 @@ function fail(message) {
     ok: false,
     message
   };
-}
-
-function normalizeError(error, fallback) {
-  if (!error) {
-    return fallback;
-  }
-
-  return error.message || fallback;
 }
 
 export async function lookupOrderTracking(orderNumber, email) {
@@ -28,7 +21,7 @@ export async function lookupOrderTracking(orderNumber, email) {
   });
 
   if (error) {
-    return fail(normalizeError(error, "We could not look up that order right now."));
+    return fail(await normalizeFunctionError(error, "We could not look up that order right now."));
   }
 
   return data?.ok ? data : fail(data?.message || "We could not look up that order right now.");
@@ -46,7 +39,7 @@ export async function refreshShiprocketTracking(localOrderId) {
   });
 
   if (error) {
-    return fail(normalizeError(error, "We could not refresh Shiprocket tracking."));
+    return fail(await normalizeFunctionError(error, "We could not refresh Shiprocket tracking."));
   }
 
   return data?.ok ? data : fail(data?.message || "We could not refresh Shiprocket tracking.");
