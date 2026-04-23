@@ -34,6 +34,15 @@ export default function CheckoutPage() {
     }
   }, [data?.settings?.brandName]);
 
+  useEffect(() => {
+    if (successOrder) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  }, [successOrder]);
+
   if (!data) {
     return (
       <section className="page-section">

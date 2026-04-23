@@ -1,4 +1,4 @@
-import { Link, useOutletContext, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import RatingStars from "../components/RatingStars.jsx";
 import Icon from "../components/Icons.jsx";
@@ -6,7 +6,8 @@ import { formatPrice } from "../lib/formatting.js";
 
 export default function HomePage() {
   const { data, storefrontState } = useOutletContext();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category") || "";
 
   if (!data) {
@@ -18,6 +19,7 @@ export default function HomePage() {
   }
 
   const settings = data.settings;
+  const selectedCategoryData = data.categories.find((category) => category.slug === selectedCategory);
   const filteredProducts = selectedCategory
     ? data.products.filter((product) => product.category?.slug === selectedCategory)
     : data.products;
@@ -32,6 +34,13 @@ export default function HomePage() {
   const heroPrimary = featuredVisible[0] || data.products[0];
   const heroSecondary = featuredVisible[1] || data.products[1] || heroPrimary;
   const stickyProduct = heroPrimary;
+  const updateCategory = (nextCategory) => {
+    const target = nextCategory
+      ? `/?category=${encodeURIComponent(nextCategory)}#featured`
+      : "/#featured";
+
+    navigate(target);
+  };
 
   return (
     <>
@@ -45,9 +54,9 @@ export default function HomePage() {
             photography at the center.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href={settings.heroPrimaryCtaHref}>
+            <Link className="button button-primary" to={settings.heroPrimaryCtaHref}>
               {settings.heroPrimaryCtaLabel}
-            </a>
+            </Link>
             <Link className="button button-secondary" to="/customize">
               {settings.heroSecondaryCtaLabel}
             </Link>
@@ -105,7 +114,7 @@ export default function HomePage() {
                 key={category.slug}
                 onClick={() => {
                   const nextCategory = selected ? "" : category.slug;
-                  setSearchParams(nextCategory ? { category: nextCategory } : {});
+                  updateCategory(nextCategory);
                 }}
                 style={{
                   "--category-accent": category.accentColor,
@@ -128,6 +137,29 @@ export default function HomePage() {
           <p className="section-lead">
             A curated edit of handmade favorites with clear pricing, warm reviews, and easy discovery.
           </p>
+        </div>
+
+        <div className="collection-context-card" aria-live="polite">
+          <div>
+            <span>{selectedCategoryData ? "Filtered collection" : "All handmade drops"}</span>
+            <strong>
+              {selectedCategoryData
+                ? `${selectedCategoryData.name} products`
+                : "Showing every available category"}
+            </strong>
+            <p>
+              {filteredProducts.length} product{filteredProducts.length === 1 ? "" : "s"} ready to browse.
+            </p>
+          </div>
+          {selectedCategoryData ? (
+            <button className="button button-secondary" onClick={() => updateCategory("")} type="button">
+              Clear filter
+            </button>
+          ) : (
+            <Link className="button button-secondary" to="/#featured">
+              Browse products
+            </Link>
+          )}
         </div>
 
         <div className="product-grid editorial-grid">

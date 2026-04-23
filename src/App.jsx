@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ScrollManager from "./components/ScrollManager.jsx";
 import SiteLayout from "./components/SiteLayout.jsx";
 import { useStorefrontData } from "./hooks/useStorefrontData.js";
 import AboutPage from "./pages/AboutPage.jsx";
@@ -75,6 +76,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollManager />
       <Routes>
         <Route path="/admin" element={<AdminPage />} />
         <Route

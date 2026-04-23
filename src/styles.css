@@ -2331,6 +2331,10 @@ h3 {
 
 /* UX conversion improvements */
 
+[id] {
+  scroll-margin-top: 7rem;
+}
+
 .checkout-header-assurance {
   display: none;
   align-items: center;
@@ -2412,6 +2416,47 @@ h3 {
   border-radius: 50%;
   background: var(--accent-warm);
   flex: 0 0 auto;
+}
+
+.collection-context-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  padding: 1rem;
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 12px 28px rgba(84, 67, 60, 0.08);
+}
+
+.collection-context-card div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.collection-context-card span {
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.collection-context-card strong {
+  color: var(--text);
+  font-family: "Noto Serif", serif;
+  font-size: 1.25rem;
+}
+
+.collection-context-card p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.collection-context-card .button {
+  min-height: 2.8rem;
 }
 
 .gallery-thumbnails {
