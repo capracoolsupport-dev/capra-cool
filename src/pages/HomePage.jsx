@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard.jsx";
 import RatingStars from "../components/RatingStars.jsx";
 import Icon from "../components/Icons.jsx";
@@ -7,7 +6,8 @@ import { formatPrice } from "../lib/formatting.js";
 
 export default function HomePage() {
   const { data, storefrontState } = useOutletContext();
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedCategory = searchParams.get("category") || "";
 
   if (!data) {
     return (
@@ -103,11 +103,10 @@ export default function HomePage() {
               <button
                 className={`category-pill ${selected ? "is-selected" : ""}`}
                 key={category.slug}
-                onClick={() =>
-                  setSelectedCategory((current) =>
-                    current === category.slug ? "" : category.slug
-                  )
-                }
+                onClick={() => {
+                  const nextCategory = selected ? "" : category.slug;
+                  setSearchParams(nextCategory ? { category: nextCategory } : {});
+                }}
                 style={{
                   "--category-accent": category.accentColor,
                   "--category-tint": category.tintColor

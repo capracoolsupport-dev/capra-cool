@@ -12,6 +12,12 @@ function createInitialCustomer() {
   };
 }
 
+const checkoutAssurances = [
+  "Secure Razorpay payment",
+  "Order support before dispatch",
+  "Gift notes accepted"
+];
+
 export default function CheckoutPage() {
   const { data, cartItems, clearCart, removeFromCart, updateCartQuantity } = useOutletContext();
   const [customer, setCustomer] = useState(createInitialCustomer);
@@ -132,9 +138,9 @@ export default function CheckoutPage() {
       <section className="page-section">
         <div className="checkout-success-card">
           <p className="eyebrow">Payment confirmed</p>
-          <h1>Order placed successfully.</h1>
+          <h1>Your handmade order is confirmed.</h1>
           <p>
-            Order <strong>{successOrder.orderNumber}</strong> is now recorded in the backend.
+            Order <strong>{successOrder.orderNumber}</strong> is saved. Keep this number for tracking and support.
           </p>
           <div className="checkout-success-grid">
             <div>
@@ -180,6 +186,11 @@ export default function CheckoutPage() {
           <p className="section-lead">
             Review your order, add customer details, and complete the payment in the Razorpay checkout window.
           </p>
+          <div className="checkout-assurance-row" aria-label="Checkout assurances">
+            {checkoutAssurances.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
         </div>
 
         <div className="checkout-layout">
@@ -227,7 +238,11 @@ export default function CheckoutPage() {
                 <span>Subtotal</span>
                 <strong>{formatPrice(total)}</strong>
               </div>
-              <p>Razorpay will open in a secure popup after you continue.</p>
+              <div className="cart-total-row">
+                <span>Shipping</span>
+                <strong>Confirmed before dispatch</strong>
+              </div>
+              <p>Razorpay will open in a secure popup. We will use your email for order updates and tracking.</p>
             </div>
           </div>
 
@@ -241,8 +256,9 @@ export default function CheckoutPage() {
 
             <div className="admin-form-grid">
               <label className="field field-full">
-                <span>Full Name</span>
+                <span>Full Name *</span>
                 <input
+                  autoComplete="name"
                   onChange={(event) => updateCustomer("name", event.target.value)}
                   placeholder="Your full name"
                   required
@@ -252,8 +268,9 @@ export default function CheckoutPage() {
               </label>
 
               <label className="field">
-                <span>Email</span>
+                <span>Email *</span>
                 <input
+                  autoComplete="email"
                   onChange={(event) => updateCustomer("email", event.target.value)}
                   placeholder="you@example.com"
                   required
@@ -263,17 +280,20 @@ export default function CheckoutPage() {
               </label>
 
               <label className="field">
-                <span>Phone</span>
+                <span>Phone (optional)</span>
                 <input
+                  autoComplete="tel"
+                  inputMode="tel"
                   onChange={(event) => updateCustomer("phone", event.target.value)}
                   placeholder="Optional phone number"
                   type="tel"
                   value={customer.phone}
                 />
+                <small>Helpful if courier support needs a quick delivery clarification.</small>
               </label>
 
               <label className="field field-full">
-                <span>Order Notes</span>
+                <span>Order Notes (optional)</span>
                 <textarea
                   onChange={(event) => updateCustomer("notes", event.target.value)}
                   placeholder="Color preference, gifting note, or delivery help"
@@ -286,6 +306,7 @@ export default function CheckoutPage() {
             <button className="button button-primary button-wide" disabled={busy} type="submit">
               {busy ? "Preparing Razorpay..." : `Pay ${formatPrice(total)}`}
             </button>
+            <p className="checkout-form-note">No account is required. You can track the order with your order number and email.</p>
 
             <p className={`form-status ${status.tone === "error" ? "is-error" : ""}`}>{status.message}</p>
           </form>

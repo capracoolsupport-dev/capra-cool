@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { formatPrice } from "../lib/formatting";
 import { submitNewsletterSignup } from "../lib/storefrontApi";
 import Icon from "./Icons.jsx";
@@ -12,6 +12,45 @@ const navLinks = [
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact Us" }
 ];
+
+const searchSuggestions = [
+  "gifts under 500",
+  "hair accessories",
+  "flowers",
+  "kids",
+  "winter"
+];
+
+function buildSearchText(product) {
+  return [
+    product.name,
+    product.tagline,
+    product.description,
+    product.reviewSnippet,
+    product.badgeText,
+    product.category?.name,
+    ...(product.highlights || [])
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function matchesIntent(product, query) {
+  if (query.includes("under 500") || query.includes("under rs 500") || query.includes("under inr 500")) {
+    return product.priceInr <= 500;
+  }
+
+  if (query.includes("hair")) {
+    return buildSearchText(product).includes("hair") || product.category?.slug === "women" || product.category?.slug === "kids";
+  }
+
+  if (query.includes("gift")) {
+    return product.category?.slug === "gifting" || buildSearchText(product).includes("gift");
+  }
+
+  return false;
+}
 
 function getBrandMark(brandName) {
   const words = String(brandName || "")
@@ -35,6 +74,7 @@ export default function SiteLayout({
   removeFromCart,
   clearCart
 }) {
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -50,8 +90,10 @@ export default function SiteLayout({
   const brandSubline = settings?.brandSubline || "trendyspicestore.com";
   const brandMark = getBrandMark(brandName);
   const products = data?.products || [];
+  const categories = data?.categories || [];
   const announcements = data?.announcements || [];
   const overlayOpen = mobileMenuOpen || searchOpen || cartOpen;
+  const isCheckoutRoute = location.pathname === "/checkout";
 
   useEffect(() => {
     document.body.classList.toggle("overlay-open", overlayOpen);
@@ -79,13 +121,7 @@ export default function SiteLayout({
   const normalizedQuery = deferredSearchValue.trim().toLowerCase();
   const searchResults = normalizedQuery
     ? products.filter((product) => {
-        return [
-          product.name,
-          product.tagline,
-          product.category?.name
-        ]
-          .filter(Boolean)
-          .some((value) => value.toLowerCase().includes(normalizedQuery));
+        return buildSearchText(product).includes(normalizedQuery) || matchesIntent(product, normalizedQuery);
       })
     : products.slice(0, 6);
 
@@ -129,7 +165,7 @@ export default function SiteLayout({
         </div>
       </div>
 
-      <header className="site-header">
+      <header className={`site-header ${isCheckoutRoute ? "is-checkout-header" : ""}`}>
         <div className="header-shell">
           <Link className="brand-lockup" to="/">
             <span className="brand-mark">{brandMark}</span>
@@ -139,46 +175,55 @@ export default function SiteLayout({
             </span>
           </Link>
 
-          <nav className="desktop-nav" aria-label="Primary">
-            {navLinks.map((link) => (
-              <NavLink
-                className={({ isActive }) => (isActive ? "is-active" : "")}
-                key={link.label}
-                to={link.to}
-                end={link.end}
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
+          {isCheckoutRoute ? (
+            <div className="checkout-header-assurance">
+              <span>Secure Razorpay checkout</span>
+              <Link to="/contact">Need help?</Link>
+            </div>
+          ) : (
+            <>
+              <nav className="desktop-nav" aria-label="Primary">
+                {navLinks.map((link) => (
+                  <NavLink
+                    className={({ isActive }) => (isActive ? "is-active" : "")}
+                    key={link.label}
+                    to={link.to}
+                    end={link.end}
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </nav>
 
-          <div className="header-actions">
-            <button
-              aria-label="Open search"
-              className="icon-button"
-              onClick={() => setSearchOpen(true)}
-              type="button"
-            >
-              <Icon name="search" />
-            </button>
-            <button
-              aria-label="Open cart"
-              className="icon-button cart-button"
-              onClick={() => setCartOpen(true)}
-              type="button"
-            >
-              <Icon name="cart" />
-              <span className="cart-count">{cartCount}</span>
-            </button>
-            <button
-              aria-label="Open menu"
-              className="icon-button mobile-only"
-              onClick={() => setMobileMenuOpen(true)}
-              type="button"
-            >
-              <Icon name="menu" />
-            </button>
-          </div>
+              <div className="header-actions">
+                <button
+                  aria-label="Open search"
+                  className="icon-button"
+                  onClick={() => setSearchOpen(true)}
+                  type="button"
+                >
+                  <Icon name="search" />
+                </button>
+                <button
+                  aria-label="Open cart"
+                  className="icon-button cart-button"
+                  onClick={() => setCartOpen(true)}
+                  type="button"
+                >
+                  <Icon name="cart" />
+                  <span className="cart-count">{cartCount}</span>
+                </button>
+                <button
+                  aria-label="Open menu"
+                  className="icon-button mobile-only"
+                  onClick={() => setMobileMenuOpen(true)}
+                  type="button"
+                >
+                  <Icon name="menu" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </header>
 
@@ -208,6 +253,22 @@ export default function SiteLayout({
                 </NavLink>
               ))}
             </nav>
+            {categories.length ? (
+              <div className="mobile-category-block">
+                <p className="eyebrow">Shop by category</p>
+                <div className="mobile-category-grid">
+                  {categories.map((category) => (
+                    <Link
+                      key={category.slug}
+                      onClick={() => setMobileMenuOpen(false)}
+                      to={`/?category=${encodeURIComponent(category.slug)}#featured`}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </aside>
         </div>
       ) : null}
@@ -242,6 +303,14 @@ export default function SiteLayout({
               />
             </label>
 
+            <div className="search-suggestion-row" aria-label="Popular searches">
+              {searchSuggestions.map((suggestion) => (
+                <button key={suggestion} onClick={() => setSearchValue(suggestion)} type="button">
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+
             <div className="search-results">
               {searchResults.length ? (
                 searchResults.map((product) => (
@@ -255,7 +324,7 @@ export default function SiteLayout({
                     <div>
                       <p className="search-result-category">{product.category?.name}</p>
                       <strong>{product.name}</strong>
-                      <span>{formatPrice(product.priceInr)}</span>
+                      <span>{formatPrice(product.priceInr)} - {product.reviewCount} reviews</span>
                     </div>
                   </Link>
                 ))
@@ -352,38 +421,42 @@ export default function SiteLayout({
         />
       </main>
 
-      <footer className="site-footer">
+      <footer className={`site-footer ${isCheckoutRoute ? "checkout-footer" : ""}`}>
         <div className="footer-stack">
           <div>
             <p className="eyebrow">{brandName}</p>
             <h2>Handmade crochet with a calm, polished shopping experience from first glance to checkout.</h2>
           </div>
 
-          <div className="footer-links">
-            {navLinks.map((link) => (
-              <Link key={link.label} to={link.to}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-            <label className="field">
-              <span>Contact Email Form</span>
-              <div className="newsletter-row">
-                <input
-                  onChange={(event) => setNewsletterValue(event.target.value)}
-                  placeholder="Enter your email"
-                  type="email"
-                  value={newsletterValue}
-                />
-                <button className="button button-secondary" disabled={newsletterBusy} type="submit">
-                  {newsletterBusy ? "Joining..." : "Join"}
-                </button>
+          {!isCheckoutRoute ? (
+            <>
+              <div className="footer-links">
+                {navLinks.map((link) => (
+                  <Link key={link.label} to={link.to}>
+                    {link.label}
+                  </Link>
+                ))}
               </div>
-            </label>
-            <p className="form-status">{newsletterStatus}</p>
-          </form>
+
+              <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+                <label className="field">
+                  <span>Contact Email Form</span>
+                  <div className="newsletter-row">
+                    <input
+                      onChange={(event) => setNewsletterValue(event.target.value)}
+                      placeholder="Enter your email"
+                      type="email"
+                      value={newsletterValue}
+                    />
+                    <button className="button button-secondary" disabled={newsletterBusy} type="submit">
+                      {newsletterBusy ? "Joining..." : "Join"}
+                    </button>
+                  </div>
+                </label>
+                <p className="form-status">{newsletterStatus}</p>
+              </form>
+            </>
+          ) : null}
 
           <div className="footer-meta">
             <p>

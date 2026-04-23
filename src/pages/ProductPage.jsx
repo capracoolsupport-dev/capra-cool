@@ -4,6 +4,40 @@ import ProductCard from "../components/ProductCard.jsx";
 import RatingStars from "../components/RatingStars.jsx";
 import { formatPrice, getRelatedProducts } from "../lib/formatting";
 
+const productConfidence = [
+  {
+    title: "Dispatch estimate",
+    detail: "Usually ready to ship in 2-4 working days after payment."
+  },
+  {
+    title: "Gift-ready packing",
+    detail: "Packed neatly for gifting, storage, and safe delivery."
+  },
+  {
+    title: "Support before dispatch",
+    detail: "Share color notes or gifting instructions at checkout."
+  }
+];
+
+function buildCareNotes(product) {
+  const material = product.highlights?.[0] || "Soft crochet yarn";
+
+  return [
+    {
+      title: "Material feel",
+      detail: `${material} with a handmade finish and soft structure.`
+    },
+    {
+      title: "Care guidance",
+      detail: "Spot clean gently and air dry flat to protect the crochet shape."
+    },
+    {
+      title: "Custom order help",
+      detail: `Want a different color or size? Use the custom order form for ${product.name.toLowerCase()}.`
+    }
+  ];
+}
+
 export default function ProductPage() {
   const { slug } = useParams();
   const { data, addToCart } = useOutletContext();
@@ -11,6 +45,19 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [statusMessage, setStatusMessage] = useState("");
   const [touchStart, setTouchStart] = useState(0);
+  const product = data?.products.find((item) => item.slug === slug);
+
+  useEffect(() => {
+    if (product && data?.settings?.brandName) {
+      document.title = `${product.name} | ${data.settings.brandName}`;
+    }
+  }, [data?.settings?.brandName, product]);
+
+  useEffect(() => {
+    setActiveIndex(0);
+    setQuantity(1);
+    setStatusMessage("");
+  }, [slug]);
 
   if (!data) {
     return (
@@ -20,14 +67,6 @@ export default function ProductPage() {
     );
   }
 
-  const product = data.products.find((item) => item.slug === slug);
-
-  useEffect(() => {
-    if (product) {
-      document.title = `${product.name} | ${data.settings.brandName}`;
-    }
-  }, [data.settings.brandName, product]);
-
   if (!product) {
     return <Navigate replace to="/" />;
   }
@@ -35,6 +74,7 @@ export default function ProductPage() {
   const gallery = product.media.length ? product.media : [{ url: product.primaryImage, altText: product.name }];
   const related = getRelatedProducts(data.products, product.slug);
   const hasGalleryControls = gallery.length > 1;
+  const careNotes = buildCareNotes(product);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -102,15 +142,17 @@ export default function ProductPage() {
             </div>
 
             {hasGalleryControls ? (
-              <div className="gallery-dots">
+              <div className="gallery-thumbnails" aria-label="Product images">
                 {gallery.map((item, index) => (
                   <button
                     aria-label={`Show image ${index + 1}`}
-                    className={`gallery-dot ${index === activeIndex ? "is-active" : ""}`}
+                    className={`gallery-thumb ${index === activeIndex ? "is-active" : ""}`}
                     key={item.id || `${product.slug}-${index}`}
                     onClick={() => setActiveIndex(index)}
                     type="button"
-                  />
+                  >
+                    <img alt="" src={item.url} />
+                  </button>
                 ))}
               </div>
             ) : null}
@@ -132,6 +174,15 @@ export default function ProductPage() {
                 <div className="highlight-card" key={highlight}>
                   <strong>{highlight}</strong>
                 </div>
+                ))}
+            </div>
+
+            <div className="product-confidence-grid" aria-label="Purchase confidence details">
+              {productConfidence.map((item) => (
+                <div className="product-confidence-card" key={item.title}>
+                  <span>{item.title}</span>
+                  <strong>{item.detail}</strong>
+                </div>
               ))}
             </div>
 
@@ -151,8 +202,33 @@ export default function ProductPage() {
             <button className="button button-primary button-wide" onClick={handleAddToCart} type="button">
               Add to Cart
             </button>
-            <p className="form-status">{statusMessage}</p>
+            {statusMessage ? (
+              <div className="add-to-cart-status">
+                <p>{statusMessage}</p>
+                <Link className="button button-secondary" to="/checkout">
+                  Review cart
+                </Link>
+              </div>
+            ) : null}
           </div>
+        </div>
+      </section>
+
+      <section className="page-section product-detail-section">
+        <div className="section-heading left-aligned">
+          <p className="eyebrow">Before you buy</p>
+          <h2>Material, care, and custom support</h2>
+          <p className="section-lead">
+            The small details shoppers usually ask about before buying a handmade piece.
+          </p>
+        </div>
+        <div className="product-care-grid">
+          {careNotes.map((item) => (
+            <article className="product-care-card" key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.detail}</p>
+            </article>
+          ))}
         </div>
       </section>
 
