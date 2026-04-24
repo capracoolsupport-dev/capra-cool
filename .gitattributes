@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+# Common binary assets should never be line-normalized.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
