@@ -125,7 +125,7 @@ export async function launchRazorpayCheckout({
         order_number: orderResult.order.orderNumber
       },
       theme: {
-        color: "#8e3f54"
+        color: "#C74B16"
       },
       modal: {
         ondismiss: () => {

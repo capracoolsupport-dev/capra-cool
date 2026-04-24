@@ -1,8 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useOutletContext, useParams } from "react-router-dom";
+import Button from "../components/Button.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import RatingStars from "../components/RatingStars.jsx";
+import { ProductPageSkeleton } from "../components/Skeletons.jsx";
 import { formatPrice, getRelatedProducts } from "../lib/formatting";
+
+function QuantitySelector({ quantity, onDecrease, onIncrease }) {
+  return (
+    <div className="quantity-selector">
+      <button onClick={onDecrease} type="button">
+        -
+      </button>
+      <span>{quantity}</span>
+      <button onClick={onIncrease} type="button">
+        +
+      </button>
+    </div>
+  );
+}
 
 export default function ProductPage() {
   const { slug } = useParams();
@@ -26,11 +42,7 @@ export default function ProductPage() {
   }, [slug]);
 
   if (!data) {
-    return (
-      <section className="page-section">
-        <div className="loading-card">Loading product details...</div>
-      </section>
-    );
+    return <ProductPageSkeleton />;
   }
 
   if (!product) {
@@ -142,24 +154,42 @@ export default function ProductPage() {
               ))}
             </div>
 
-            <div className="quantity-card">
+            <div className="quantity-card product-purchase-card">
               <span className="quantity-label">Quantity</span>
-              <div className="quantity-selector">
-                <button onClick={() => setQuantity((current) => Math.max(1, current - 1))} type="button">
-                  -
-                </button>
-                <span>{quantity}</span>
-                <button onClick={() => setQuantity((current) => current + 1)} type="button">
-                  +
-                </button>
-              </div>
+              <QuantitySelector
+                onDecrease={() => setQuantity((current) => Math.max(1, current - 1))}
+                onIncrease={() => setQuantity((current) => current + 1)}
+                quantity={quantity}
+              />
+              <Button onClick={handleAddToCart} type="button" wide>
+                Add to Cart
+              </Button>
             </div>
 
-            <button className="button button-primary button-wide" onClick={handleAddToCart} type="button">
-              Add to Cart
-            </button>
-            <p className="form-status">{statusMessage}</p>
+            {statusMessage ? (
+              <div className="add-to-cart-status" role="status">
+                <p>{statusMessage}</p>
+              </div>
+            ) : null}
           </div>
+        </div>
+
+        <div className="product-sticky-bar">
+          <div className="product-sticky-summary">
+            <span>{formatPrice(product.priceInr)}</span>
+            <strong>{product.name}</strong>
+          </div>
+          <div className="product-sticky-actions">
+            <QuantitySelector
+              onDecrease={() => setQuantity((current) => Math.max(1, current - 1))}
+              onIncrease={() => setQuantity((current) => current + 1)}
+              quantity={quantity}
+            />
+            <Button onClick={handleAddToCart} type="button">
+              Add to Cart
+            </Button>
+          </div>
+          {statusMessage ? <p className="product-sticky-status">{statusMessage}</p> : null}
         </div>
       </section>
 
@@ -185,7 +215,7 @@ export default function ProductPage() {
           <p className="eyebrow">You may also like</p>
           <h2>Related Handmade Picks</h2>
         </div>
-        <div className="product-grid">
+        <div className="product-grid editorial-grid">
           {related.map((item) => (
             <ProductCard badge="Related" key={item.slug} product={item} />
           ))}

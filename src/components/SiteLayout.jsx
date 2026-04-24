@@ -1,7 +1,10 @@
-import { useDeferredValue, useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import Button from "./Button.jsx";
+import Header from "./Header.jsx";
 import { formatPrice } from "../lib/formatting";
 import Icon from "./Icons.jsx";
+import MobileMenu from "./MobileMenu.jsx";
 
 const navLinks = [
   { to: "/", label: "Home", end: true },
@@ -10,51 +13,6 @@ const navLinks = [
   { to: "/customize", label: "Custom Orders" },
   { to: "/contact", label: "Contact" }
 ];
-
-function buildSearchText(product) {
-  return [
-    product.name,
-    product.tagline,
-    product.description,
-    product.reviewSnippet,
-    product.badgeText,
-    product.category?.name,
-    ...(product.highlights || [])
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-}
-
-function matchesIntent(product, query) {
-  if (query.includes("under 500") || query.includes("under rs 500") || query.includes("under inr 500")) {
-    return product.priceInr <= 500;
-  }
-
-  if (query.includes("hair")) {
-    return buildSearchText(product).includes("hair") || product.category?.slug === "women" || product.category?.slug === "kids";
-  }
-
-  if (query.includes("gift")) {
-    return product.category?.slug === "gifting" || buildSearchText(product).includes("gift");
-  }
-
-  return false;
-}
-
-function getBrandMark(brandName) {
-  const words = String(brandName || "")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-
-  if (words.length >= 2) {
-    return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
-  }
-
-  const compact = String(brandName || "").replace(/[^a-zA-Z]/g, "");
-  return (compact.slice(0, 2) || "TS").toUpperCase();
-}
 
 export default function SiteLayout({
   storefrontState,
@@ -66,19 +24,13 @@ export default function SiteLayout({
 }) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const deferredSearchValue = useDeferredValue(searchValue);
 
   const data = storefrontState.data;
   const settings = data?.settings;
   const brandName = settings?.brandName || "Trendy Spice Store";
-  const brandSubline = settings?.brandSubline || "";
-  const brandMark = getBrandMark(brandName);
-  const products = data?.products || [];
   const categories = data?.categories || [];
-  const overlayOpen = mobileMenuOpen || searchOpen || cartOpen;
+  const overlayOpen = mobileMenuOpen || cartOpen;
   const isCheckoutRoute = location.pathname === "/checkout";
 
   useEffect(() => {
@@ -104,13 +56,6 @@ export default function SiteLayout({
     }
   }, [storefrontState.error, storefrontState.source]);
 
-  const normalizedQuery = deferredSearchValue.trim().toLowerCase();
-  const searchResults = normalizedQuery
-    ? products.filter((product) => {
-        return buildSearchText(product).includes(normalizedQuery) || matchesIntent(product, normalizedQuery);
-      })
-    : products.slice(0, 6);
-
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce(
     (sum, item) => sum + item.priceInr * item.quantity,
@@ -123,167 +68,20 @@ export default function SiteLayout({
         Skip to content
       </a>
 
-      <header className={`site-header ${isCheckoutRoute ? "is-checkout-header" : ""}`}>
-        <div className="header-shell">
-          <Link className="brand-lockup" to="/">
-            <span className="brand-mark">{brandMark}</span>
-            <span className="brand-copy">
-              <strong>{brandName}</strong>
-              {brandSubline ? <small>{brandSubline}</small> : null}
-            </span>
-          </Link>
-
-          {isCheckoutRoute ? (
-            <div className="checkout-header-assurance">
-              <span>Secure Razorpay checkout</span>
-              <Link to="/contact">Need help?</Link>
-            </div>
-          ) : (
-            <>
-              <nav className="desktop-nav" aria-label="Primary">
-                {navLinks.map((link) => (
-                  <NavLink
-                    className={({ isActive }) => (isActive ? "is-active" : "")}
-                    key={link.label}
-                    to={link.to}
-                    end={link.end}
-                  >
-                    {link.label}
-                  </NavLink>
-                ))}
-              </nav>
-
-              <div className="header-actions">
-                <button
-                  aria-label="Open search"
-                  className="icon-button"
-                  onClick={() => setSearchOpen(true)}
-                  type="button"
-                >
-                  <Icon name="search" />
-                </button>
-                <button
-                  aria-label="Open cart"
-                  className="icon-button cart-button"
-                  onClick={() => setCartOpen(true)}
-                  type="button"
-                >
-                  <Icon name="cart" />
-                  <span className="cart-count">{cartCount}</span>
-                </button>
-                <button
-                  aria-label="Open menu"
-                  className="icon-button mobile-only"
-                  onClick={() => setMobileMenuOpen(true)}
-                  type="button"
-                >
-                  <Icon name="menu" />
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </header>
+      <Header
+        brandName={brandName}
+        cartCount={cartCount}
+        onOpenCart={() => setCartOpen(true)}
+        onOpenMenu={() => setMobileMenuOpen(true)}
+      />
 
       {mobileMenuOpen ? (
-        <div className="overlay-shell">
-          <div className="overlay-backdrop" onClick={() => setMobileMenuOpen(false)} />
-          <aside className="mobile-menu-panel">
-            <div className="overlay-head">
-              <strong>Browse</strong>
-              <button
-                aria-label="Close menu"
-                className="icon-button"
-                onClick={() => setMobileMenuOpen(false)}
-                type="button"
-              >
-                <Icon name="close" />
-              </button>
-            </div>
-            <nav className="mobile-nav" aria-label="Mobile navigation">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.label}
-                  onClick={() => setMobileMenuOpen(false)}
-                  to={link.to}
-                >
-                  {link.label}
-                </NavLink>
-              ))}
-            </nav>
-            {categories.length ? (
-              <div className="mobile-category-block">
-                <p className="eyebrow">Shop by category</p>
-                <div className="mobile-category-grid">
-                  {categories.map((category) => (
-                    <Link
-                      key={category.slug}
-                      onClick={() => setMobileMenuOpen(false)}
-                      to={`/?category=${encodeURIComponent(category.slug)}#featured`}
-                    >
-                      {category.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </aside>
-        </div>
-      ) : null}
-
-      {searchOpen ? (
-        <div className="overlay-shell">
-          <div className="overlay-backdrop" onClick={() => setSearchOpen(false)} />
-          <aside className="drawer-panel">
-            <div className="overlay-head">
-              <div>
-                <p className="eyebrow">Search</p>
-                <h2>Find handmade crochet pieces quickly</h2>
-              </div>
-              <button
-                aria-label="Close search"
-                className="icon-button"
-                onClick={() => setSearchOpen(false)}
-                type="button"
-              >
-                <Icon name="close" />
-              </button>
-            </div>
-
-            <label className="search-field">
-              <span className="sr-only">Search products</span>
-              <input
-                autoFocus
-                onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search products..."
-                type="search"
-                value={searchValue}
-              />
-            </label>
-
-            <div className="search-results">
-              {searchResults.length ? (
-                searchResults.map((product) => (
-                  <Link
-                    className="search-result-card"
-                    key={product.slug}
-                    onClick={() => setSearchOpen(false)}
-                    to={`/products/${product.slug}`}
-                  >
-                    <img alt={product.name} loading="lazy" src={product.primaryImage} />
-                    <div>
-                      <p className="search-result-category">{product.category?.name}</p>
-                      <strong>{product.name}</strong>
-                      <span>{formatPrice(product.priceInr)} - {product.reviewCount} reviews</span>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <p className="empty-state">No products matched that search.</p>
-              )}
-            </div>
-          </aside>
-        </div>
+        <MobileMenu
+          brandName={brandName}
+          categories={categories}
+          navLinks={navLinks}
+          onClose={() => setMobileMenuOpen(false)}
+        />
       ) : null}
 
       {cartOpen ? (
@@ -344,9 +142,9 @@ export default function SiteLayout({
                 <span>Total</span>
                 <strong>{formatPrice(cartTotal)}</strong>
               </div>
-              <Link className="button button-primary button-wide" onClick={() => setCartOpen(false)} to="/checkout">
+              <Button onClick={() => setCartOpen(false)} to="/checkout" wide>
                 Proceed to Checkout
-              </Link>
+              </Button>
             </div>
           </aside>
         </div>

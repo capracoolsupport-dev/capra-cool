@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollManager from "./components/ScrollManager.jsx";
+import ProtectedAdminLayout from "./components/ProtectedAdminLayout.jsx";
 import SiteLayout from "./components/SiteLayout.jsx";
 import { useStorefrontData } from "./hooks/useStorefrontData.js";
 import AboutPage from "./pages/AboutPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
+import AdminLoginPage from "./pages/AdminLoginPage.jsx";
+import AdminProductEditorPage from "./pages/AdminProductEditorPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import CustomizePage from "./pages/CustomizePage.jsx";
@@ -78,7 +81,11 @@ export default function App() {
     <BrowserRouter>
       <ScrollManager />
       <Routes>
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route element={<ProtectedAdminLayout />}>
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/products/new" element={<AdminProductEditorPage />} />
+        </Route>
         <Route
           element={
             <SiteLayout

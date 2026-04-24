@@ -428,6 +428,7 @@ create table if not exists public.products (
   slug text not null unique,
   name text not null,
   price_inr numeric(10, 2) not null check (price_inr >= 0),
+  stock_quantity integer not null default 0 check (stock_quantity >= 0),
   rating numeric(2, 1) not null default 0 check (rating >= 0 and rating <= 5),
   review_count integer not null default 0 check (review_count >= 0),
   review_snippet text,

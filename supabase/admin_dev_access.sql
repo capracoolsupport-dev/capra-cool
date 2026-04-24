@@ -2,6 +2,8 @@
 -- This file opens broad browser-side CRUD access so the in-app admin page can
 -- manage storefront content and read form submissions directly with the anon key.
 -- Do not keep these policies enabled in production.
+-- Use supabase/admin_production_access.sql when you are ready to switch to
+-- authenticated admin-only writes.
 
 drop policy if exists "Dev admin full access store settings" on public.store_settings;
 create policy "Dev admin full access store settings"

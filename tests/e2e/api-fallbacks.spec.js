@@ -8,7 +8,7 @@ test.describe("API Error Fallbacks", () => {
 
     await contactForm.getByLabel("Name").fill("Playwright Tester");
     await contactForm.getByLabel("Email").fill("tester@example.com");
-    await contactForm.getByLabel("Message").fill("This is a mock fallback test.");
+    await contactForm.getByRole("textbox", { name: "Message" }).fill("This is a mock fallback test.");
 
     await contactForm.getByRole("button", { name: "Send Message" }).click();
     

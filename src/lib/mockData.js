@@ -307,6 +307,7 @@ const products = productSeeds.map((product, index) => {
     slug: product.slug,
     name: product.name,
     priceInr: product.price,
+    stockQuantity: Math.max(2, 18 - index * 2),
     rating: product.rating,
     reviewCount: product.reviewCount,
     reviewSnippet: product.reviewSnippet,

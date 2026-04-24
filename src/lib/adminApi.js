@@ -7,10 +7,11 @@ function fail(message) {
   };
 }
 
-function succeed(message) {
+function succeed(message, data = null) {
   return {
     ok: true,
-    message
+    message,
+    data
   };
 }
 
@@ -46,7 +47,6 @@ export async function loadAdminDashboard() {
     productMediaResult,
     reviewsResult,
     ordersResult,
-    newsletterResult,
     contactResult,
     customOrdersResult
   ] = await Promise.all([
@@ -58,7 +58,6 @@ export async function loadAdminDashboard() {
     supabase.from("product_media").select("*").order("sort_order"),
     supabase.from("reviews").select("*").order("display_order"),
     supabase.from("customer_orders").select("*").order("created_at", { ascending: false }),
-    supabase.from("newsletter_signups").select("*").order("created_at", { ascending: false }),
     supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
     supabase
       .from("custom_order_requests")
@@ -75,7 +74,6 @@ export async function loadAdminDashboard() {
     productMediaResult.error ||
     reviewsResult.error ||
     ordersResult.error ||
-    newsletterResult.error ||
     contactResult.error ||
     customOrdersResult.error;
 
@@ -102,7 +100,6 @@ export async function loadAdminDashboard() {
       productMedia: productMediaResult.data || [],
       reviews: reviewsResult.data || [],
       customerOrders: ordersResult.data || [],
-      newsletterSignups: newsletterResult.data || [],
       contactMessages: contactResult.data || [],
       customOrderRequests: customOrdersResult.data || []
     }
@@ -126,13 +123,13 @@ export async function saveAdminRecord(table, payload, options = {}) {
     query = supabase.from(table).insert(clean);
   }
 
-  const { error } = await query.select().maybeSingle();
+  const { data, error } = await query.select().maybeSingle();
 
   if (error) {
     return fail(normalizeError(error, `We could not save ${table}.`));
   }
 
-  return succeed(recordId ? "Changes saved." : "New record created.");
+  return succeed(recordId ? "Changes saved." : "New record created.", data || null);
 }
 
 export async function deleteAdminRecord(table, record, options = {}) {

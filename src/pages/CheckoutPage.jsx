@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
+import Button from "../components/Button.jsx";
+import Input from "../components/Input.jsx";
+import { CheckoutPageSkeleton } from "../components/Skeletons.jsx";
 import { launchRazorpayCheckout } from "../lib/paymentApi.js";
 import { formatPrice } from "../lib/formatting.js";
 
@@ -36,11 +39,7 @@ export default function CheckoutPage() {
   }, [successOrder]);
 
   if (!data) {
-    return (
-      <section className="page-section">
-        <div className="loading-card">Loading checkout...</div>
-      </section>
-    );
+    return <CheckoutPageSkeleton />;
   }
 
   const total = cartItems.reduce((sum, item) => sum + item.priceInr * item.quantity, 0);
@@ -238,35 +237,30 @@ export default function CheckoutPage() {
             </div>
 
             <div className="admin-form-grid">
-              <label className="field field-full">
-                <span>Full Name *</span>
-                <input
-                  autoComplete="name"
-                  onChange={(event) => updateCustomer("name", event.target.value)}
-                  placeholder="Your full name"
-                  required
-                  type="text"
-                  value={customer.name}
-                />
-              </label>
+              <Input
+                autoComplete="name"
+                fullWidth
+                label="Full Name *"
+                onChange={(event) => updateCustomer("name", event.target.value)}
+                required
+                type="text"
+                value={customer.name}
+              />
 
-              <label className="field">
-                <span>Email *</span>
-                <input
-                  autoComplete="email"
-                  onChange={(event) => updateCustomer("email", event.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  type="email"
-                  value={customer.email}
-                />
-              </label>
+              <Input
+                autoComplete="email"
+                label="Email *"
+                onChange={(event) => updateCustomer("email", event.target.value)}
+                required
+                type="email"
+                value={customer.email}
+              />
 
             </div>
 
-            <button className="button button-primary button-wide" disabled={busy} type="submit">
+            <Button disabled={busy} type="submit" wide>
               {busy ? "Preparing Razorpay..." : `Pay ${formatPrice(total)}`}
-            </button>
+            </Button>
 
             <p className={`form-status ${status.tone === "error" ? "is-error" : ""}`}>{status.message}</p>
           </form>

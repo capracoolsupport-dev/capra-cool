@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import Button from "../components/Button.jsx";
+import Input from "../components/Input.jsx";
+import { FormPageSkeleton } from "../components/Skeletons.jsx";
 import { submitCustomOrderRequest } from "../lib/storefrontApi";
 
 const initialForm = {
@@ -16,11 +19,7 @@ export default function CustomizePage() {
   const [busy, setBusy] = useState(false);
 
   if (!data) {
-    return (
-      <section className="page-section">
-        <div className="loading-card">Loading custom order form...</div>
-      </section>
-    );
+    return <FormPageSkeleton />;
   }
 
   const handleSubmit = async (event) => {
@@ -55,56 +54,49 @@ export default function CustomizePage() {
           </div>
 
           <form className="stack-form" onSubmit={handleSubmit}>
-            <label className="field">
-              <span>Name</span>
-              <input
-                onChange={(event) => setForm({ ...form, name: event.target.value })}
-                required
-                type="text"
-                value={form.name}
-              />
-            </label>
+            <Input
+              label="Name"
+              onChange={(event) => setForm({ ...form, name: event.target.value })}
+              required
+              type="text"
+              value={form.name}
+            />
 
-            <label className="field">
-              <span>Email</span>
-              <input
-                onChange={(event) => setForm({ ...form, email: event.target.value })}
-                required
-                type="email"
-                value={form.email}
-              />
-            </label>
+            <Input
+              label="Email"
+              onChange={(event) => setForm({ ...form, email: event.target.value })}
+              required
+              type="email"
+              value={form.email}
+            />
 
-            <label className="field">
-              <span>Product Type</span>
-              <select
-                onChange={(event) => setForm({ ...form, productType: event.target.value })}
-                required
-                value={form.productType}
-              >
-                <option value="">Select a crochet type</option>
-                {data.products.map((product) => (
-                  <option key={product.slug} value={product.name}>
-                    {product.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Input
+              as="select"
+              emptyOptionLabel="Select a crochet type"
+              label="Product Type"
+              onChange={(event) => setForm({ ...form, productType: event.target.value })}
+              required
+              value={form.productType}
+            >
+              {data.products.map((product) => (
+                <option key={product.slug} value={product.name}>
+                  {product.name}
+                </option>
+              ))}
+            </Input>
 
-            <label className="field">
-              <span>Customization Details</span>
-              <textarea
-                onChange={(event) => setForm({ ...form, details: event.target.value })}
-                placeholder="Colors, size, and what you want made."
-                required
-                rows="6"
-                value={form.details}
-              />
-            </label>
+            <Input
+              as="textarea"
+              label="Customization Details"
+              onChange={(event) => setForm({ ...form, details: event.target.value })}
+              required
+              rows={6}
+              value={form.details}
+            />
 
-            <button className="button button-primary button-wide" disabled={busy} type="submit">
+            <Button disabled={busy} type="submit" wide>
               {busy ? "Saving..." : "Request Custom Order"}
-            </button>
+            </Button>
             <p className="form-status">{status}</p>
           </form>
         </div>

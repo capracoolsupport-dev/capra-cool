@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("homepage renders the main storefront sections", async ({ page }) => {
+test("homepage renders the simplified storefront sections", async ({ page }) => {
   await page.goto("/");
 
   await expect(
@@ -9,36 +9,25 @@ test("homepage renders the main storefront sections", async ({ page }) => {
     })
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product Categories" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Featured Product Collections" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Reviews + Trust" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "All Products" })).toBeVisible();
   await expect(page.locator(".product-card").first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open menu" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open cart" })).toBeVisible();
 });
 
-test("search can open a product and add it to the cart", async ({ page }) => {
+test("product cards open the product page and support gallery navigation", async ({ page }) => {
   await page.goto("/");
 
-  await page.getByRole("button", { name: "Open search" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Find handmade crochet pieces quickly" })
-  ).toBeVisible();
-
-  await page.getByPlaceholder("Search scrunchies, gifting, flowers...").fill("flowers");
-  await page.locator(".search-result-card").filter({ hasText: "Flowers" }).click();
+  await page.getByRole("link", { name: "View Flowers" }).click();
 
   await expect(page).toHaveURL(/\/products\/flowers$/);
   await expect(page.getByRole("heading", { name: "Flowers" })).toBeVisible();
 
   const galleryImage = page.locator(".gallery-stage img");
   const firstSrc = await galleryImage.getAttribute("src");
+
   await page.getByRole("button", { name: "Next image" }).click();
   await expect(galleryImage).not.toHaveAttribute("src", firstSrc || "");
-
-  await page.getByRole("button", { name: "Add to Cart" }).click();
-  await expect(page.getByText("1 Flowers added to cart.")).toBeVisible();
-
-  await page.getByRole("button", { name: "Open cart" }).click();
-  await expect(page.locator(".cart-item").getByText("Flowers", { exact: true })).toBeVisible();
-  await expect(page.locator(".cart-footer").getByText("Total", { exact: true })).toBeVisible();
 });
 
 test("contact form handles a safe mock-mode submission flow", async ({ page }) => {
@@ -48,9 +37,8 @@ test("contact form handles a safe mock-mode submission flow", async ({ page }) =
 
   await contactForm.getByLabel("Name").fill("Playwright Tester");
   await contactForm.getByLabel("Email").fill("tester@example.com");
-  await contactForm.getByLabel("Phone Number (optional)").fill("9999999999");
   await contactForm
-    .getByLabel("Message")
+    .getByRole("textbox", { name: "Message" })
     .fill("Need help with a gifting recommendation for an anniversary order.");
 
   await contactForm.getByRole("button", { name: "Send Message" }).click();
@@ -84,8 +72,8 @@ test("mobile menu opens and navigates to the customize page", async ({ page }, t
   await page.getByRole("button", { name: "Open menu" }).click();
 
   const mobileMenu = page.locator(".mobile-menu-panel");
-  await expect(mobileMenu.getByText("Browse", { exact: true })).toBeVisible();
-  await mobileMenu.getByRole("link", { name: "Customize" }).click();
+  await expect(mobileMenu.getByText("Menu", { exact: true })).toBeVisible();
+  await mobileMenu.getByRole("link", { name: "Custom Orders" }).click();
 
   await expect(page).toHaveURL(/\/customize$/);
   await expect(

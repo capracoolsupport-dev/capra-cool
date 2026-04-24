@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import Button from "../components/Button.jsx";
+import Input from "../components/Input.jsx";
+import { FormPageSkeleton } from "../components/Skeletons.jsx";
 import { submitContactMessage } from "../lib/storefrontApi";
 
 const initialForm = {
@@ -15,11 +18,7 @@ export default function ContactPage() {
   const [status, setStatus] = useState("");
 
   if (!data) {
-    return (
-      <section className="page-section">
-        <div className="loading-card">Loading contact form...</div>
-      </section>
-    );
+    return <FormPageSkeleton />;
   }
 
   const handleSubmit = async (event) => {
@@ -51,40 +50,34 @@ export default function ContactPage() {
           </div>
 
           <form className="stack-form" onSubmit={handleSubmit}>
-            <label className="field">
-              <span>Name</span>
-              <input
-                onChange={(event) => setForm({ ...form, name: event.target.value })}
-                required
-                type="text"
-                value={form.name}
-              />
-            </label>
+            <Input
+              label="Name"
+              onChange={(event) => setForm({ ...form, name: event.target.value })}
+              required
+              type="text"
+              value={form.name}
+            />
 
-            <label className="field">
-              <span>Email</span>
-              <input
-                onChange={(event) => setForm({ ...form, email: event.target.value })}
-                required
-                type="email"
-                value={form.email}
-              />
-            </label>
+            <Input
+              label="Email"
+              onChange={(event) => setForm({ ...form, email: event.target.value })}
+              required
+              type="email"
+              value={form.email}
+            />
 
-            <label className="field">
-              <span>Message</span>
-              <textarea
-                onChange={(event) => setForm({ ...form, message: event.target.value })}
-                placeholder="Tell us what you are looking for, and we will help."
-                required
-                rows="6"
-                value={form.message}
-              />
-            </label>
+            <Input
+              as="textarea"
+              label="Message"
+              onChange={(event) => setForm({ ...form, message: event.target.value })}
+              required
+              rows={6}
+              value={form.message}
+            />
 
-            <button className="button button-primary button-wide" disabled={busy} type="submit">
+            <Button disabled={busy} type="submit" wide>
               {busy ? "Saving..." : "Send Message"}
-            </button>
+            </Button>
             <p className="form-status">{status}</p>
           </form>
         </div>

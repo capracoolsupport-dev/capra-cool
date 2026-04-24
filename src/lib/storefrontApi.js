@@ -45,6 +45,7 @@ function normalizeProduct(product, categoriesById) {
     slug: product.slug,
     name: product.name,
     priceInr: Number(product.price_inr ?? product.priceInr ?? 0),
+    stockQuantity: Number(product.stock_quantity ?? product.stockQuantity ?? 0),
     rating: Number(product.rating ?? 0),
     reviewCount: Number(product.review_count ?? product.reviewCount ?? reviews.length),
     reviewSnippet: product.review_snippet || product.reviewSnippet || "",

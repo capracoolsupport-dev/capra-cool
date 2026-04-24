@@ -19,6 +19,18 @@ export default function Icon({ name }) {
         <circle cx="17" cy="19" r="1.6" />
       </>
     ),
+    "arrow-right": (
+      <>
+        <path d="M5 12h14" />
+        <path d="M13 6l6 6-6 6" />
+      </>
+    ),
+    edit: (
+      <>
+        <path d="M4 20h4l10.5-10.5a2.1 2.1 0 00-4-4L4 16v4" />
+        <path d="M13.5 6.5l4 4" />
+      </>
+    ),
     star: (
       <path d="M12 3.5l2.7 5.4 6 .9-4.3 4.2 1 5.9L12 17l-5.4 2.9 1-5.9-4.3-4.2 6-.9z" />
     ),
@@ -49,6 +61,13 @@ export default function Icon({ name }) {
     ),
     facebook: (
       <path d="M13.5 20v-6h2.8l.4-3h-3.2V9.1c0-.9.3-1.6 1.7-1.6h1.7V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.2V11H8v3h2.5v6" />
+    ),
+    trash: (
+      <>
+        <path d="M5 7h14" />
+        <path d="M9 7V4.8h6V7" />
+        <path d="M8 7l.8 12h6.4L16 7" />
+      </>
     )
   };
 
