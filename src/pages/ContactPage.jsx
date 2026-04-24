@@ -5,7 +5,6 @@ import { submitContactMessage } from "../lib/storefrontApi";
 const initialForm = {
   name: "",
   email: "",
-  phone: "",
   message: ""
 };
 
@@ -73,15 +72,6 @@ export default function ContactPage() {
             </label>
 
             <label className="field">
-              <span>Phone Number (optional)</span>
-              <input
-                onChange={(event) => setForm({ ...form, phone: event.target.value })}
-                type="tel"
-                value={form.phone}
-              />
-            </label>
-
-            <label className="field">
               <span>Message</span>
               <textarea
                 onChange={(event) => setForm({ ...form, message: event.target.value })}
@@ -102,9 +92,6 @@ export default function ContactPage() {
         <aside className="info-card">
           <p className="eyebrow">Studio details</p>
           <h2>{data.settings.brandName}</h2>
-          <p>
-            Handmade crochet with premium presentation, thoughtful support, and a warm shopping experience from start to finish.
-          </p>
           <ul className="info-list">
             <li>Email: {data.settings.supportEmail}</li>
             <li>Phone: {data.settings.supportPhone}</li>

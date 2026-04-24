@@ -1,24 +1,14 @@
 import { useDeferredValue, useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { formatPrice } from "../lib/formatting";
-import { submitNewsletterSignup } from "../lib/storefrontApi";
 import Icon from "./Icons.jsx";
 
 const navLinks = [
   { to: "/", label: "Home", end: true },
-  { to: "/#featured", label: "New Arrivals" },
+  { to: "/#featured", label: "Products" },
   { to: "/track-order", label: "Track Order" },
-  { to: "/customize", label: "Customize" },
-  { to: "/about", label: "About Us" },
-  { to: "/contact", label: "Contact Us" }
-];
-
-const searchSuggestions = [
-  "gifts under 500",
-  "hair accessories",
-  "flowers",
-  "kids",
-  "winter"
+  { to: "/customize", label: "Custom Orders" },
+  { to: "/contact", label: "Contact" }
 ];
 
 function buildSearchText(product) {
@@ -79,19 +69,15 @@ export default function SiteLayout({
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [newsletterValue, setNewsletterValue] = useState("");
-  const [newsletterStatus, setNewsletterStatus] = useState("");
-  const [newsletterBusy, setNewsletterBusy] = useState(false);
   const deferredSearchValue = useDeferredValue(searchValue);
 
   const data = storefrontState.data;
   const settings = data?.settings;
   const brandName = settings?.brandName || "Trendy Spice Store";
-  const brandSubline = settings?.brandSubline || "trendyspicestore.com";
+  const brandSubline = settings?.brandSubline || "";
   const brandMark = getBrandMark(brandName);
   const products = data?.products || [];
   const categories = data?.categories || [];
-  const announcements = data?.announcements || [];
   const overlayOpen = mobileMenuOpen || searchOpen || cartOpen;
   const isCheckoutRoute = location.pathname === "/checkout";
 
@@ -131,39 +117,11 @@ export default function SiteLayout({
     0
   );
 
-  const handleNewsletterSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!newsletterValue.trim()) {
-      setNewsletterStatus("Please enter an email address.");
-      return;
-    }
-
-    setNewsletterBusy(true);
-    const result = await submitNewsletterSignup(newsletterValue.trim());
-    setNewsletterStatus(result.message);
-    setNewsletterBusy(false);
-
-    if (result.ok) {
-      setNewsletterValue("");
-    }
-  };
-
   return (
     <>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-
-      <div className="announcement-bar" aria-label="Promotions">
-        <div className="announcement-track">
-          {[...announcements, ...announcements, ...announcements].map((item, index) => (
-            <span key={`${item.id}-${index}`}>
-              {item.message}
-            </span>
-          ))}
-        </div>
-      </div>
 
       <header className={`site-header ${isCheckoutRoute ? "is-checkout-header" : ""}`}>
         <div className="header-shell">
@@ -171,7 +129,7 @@ export default function SiteLayout({
             <span className="brand-mark">{brandMark}</span>
             <span className="brand-copy">
               <strong>{brandName}</strong>
-              <small>{brandSubline}</small>
+              {brandSubline ? <small>{brandSubline}</small> : null}
             </span>
           </Link>
 
@@ -297,19 +255,11 @@ export default function SiteLayout({
               <input
                 autoFocus
                 onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search scrunchies, gifting, flowers..."
+                placeholder="Search products..."
                 type="search"
                 value={searchValue}
               />
             </label>
-
-            <div className="search-suggestion-row" aria-label="Popular searches">
-              {searchSuggestions.map((suggestion) => (
-                <button key={suggestion} onClick={() => setSearchValue(suggestion)} type="button">
-                  {suggestion}
-                </button>
-              ))}
-            </div>
 
             <div className="search-results">
               {searchResults.length ? (
@@ -425,38 +375,16 @@ export default function SiteLayout({
         <div className="footer-stack">
           <div>
             <p className="eyebrow">{brandName}</p>
-            <h2>Handmade crochet with a calm, polished shopping experience from first glance to checkout.</h2>
+            <h2>Simple handmade shopping.</h2>
           </div>
 
-          {!isCheckoutRoute ? (
-            <>
-              <div className="footer-links">
-                {navLinks.map((link) => (
-                  <Link key={link.label} to={link.to}>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-
-              <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-                <label className="field">
-                  <span>Contact Email Form</span>
-                  <div className="newsletter-row">
-                    <input
-                      onChange={(event) => setNewsletterValue(event.target.value)}
-                      placeholder="Enter your email"
-                      type="email"
-                      value={newsletterValue}
-                    />
-                    <button className="button button-secondary" disabled={newsletterBusy} type="submit">
-                      {newsletterBusy ? "Joining..." : "Join"}
-                    </button>
-                  </div>
-                </label>
-                <p className="form-status">{newsletterStatus}</p>
-              </form>
-            </>
-          ) : null}
+          <div className="footer-links">
+            {navLinks.map((link) => (
+              <Link key={link.label} to={link.to}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
 
           <div className="footer-meta">
             <p>

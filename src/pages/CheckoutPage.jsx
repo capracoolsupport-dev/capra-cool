@@ -6,17 +6,9 @@ import { formatPrice } from "../lib/formatting.js";
 function createInitialCustomer() {
   return {
     name: "",
-    email: "",
-    phone: "",
-    notes: ""
+    email: ""
   };
 }
-
-const checkoutAssurances = [
-  "Secure Razorpay payment",
-  "Order support before dispatch",
-  "Gift notes accepted"
-];
 
 export default function CheckoutPage() {
   const { data, cartItems, clearCart, removeFromCart, updateCartQuantity } = useOutletContext();
@@ -98,8 +90,8 @@ export default function CheckoutPage() {
       customer: {
         name: customer.name.trim(),
         email: customer.email.trim(),
-        phone: customer.phone.trim(),
-        notes: customer.notes.trim()
+        phone: "",
+        notes: ""
       },
       onDismiss: () => {
         setStatus({
@@ -165,22 +157,16 @@ export default function CheckoutPage() {
               <strong>{successOrder.razorpayPaymentId}</strong>
             </div>
           </div>
-            <div className="hero-actions">
-              <Link className="button button-primary" to="/">
-                Continue Shopping
-              </Link>
-              <Link
-                className="button button-secondary"
-                to={`/track-order?order=${encodeURIComponent(successOrder.orderNumber)}&email=${encodeURIComponent(
-                  customer.email.trim().toLowerCase()
-                )}`}
-              >
-                Track This Order
-              </Link>
-              <button className="button button-secondary" onClick={() => setSuccessOrder(null)} type="button">
-                Start Another Order
-              </button>
-            </div>
+          <div className="hero-actions">
+            <Link
+              className="button button-primary"
+              to={`/track-order?order=${encodeURIComponent(successOrder.orderNumber)}&email=${encodeURIComponent(
+                customer.email.trim().toLowerCase()
+              )}`}
+            >
+              Track This Order
+            </Link>
+          </div>
         </div>
       </section>
     );
@@ -192,14 +178,6 @@ export default function CheckoutPage() {
         <div className="checkout-copy">
           <p className="eyebrow">Secure checkout</p>
           <h1>Pay for your handmade picks with Razorpay.</h1>
-          <p className="section-lead">
-            Review your order, add customer details, and complete the payment in the Razorpay checkout window.
-          </p>
-          <div className="checkout-assurance-row" aria-label="Checkout assurances">
-            {checkoutAssurances.map((item) => (
-              <span key={item}>{item}</span>
-            ))}
-          </div>
         </div>
 
         <div className="checkout-layout">
@@ -247,11 +225,7 @@ export default function CheckoutPage() {
                 <span>Subtotal</span>
                 <strong>{formatPrice(total)}</strong>
               </div>
-              <div className="cart-total-row">
-                <span>Shipping</span>
-                <strong>Confirmed before dispatch</strong>
-              </div>
-              <p>Razorpay will open in a secure popup. We will use your email for order updates and tracking.</p>
+              <p>Use your email to receive order updates and tracking details.</p>
             </div>
           </div>
 
@@ -288,34 +262,11 @@ export default function CheckoutPage() {
                 />
               </label>
 
-              <label className="field">
-                <span>Phone (optional)</span>
-                <input
-                  autoComplete="tel"
-                  inputMode="tel"
-                  onChange={(event) => updateCustomer("phone", event.target.value)}
-                  placeholder="Optional phone number"
-                  type="tel"
-                  value={customer.phone}
-                />
-                <small>Helpful if courier support needs a quick delivery clarification.</small>
-              </label>
-
-              <label className="field field-full">
-                <span>Order Notes (optional)</span>
-                <textarea
-                  onChange={(event) => updateCustomer("notes", event.target.value)}
-                  placeholder="Color preference, gifting note, or delivery help"
-                  rows="4"
-                  value={customer.notes}
-                />
-              </label>
             </div>
 
             <button className="button button-primary button-wide" disabled={busy} type="submit">
               {busy ? "Preparing Razorpay..." : `Pay ${formatPrice(total)}`}
             </button>
-            <p className="checkout-form-note">No account is required. You can track the order with your order number and email.</p>
 
             <p className={`form-status ${status.tone === "error" ? "is-error" : ""}`}>{status.message}</p>
           </form>

@@ -12,7 +12,6 @@ const initialForm = {
 export default function CustomizePage() {
   const { data } = useOutletContext();
   const [form, setForm] = useState(initialForm);
-  const [referenceFile, setReferenceFile] = useState(null);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -29,8 +28,7 @@ export default function CustomizePage() {
 
     setBusy(true);
     const result = await submitCustomOrderRequest({
-      ...form,
-      referenceFile
+      ...form
     });
 
     setStatus(result.message);
@@ -38,7 +36,6 @@ export default function CustomizePage() {
 
     if (result.ok) {
       setForm(initialForm);
-      setReferenceFile(null);
     }
   };
 
@@ -54,7 +51,7 @@ export default function CustomizePage() {
         <div className="form-card">
           <div className="section-heading left-aligned">
             <p className="eyebrow">Custom order form</p>
-            <h2>Tell us what you want made</h2>
+            <h2>Send your request</h2>
           </div>
 
           <form className="stack-form" onSubmit={handleSubmit}>
@@ -98,21 +95,11 @@ export default function CustomizePage() {
               <span>Customization Details</span>
               <textarea
                 onChange={(event) => setForm({ ...form, details: event.target.value })}
-                placeholder="Colors, size, occasion, preferred finish, and any special notes."
+                placeholder="Colors, size, and what you want made."
                 required
                 rows="6"
                 value={form.details}
               />
-            </label>
-
-            <label className="field">
-              <span>Reference Image Upload (optional)</span>
-              <input
-                accept="image/*"
-                onChange={(event) => setReferenceFile(event.target.files?.[0] || null)}
-                type="file"
-              />
-              <small>{referenceFile ? referenceFile.name : "No file selected"}</small>
             </label>
 
             <button className="button button-primary button-wide" disabled={busy} type="submit">

@@ -289,26 +289,6 @@ export async function loadStorefrontData() {
   }
 }
 
-export async function submitNewsletterSignup(email) {
-  if (!supabase) {
-    return {
-      ok: false,
-      message: "Email signups are not available right now. Please try again soon."
-    };
-  }
-
-  const { error } = await supabase.from("newsletter_signups").insert({
-    email
-  });
-
-  return {
-    ok: !error,
-    message: error
-      ? humanizeSupabaseError(error, "We could not save your email right now.")
-      : "Thanks. You are on the list for new handmade drops."
-  };
-}
-
 function slugifyFileName(fileName) {
   return fileName
     .toLowerCase()
