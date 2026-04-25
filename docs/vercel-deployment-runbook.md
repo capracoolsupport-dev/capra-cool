@@ -36,10 +36,9 @@ SHIPROCKET_WEBHOOK_SECRET=optional-webhook-token
 
 Run these in this order:
 
-1. `supabase/schema.sql`
-2. `supabase/payments.sql`
-3. `supabase/shipping.sql`
-4. `supabase/seed.sql` if you want starter content
+1. `supabase/rebuild_from_scratch.sql`
+2. `supabase/shopify_catalog_seed.sql` for the processed real catalog from `Shopify/`
+3. `supabase/seed.sql` only if you want starter/demo content instead
 
 ### Important
 
@@ -49,7 +48,7 @@ Do **not** run `supabase/admin_dev_access.sql` in production unless you intentio
 
 ## 3. Supabase storage
 
-`supabase/schema.sql` creates and uses these buckets:
+`supabase/rebuild_from_scratch.sql` creates and uses these buckets:
 
 - `product-media`
 - `request-media`

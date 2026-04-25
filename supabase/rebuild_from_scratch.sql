@@ -1,4 +1,46 @@
+-- Reset the app schema and recreate the required database objects.
+--
+-- Suggested run order:
+-- 1. Run this file.
+-- 2. Run supabase/seed.sql or your own catalog seed.
+-- 3. Run supabase/admin_dev_access.sql for local development, or
+--    supabase/admin_production_access.sql for production.
+--
+-- Note:
+-- This script resets database tables, functions, triggers, policies, and
+-- bucket metadata used by the app. It does not delete files already stored in
+-- Supabase Storage. Remove existing bucket objects from the Storage dashboard
+-- if you want a full media wipe as well.
+
+begin;
+
 create extension if not exists pgcrypto;
+
+-- Clean up Storage policies from earlier dev or prod runs.
+drop policy if exists "Dev admin manage product bucket" on storage.objects;
+drop policy if exists "Public read product bucket" on storage.objects;
+drop policy if exists public_read_product_bucket on storage.objects;
+drop policy if exists admin_manage_product_bucket on storage.objects;
+drop policy if exists "Dev admin manage request bucket" on storage.objects;
+drop policy if exists "Public upload custom references" on storage.objects;
+drop policy if exists "Authenticated read request bucket" on storage.objects;
+drop policy if exists public_upload_custom_references on storage.objects;
+drop policy if exists admin_manage_request_bucket on storage.objects;
+
+drop table if exists public.customer_orders cascade;
+drop table if exists public.custom_order_requests cascade;
+drop table if exists public.contact_messages cascade;
+drop table if exists public.newsletter_signups cascade;
+drop table if exists public.reviews cascade;
+drop table if exists public.product_media cascade;
+drop table if exists public.products cascade;
+drop table if exists public.trust_badges cascade;
+drop table if exists public.categories cascade;
+drop table if exists public.announcements cascade;
+drop table if exists public.store_settings cascade;
+
+drop function if exists public.is_admin_user();
+drop function if exists public.set_updated_at();
 
 create or replace function public.set_updated_at()
 returns trigger
@@ -10,7 +52,7 @@ begin
 end;
 $$;
 
-create table if not exists public.store_settings (
+create table public.store_settings (
   id uuid primary key default gen_random_uuid(),
   brand_name text not null,
   brand_subline text not null,
@@ -45,7 +87,7 @@ create table if not exists public.store_settings (
   updated_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.announcements (
+create table public.announcements (
   id uuid primary key default gen_random_uuid(),
   message text not null unique,
   display_order integer not null default 0,
@@ -53,7 +95,7 @@ create table if not exists public.announcements (
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.categories (
+create table public.categories (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
   name text not null,
@@ -66,7 +108,7 @@ create table if not exists public.categories (
   updated_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.trust_badges (
+create table public.trust_badges (
   id uuid primary key default gen_random_uuid(),
   title text not null unique,
   detail text not null,
@@ -76,7 +118,7 @@ create table if not exists public.trust_badges (
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.products (
+create table public.products (
   id uuid primary key default gen_random_uuid(),
   category_id uuid not null references public.categories(id) on delete cascade,
   slug text not null unique,
@@ -91,14 +133,14 @@ create table if not exists public.products (
   highlights jsonb not null default '[]'::jsonb,
   badge_text text,
   is_featured_home boolean not null default false,
-  featured_rank integer,
+  featured_rank integer check (featured_rank is null or featured_rank > 0),
   display_order integer not null default 0,
   is_active boolean not null default true,
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.product_media (
+create table public.product_media (
   id uuid primary key default gen_random_uuid(),
   product_id uuid not null references public.products(id) on delete cascade,
   media_kind text not null default 'image' check (media_kind in ('image', 'video')),
@@ -111,7 +153,7 @@ create table if not exists public.product_media (
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.reviews (
+create table public.reviews (
   id uuid primary key default gen_random_uuid(),
   product_id uuid references public.products(id) on delete cascade,
   reviewer_name text not null,
@@ -123,13 +165,13 @@ create table if not exists public.reviews (
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.newsletter_signups (
+create table public.newsletter_signups (
   id uuid primary key default gen_random_uuid(),
   email text not null unique,
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.contact_messages (
+create table public.contact_messages (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text not null,
@@ -138,7 +180,7 @@ create table if not exists public.contact_messages (
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.custom_order_requests (
+create table public.custom_order_requests (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text not null,
@@ -147,6 +189,74 @@ create table if not exists public.custom_order_requests (
   reference_storage_path text,
   created_at timestamptz not null default timezone('utc', now())
 );
+
+create table public.customer_orders (
+  id uuid primary key default gen_random_uuid(),
+  order_number text not null unique,
+  receipt text not null unique,
+  customer_name text not null,
+  customer_email text not null,
+  customer_phone text,
+  customer_notes text,
+  currency text not null default 'INR',
+  amount_inr numeric(10, 2) not null check (amount_inr >= 0),
+  amount_subunits bigint not null check (amount_subunits >= 0),
+  status text not null default 'draft' check (
+    status in ('draft', 'created', 'authorized', 'paid', 'failed', 'verification_failed', 'cancelled')
+  ),
+  line_items jsonb not null default '[]'::jsonb,
+  razorpay_order_id text unique,
+  razorpay_payment_id text unique,
+  razorpay_signature text,
+  gateway_order_payload jsonb,
+  gateway_payment_payload jsonb,
+  failure_message text,
+  payment_verified_at timestamptz,
+  shipping_status text,
+  shiprocket_order_id text,
+  shiprocket_shipment_id text,
+  shiprocket_channel_order_id text,
+  shiprocket_awb_code text,
+  shiprocket_courier_name text,
+  shiprocket_tracking_url text,
+  shiprocket_last_event text,
+  shiprocket_last_scan_at timestamptz,
+  shiprocket_tracking_payload jsonb,
+  shiprocket_synced_at timestamptz,
+  delivered_at timestamptz,
+  created_at timestamptz not null default timezone('utc', now()),
+  updated_at timestamptz not null default timezone('utc', now())
+);
+
+create index categories_display_order_idx
+on public.categories (display_order, is_active);
+
+create index products_category_active_order_idx
+on public.products (category_id, is_active, display_order);
+
+create index products_featured_rank_idx
+on public.products (is_featured_home, featured_rank);
+
+create index product_media_product_order_idx
+on public.product_media (product_id, sort_order, is_primary);
+
+create index reviews_product_order_idx
+on public.reviews (product_id, display_order);
+
+create index customer_orders_status_idx
+on public.customer_orders (status);
+
+create index customer_orders_created_at_idx
+on public.customer_orders (created_at desc);
+
+create index customer_orders_shiprocket_awb_idx
+on public.customer_orders (shiprocket_awb_code);
+
+create index customer_orders_shiprocket_order_idx
+on public.customer_orders (shiprocket_order_id);
+
+create index customer_orders_shiprocket_channel_order_idx
+on public.customer_orders (shiprocket_channel_order_id);
 
 drop trigger if exists set_store_settings_updated_at on public.store_settings;
 create trigger set_store_settings_updated_at
@@ -166,6 +276,12 @@ before update on public.products
 for each row
 execute function public.set_updated_at();
 
+drop trigger if exists set_customer_orders_updated_at on public.customer_orders;
+create trigger set_customer_orders_updated_at
+before update on public.customer_orders
+for each row
+execute function public.set_updated_at();
+
 alter table public.store_settings enable row level security;
 alter table public.announcements enable row level security;
 alter table public.categories enable row level security;
@@ -176,71 +292,62 @@ alter table public.reviews enable row level security;
 alter table public.newsletter_signups enable row level security;
 alter table public.contact_messages enable row level security;
 alter table public.custom_order_requests enable row level security;
+alter table public.customer_orders enable row level security;
 
-drop policy if exists "Public read store settings" on public.store_settings;
 create policy "Public read store settings"
 on public.store_settings
 for select
 to anon, authenticated
 using (true);
 
-drop policy if exists "Public read announcements" on public.announcements;
 create policy "Public read announcements"
 on public.announcements
 for select
 to anon, authenticated
 using (is_active = true);
 
-drop policy if exists "Public read categories" on public.categories;
 create policy "Public read categories"
 on public.categories
 for select
 to anon, authenticated
 using (is_active = true);
 
-drop policy if exists "Public read trust badges" on public.trust_badges;
 create policy "Public read trust badges"
 on public.trust_badges
 for select
 to anon, authenticated
 using (is_active = true);
 
-drop policy if exists "Public read products" on public.products;
 create policy "Public read products"
 on public.products
 for select
 to anon, authenticated
 using (is_active = true);
 
-drop policy if exists "Public read product media" on public.product_media;
 create policy "Public read product media"
 on public.product_media
 for select
 to anon, authenticated
 using (true);
 
-drop policy if exists "Public read reviews" on public.reviews;
 create policy "Public read reviews"
 on public.reviews
 for select
 to anon, authenticated
 using (true);
 
-drop policy if exists "Public insert newsletter signups" on public.newsletter_signups;
 create policy "Public insert newsletter signups"
 on public.newsletter_signups
 for insert
 to anon, authenticated
 with check (true);
 
-drop policy if exists "Public insert contact messages" on public.contact_messages;
 create policy "Public insert contact messages"
 on public.contact_messages
 for insert
 to anon, authenticated
 with check (true);
 
-drop policy if exists "Public insert custom order requests" on public.custom_order_requests;
 create policy "Public insert custom order requests"
 on public.custom_order_requests
 for insert
@@ -249,20 +356,24 @@ with check (true);
 
 insert into storage.buckets (id, name, public)
 values ('product-media', 'product-media', true)
-on conflict (id) do update set public = excluded.public;
+on conflict (id) do update
+set
+  name = excluded.name,
+  public = excluded.public;
 
 insert into storage.buckets (id, name, public)
 values ('request-media', 'request-media', false)
-on conflict (id) do update set public = excluded.public;
+on conflict (id) do update
+set
+  name = excluded.name,
+  public = excluded.public;
 
-drop policy if exists "Public read product bucket" on storage.objects;
 create policy "Public read product bucket"
 on storage.objects
 for select
 to anon, authenticated
 using (bucket_id = 'product-media');
 
-drop policy if exists "Public upload custom references" on storage.objects;
 create policy "Public upload custom references"
 on storage.objects
 for insert
@@ -272,9 +383,10 @@ with check (
   and (storage.foldername(name))[1] = 'custom-orders'
 );
 
-drop policy if exists "Authenticated read request bucket" on storage.objects;
 create policy "Authenticated read request bucket"
 on storage.objects
 for select
 to authenticated
 using (bucket_id = 'request-media');
+
+commit;

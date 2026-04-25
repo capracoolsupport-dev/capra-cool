@@ -14,9 +14,10 @@ Use the Shiprocket API user credentials, not a frontend-exposed secret.
 
 Run these SQL files in Supabase SQL Editor:
 
-1. `supabase/payments.sql`
-2. `supabase/shipping.sql`
-3. `supabase/admin_dev_access.sql` for development-only admin/browser access
+1. `supabase/rebuild_from_scratch.sql`
+2. `supabase/shopify_catalog_seed.sql` for the processed real catalog from `Shopify/`
+3. `supabase/seed.sql` only if you want starter storefront content instead
+4. `supabase/admin_dev_access.sql` for development-only admin/browser access
 
 ## Edge Function secrets
 

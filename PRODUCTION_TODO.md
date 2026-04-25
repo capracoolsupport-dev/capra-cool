@@ -5,12 +5,11 @@ This checklist outlines the exact manual steps required from your side to take t
 ## 1. Supabase Setup (Database & Storage)
 - [ ] **Create Project**: Create a new project in the [Supabase Dashboard](https://supabase.com/dashboard).
 - [ ] **Run Core SQL Schemas**: Open the SQL Editor in Supabase and execute these scripts strictly in this order:
-  1. `supabase/schema.sql`
-  2. `supabase/payments.sql`
-  3. `supabase/shipping.sql`
-  4. *(Optional)* `supabase/seed.sql` (if you want the dummy/mock products to be populated).
+  1. `supabase/rebuild_from_scratch.sql`
+  2. `supabase/shopify_catalog_seed.sql` (for the processed real catalog from `Shopify/`).
+  3. *(Optional)* `supabase/seed.sql` only if you want the dummy/mock products instead.
 - [ ] **CRITICAL**: Do **NOT** run `supabase/admin_dev_access.sql` in your production database. That script bypasses security rules for local development and will expose your private admin tables.
-- [ ] **Setup Storage Buckets**: Navigate to **Storage** in your Supabase dashboard and create two new buckets. Ensure both are set to **Public**:
+- [ ] **Setup Storage Buckets**: Confirm these buckets exist after running the rebuild SQL:
   - `product-media`
   - `request-media`
 
