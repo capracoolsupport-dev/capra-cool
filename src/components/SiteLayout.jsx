@@ -9,9 +9,18 @@ import MobileMenu from "./MobileMenu.jsx";
 const navLinks = [
   { to: "/", label: "Home", end: true },
   { to: "/#featured", label: "Products" },
+  { to: "/about", label: "About Us" },
+  { to: "/blog", label: "Blog" },
   { to: "/track-order", label: "Track Order" },
   { to: "/customize", label: "Custom Orders" },
   { to: "/contact", label: "Contact" }
+];
+
+const footerPolicyLinks = [
+  { to: "/shipping-policy", label: "Shipping Policy" },
+  { to: "/return-policy", label: "Return Policy" },
+  { to: "/privacy-policy", label: "Privacy Policy" },
+  { to: "/faq", label: "FAQ" }
 ];
 
 export default function SiteLayout({
@@ -31,11 +40,14 @@ export default function SiteLayout({
   const data = storefrontState.data;
   const settings = data?.settings;
   const brandName = settings?.brandName || "Trendy Spice Store";
-  const businessLocation = settings?.businessLocation || "Bengaluru, India";
+  const businessLocation =
+    settings?.businessLocation || "MOG lines, Mahu naka, Indore Madhya Pradesh, 452002";
   const supportEmail = settings?.supportEmail || "trendyspicestore@gmail.com";
+  const supportPhone = settings?.supportPhone || "7067491668";
   const supportWindow = settings?.supportWindow || "Monday to Saturday, 10 AM to 7 PM";
-  const instagramUrl = settings?.instagramUrl || "https://www.instagram.com/";
-  const facebookUrl = settings?.facebookUrl || "https://www.facebook.com/";
+  const instagramUrl =
+    settings?.instagramUrl || "https://www.instagram.com/muskan_crochet_?igsh=MWk1eWdvYTR6NDR5";
+  const facebookUrl = settings?.facebookUrl || "https://www.facebook.com/share/1CDKXCNsFq/";
   const categories = data?.categories || [];
   const overlayOpen = mobileMenuOpen || cartOpen;
   const isCheckoutRoute = location.pathname === "/checkout";
@@ -147,9 +159,14 @@ export default function SiteLayout({
         <MobileMenu
           brandName={brandName}
           categories={categories}
+          facebookUrl={facebookUrl}
+          instagramHandle="@muskan_crochet_"
+          instagramUrl={instagramUrl}
           navLinks={navLinks}
           onClose={() => setMobileMenuOpen(false)}
           panelRef={mobileMenuPanelRef}
+          supportEmail={supportEmail}
+          supportPhone={supportPhone}
         />
       ) : null}
 
@@ -252,12 +269,26 @@ export default function SiteLayout({
             <h2>Simple handmade shopping.</h2>
           </div>
 
-          <div className="footer-links">
-            {navLinks.map((link) => (
-              <Link key={link.label} to={link.to}>
-                {link.label}
-              </Link>
-            ))}
+          <div className="footer-section">
+            <p className="eyebrow">Quick Links</p>
+            <div className="footer-links">
+              {navLinks.map((link) => (
+                <Link key={link.label} to={link.to}>
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="footer-section">
+            <p className="eyebrow">Policies</p>
+            <div className="footer-links">
+              {footerPolicyLinks.map((link) => (
+                <Link key={link.label} to={link.to}>
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
           <div className="footer-meta">
@@ -268,6 +299,9 @@ export default function SiteLayout({
               <strong>Email:</strong> {supportEmail}
             </p>
             <p>
+              <strong>Contact:</strong> {supportPhone}
+            </p>
+            <p>
               <strong>Support:</strong> {supportWindow}
             </p>
           </div>
@@ -275,7 +309,7 @@ export default function SiteLayout({
           <div className="social-row">
             <a className="social-link" href={instagramUrl} rel="noreferrer" target="_blank">
               <Icon name="instagram" />
-              <span>Instagram</span>
+              <span>@muskan_crochet_</span>
             </a>
             <a className="social-link" href={facebookUrl} rel="noreferrer" target="_blank">
               <Icon name="facebook" />

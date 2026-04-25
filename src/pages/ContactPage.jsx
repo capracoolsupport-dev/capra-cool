@@ -99,10 +99,26 @@ export default function ContactPage() {
           <p className="eyebrow">Studio details</p>
           <h2>{data.settings.brandName}</h2>
           <ul className="info-list">
-            <li>Email: {data.settings.supportEmail}</li>
-            <li>Phone: {data.settings.supportPhone}</li>
+            <li>
+              Email: <a href={`mailto:${data.settings.supportEmail}`}>{data.settings.supportEmail}</a>
+            </li>
+            <li>
+              Phone: <a href={`tel:${data.settings.supportPhone}`}>{data.settings.supportPhone}</a>
+            </li>
             <li>Location: {data.settings.businessLocation}</li>
             <li>Support Window: {data.settings.supportWindow}</li>
+            <li>
+              Instagram:{" "}
+              <a href={data.settings.instagramUrl} rel="noreferrer" target="_blank">
+                @muskan_crochet_
+              </a>
+            </li>
+            <li>
+              Facebook:{" "}
+              <a href={data.settings.facebookUrl} rel="noreferrer" target="_blank">
+                Visit page
+              </a>
+            </li>
           </ul>
         </aside>
       </section>

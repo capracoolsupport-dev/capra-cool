@@ -4,11 +4,11 @@ const defaultStoreSettings = {
   brandName: "Trendy Spice Store",
   brandSubline: "trendyspicestore.com",
   supportEmail: "trendyspicestore@gmail.com",
-  supportPhone: "+91 90000 00000",
-  businessLocation: "Bengaluru, India",
+  supportPhone: "7067491668",
+  businessLocation: "MOG lines, Mahu naka, Indore Madhya Pradesh, 452002",
   supportWindow: "Monday to Saturday, 10 AM to 7 PM",
-  instagramUrl: "https://www.instagram.com/",
-  facebookUrl: "https://www.facebook.com/",
+  instagramUrl: "https://www.instagram.com/muskan_crochet_?igsh=MWk1eWdvYTR6NDR5",
+  facebookUrl: "https://www.facebook.com/share/1CDKXCNsFq/",
   heroEyebrow: "Premium handmade crochet",
   heroTitle: "Handmade crochet that feels personal, polished, and beautifully gift-ready.",
   heroDescription:
@@ -97,18 +97,39 @@ function normalizeProduct(product, categoriesById) {
 }
 
 function normalizeSettings(settings) {
+  const resolveSetting = (value, placeholders, fallback) => {
+    if (!value || placeholders.includes(value)) {
+      return fallback;
+    }
+
+    return value;
+  };
+
   return {
     brandName: settings.brand_name || settings.brandName || defaultStoreSettings.brandName,
     brandSubline: settings.brand_subline || settings.brandSubline || defaultStoreSettings.brandSubline,
     supportEmail: settings.support_email || settings.supportEmail || defaultStoreSettings.supportEmail,
-    supportPhone: settings.support_phone || settings.supportPhone || defaultStoreSettings.supportPhone,
-    businessLocation:
-      settings.business_location ||
-      settings.businessLocation ||
-      defaultStoreSettings.businessLocation,
+    supportPhone: resolveSetting(
+      settings.support_phone || settings.supportPhone,
+      ["+91 90000 00000"],
+      defaultStoreSettings.supportPhone
+    ),
+    businessLocation: resolveSetting(
+      settings.business_location || settings.businessLocation,
+      ["Bengaluru, India", "Indiranagar, Bengaluru, India"],
+      defaultStoreSettings.businessLocation
+    ),
     supportWindow: settings.support_window || settings.supportWindow || defaultStoreSettings.supportWindow,
-    instagramUrl: settings.instagram_url || settings.instagramUrl || defaultStoreSettings.instagramUrl,
-    facebookUrl: settings.facebook_url || settings.facebookUrl || defaultStoreSettings.facebookUrl,
+    instagramUrl: resolveSetting(
+      settings.instagram_url || settings.instagramUrl,
+      ["https://www.instagram.com/"],
+      defaultStoreSettings.instagramUrl
+    ),
+    facebookUrl: resolveSetting(
+      settings.facebook_url || settings.facebookUrl,
+      ["https://www.facebook.com/"],
+      defaultStoreSettings.facebookUrl
+    ),
     heroEyebrow: settings.hero_eyebrow || settings.heroEyebrow || defaultStoreSettings.heroEyebrow,
     heroTitle: settings.hero_title || settings.heroTitle || defaultStoreSettings.heroTitle,
     heroDescription:

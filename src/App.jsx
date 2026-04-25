@@ -8,11 +8,16 @@ import AboutPage from "./pages/AboutPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import AdminLoginPage from "./pages/AdminLoginPage.jsx";
 import AdminProductEditorPage from "./pages/AdminProductEditorPage.jsx";
+import BlogPage from "./pages/BlogPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import CustomizePage from "./pages/CustomizePage.jsx";
+import FaqPage from "./pages/FaqPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
+import ReturnPolicyPage from "./pages/ReturnPolicyPage.jsx";
+import ShippingPolicyPage from "./pages/ShippingPolicyPage.jsx";
 import TrackOrderPage from "./pages/TrackOrderPage.jsx";
 
 const activeCartStorageKey = "trendy-spice-store-cart";
@@ -110,6 +115,11 @@ export default function App() {
           <Route path="/customize" element={<CustomizePage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/shipping-policy" element={<ShippingPolicyPage />} />
+          <Route path="/return-policy" element={<ReturnPolicyPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/faq" element={<FaqPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

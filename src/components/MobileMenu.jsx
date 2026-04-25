@@ -3,7 +3,17 @@ import { Link, NavLink } from "react-router-dom";
 import Icon from "./Icons.jsx";
 
 const MobileMenu = forwardRef(function MobileMenu(
-  { brandName, categories, navLinks, onClose },
+  {
+    brandName,
+    categories,
+    facebookUrl,
+    instagramHandle,
+    instagramUrl,
+    navLinks,
+    onClose,
+    supportEmail,
+    supportPhone
+  },
   ref
 ) {
   return (
@@ -63,6 +73,22 @@ const MobileMenu = forwardRef(function MobileMenu(
             </div>
           </div>
         ) : null}
+
+        <div className="mobile-support-block">
+          <p className="eyebrow">Support</p>
+          <a href={`tel:${supportPhone}`}>{supportPhone}</a>
+          <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+        </div>
+
+        <div className="mobile-support-block">
+          <p className="eyebrow">Follow Us</p>
+          <a href={instagramUrl} rel="noreferrer" target="_blank">
+            {instagramHandle}
+          </a>
+          <a href={facebookUrl} rel="noreferrer" target="_blank">
+            Facebook
+          </a>
+        </div>
       </aside>
     </div>
   );
