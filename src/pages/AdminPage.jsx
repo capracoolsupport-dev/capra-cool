@@ -69,6 +69,10 @@ export default function AdminPage() {
     }
   }, [location.pathname, location.state, navigate]);
 
+  useEffect(() => {
+    document.title = "Admin Dashboard | Trendy Spice Store";
+  }, []);
+
   const refreshDashboard = async () => {
     setDashboardState((current) => ({
       ...current,
@@ -99,6 +103,7 @@ export default function AdminPage() {
   }, []);
 
   const dashboard = dashboardState.data;
+  const metricsLoading = dashboardState.status === "loading";
   const categoriesById = useMemo(
     () =>
       (dashboard?.categories || []).reduce((accumulator, category) => {
@@ -204,15 +209,15 @@ export default function AdminPage() {
             <div className="admin-kpi-grid">
               <article className="admin-kpi-card">
                 <span>Total Products</span>
-                <strong>{totalProducts}</strong>
+                <strong>{metricsLoading ? "..." : totalProducts}</strong>
               </article>
               <article className="admin-kpi-card">
                 <span>Low Stock Alerts</span>
-                <strong>{lowStockAlerts}</strong>
+                <strong>{metricsLoading ? "..." : lowStockAlerts}</strong>
               </article>
               <article className="admin-kpi-card">
                 <span>Active Categories</span>
-                <strong>{activeCategories}</strong>
+                <strong>{metricsLoading ? "..." : activeCategories}</strong>
               </article>
             </div>
           </section>
@@ -229,6 +234,11 @@ export default function AdminPage() {
                 <p className="eyebrow">Products</p>
                 <h2>Catalog overview</h2>
                 <p className="section-lead">Edit essentials quickly or remove outdated products from the storefront.</p>
+                <p className="admin-table-meta">
+                  {dashboardState.status === "loading"
+                    ? "Loading the live catalog..."
+                    : `${totalProducts} products currently available in the admin catalog.`}
+                </p>
               </div>
               <Button to="/admin/products/new" variant="secondary">
                 New Product

@@ -100,6 +100,10 @@ export default function AdminProductEditorPage() {
   });
 
   useEffect(() => {
+    document.title = `${editId ? "Edit Product" : "New Product"} | Trendy Spice Store`;
+  }, [editId]);
+
+  useEffect(() => {
     return () => {
       if (previewObjectUrl) {
         URL.revokeObjectURL(previewObjectUrl);
@@ -424,7 +428,13 @@ export default function AdminProductEditorPage() {
                 <label className="field">
                   <span>Image</span>
                   <input accept="image/*" onChange={handleUpload} type="file" />
-                  <small>{uploadState.busy ? "Uploading..." : "Choose a file, then save to upload it."}</small>
+                  <small>
+                    {uploadState.busy
+                      ? "Uploading..."
+                      : editId && !pendingImageFile
+                        ? "Leave this unchanged to keep the current product image."
+                        : "Choose a file, then save to upload it."}
+                  </small>
                 </label>
                 {form.imageUrl ? (
                   <div className="admin-image-preview">

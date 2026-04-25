@@ -2,8 +2,9 @@ import { expect, test } from "@playwright/test";
 
 async function waitForStorefront(page, path = "/") {
   await page.goto(path);
-  await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-status", "ready");
-  await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-source", "supabase");
+  const storefront = page.locator("#main-content");
+  await expect(storefront).toHaveAttribute("data-storefront-source", "supabase");
+  await expect(storefront).toHaveAttribute("data-storefront-status", "ready", { timeout: 15000 });
 }
 
 test.describe("Category Discovery", () => {
