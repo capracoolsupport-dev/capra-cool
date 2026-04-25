@@ -1,15 +1,28 @@
+import { forwardRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Icon from "./Icons.jsx";
 
-export default function MobileMenu({ brandName, categories, navLinks, onClose }) {
+const MobileMenu = forwardRef(function MobileMenu(
+  { brandName, categories, navLinks, onClose },
+  ref
+) {
   return (
     <div className="overlay-shell">
-      <div className="overlay-backdrop" onClick={onClose} />
-      <aside className="mobile-menu-panel">
+      <div className="overlay-backdrop" onClick={onClose} role="presentation" />
+      <aside
+        aria-labelledby="mobile-menu-title"
+        aria-modal="true"
+        className="mobile-menu-panel"
+        ref={ref}
+        role="dialog"
+        tabIndex={-1}
+      >
         <div className="overlay-head">
           <div>
             <p className="eyebrow">Menu</p>
-            <strong className="mobile-menu-brand">{brandName}</strong>
+            <strong className="mobile-menu-brand" id="mobile-menu-title">
+              {brandName}
+            </strong>
           </div>
           <button
             aria-label="Close menu"
@@ -53,4 +66,6 @@ export default function MobileMenu({ brandName, categories, navLinks, onClose })
       </aside>
     </div>
   );
-}
+});
+
+export default MobileMenu;

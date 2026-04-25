@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Button from "./Button.jsx";
 import Header from "./Header.jsx";
@@ -25,10 +25,17 @@ export default function SiteLayout({
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const mobileMenuPanelRef = useRef(null);
+  const cartPanelRef = useRef(null);
 
   const data = storefrontState.data;
   const settings = data?.settings;
   const brandName = settings?.brandName || "Trendy Spice Store";
+  const businessLocation = settings?.businessLocation || "Bengaluru, India";
+  const supportEmail = settings?.supportEmail || "trendyspicestore@gmail.com";
+  const supportWindow = settings?.supportWindow || "Monday to Saturday, 10 AM to 7 PM";
+  const instagramUrl = settings?.instagramUrl || "https://www.instagram.com/";
+  const facebookUrl = settings?.facebookUrl || "https://www.facebook.com/";
   const categories = data?.categories || [];
   const overlayOpen = mobileMenuOpen || cartOpen;
   const isCheckoutRoute = location.pathname === "/checkout";
@@ -42,19 +49,80 @@ export default function SiteLayout({
   }, [overlayOpen]);
 
   useEffect(() => {
-    if (!import.meta.env.DEV) {
+    if (import.meta.env.DEV && storefrontState.error) {
+      console.warn("Storefront failed to load live data.", storefrontState.error);
+    }
+  }, [storefrontState.error]);
+
+  useEffect(() => {
+    if (!overlayOpen) {
       return;
     }
 
-    if (storefrontState.error) {
-      console.warn("Storefront data fallback in use.", storefrontState.error);
-      return;
-    }
+    const activePanel = mobileMenuOpen ? mobileMenuPanelRef.current : cartPanelRef.current;
+    const closeOverlay = () => {
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      } else {
+        setCartOpen(false);
+      }
+    };
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusPanelFrame = window.requestAnimationFrame(() => {
+      activePanel?.focus();
+    });
 
-    if (storefrontState.source === "mock") {
-      console.info("Storefront is using preview data.");
-    }
-  }, [storefrontState.error, storefrontState.source]);
+    const getFocusableElements = () => {
+      if (!activePanel) {
+        return [];
+      }
+
+      return Array.from(
+        activePanel.querySelectorAll(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => element instanceof HTMLElement && element.offsetParent !== null);
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeOverlay();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = getFocusableElements();
+
+      if (!focusableElements.length) {
+        event.preventDefault();
+        activePanel?.focus();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(focusPanelFrame);
+      document.removeEventListener("keydown", handleKeyDown);
+      previouslyFocused?.focus();
+    };
+  }, [cartOpen, mobileMenuOpen, overlayOpen]);
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = cartItems.reduce(
@@ -81,17 +149,25 @@ export default function SiteLayout({
           categories={categories}
           navLinks={navLinks}
           onClose={() => setMobileMenuOpen(false)}
+          panelRef={mobileMenuPanelRef}
         />
       ) : null}
 
       {cartOpen ? (
         <div className="overlay-shell">
-          <div className="overlay-backdrop" onClick={() => setCartOpen(false)} />
-          <aside className="drawer-panel">
+          <div className="overlay-backdrop" onClick={() => setCartOpen(false)} role="presentation" />
+          <aside
+            aria-labelledby="cart-dialog-title"
+            aria-modal="true"
+            className="drawer-panel"
+            ref={cartPanelRef}
+            role="dialog"
+            tabIndex={-1}
+          >
             <div className="overlay-head">
               <div>
                 <p className="eyebrow">Your cart</p>
-                <h2>Handmade picks saved</h2>
+                <h2 id="cart-dialog-title">Handmade picks saved</h2>
               </div>
               <button
                 aria-label="Close cart"
@@ -186,22 +262,22 @@ export default function SiteLayout({
 
           <div className="footer-meta">
             <p>
-              <strong>Business Location:</strong> {settings?.businessLocation}
+              <strong>Business Location:</strong> {businessLocation}
             </p>
             <p>
-              <strong>Email:</strong> {settings?.supportEmail}
+              <strong>Email:</strong> {supportEmail}
             </p>
             <p>
-              <strong>Support:</strong> {settings?.supportWindow}
+              <strong>Support:</strong> {supportWindow}
             </p>
           </div>
 
           <div className="social-row">
-            <a className="social-link" href={settings?.instagramUrl} rel="noreferrer" target="_blank">
+            <a className="social-link" href={instagramUrl} rel="noreferrer" target="_blank">
               <Icon name="instagram" />
               <span>Instagram</span>
             </a>
-            <a className="social-link" href={settings?.facebookUrl} rel="noreferrer" target="_blank">
+            <a className="social-link" href={facebookUrl} rel="noreferrer" target="_blank">
               <Icon name="facebook" />
               <span>Facebook</span>
             </a>

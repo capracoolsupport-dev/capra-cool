@@ -165,3 +165,40 @@ export async function deleteAdminRecord(table, record, options = {}) {
 
   return succeed("Record deleted.");
 }
+
+export async function deleteProductWithMedia(product, productMedia = []) {
+  if (!supabase) {
+    return fail("Supabase is not configured.");
+  }
+
+  const relatedMedia = productMedia.filter((item) => item.product_id === product.id);
+  const { error: productError } = await supabase.from("products").delete().eq("id", product.id);
+
+  if (productError) {
+    return fail(normalizeError(productError, "We could not delete the product."));
+  }
+
+  const storagePathsByBucket = relatedMedia.reduce((accumulator, item) => {
+    if (!item.bucket_name || !item.storage_path) {
+      return accumulator;
+    }
+
+    const currentPaths = accumulator[item.bucket_name] || [];
+    accumulator[item.bucket_name] = [...currentPaths, item.storage_path];
+    return accumulator;
+  }, {});
+
+  for (const [bucketName, paths] of Object.entries(storagePathsByBucket)) {
+    if (!paths.length) {
+      continue;
+    }
+
+    const { error: storageError } = await supabase.storage.from(bucketName).remove(paths);
+
+    if (storageError) {
+      return succeed("Product deleted, but one or more uploaded images still need manual cleanup.");
+    }
+  }
+
+  return succeed("Product deleted.");
+}

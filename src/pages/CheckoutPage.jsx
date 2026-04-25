@@ -3,18 +3,26 @@ import { Link, useOutletContext } from "react-router-dom";
 import Button from "../components/Button.jsx";
 import Input from "../components/Input.jsx";
 import { CheckoutPageSkeleton } from "../components/Skeletons.jsx";
+import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 import { launchRazorpayCheckout } from "../lib/paymentApi.js";
 import { formatPrice } from "../lib/formatting.js";
 
 function createInitialCustomer() {
   return {
     name: "",
-    email: ""
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "India"
   };
 }
 
 export default function CheckoutPage() {
-  const { data, cartItems, clearCart, removeFromCart, updateCartQuantity } = useOutletContext();
+  const { data, storefrontState, cartItems, clearCart, removeFromCart, updateCartQuantity } = useOutletContext();
   const [customer, setCustomer] = useState(createInitialCustomer);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState({
@@ -39,6 +47,10 @@ export default function CheckoutPage() {
   }, [successOrder]);
 
   if (!data) {
+    if (storefrontState.status === "error") {
+      return <StorefrontErrorState title="Checkout is temporarily unavailable." />;
+    }
+
     return <CheckoutPageSkeleton />;
   }
 
@@ -63,10 +75,19 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!customer.name.trim() || !customer.email.trim()) {
+    if (
+      !customer.name.trim() ||
+      !customer.email.trim() ||
+      !customer.phone.trim() ||
+      !customer.addressLine1.trim() ||
+      !customer.city.trim() ||
+      !customer.state.trim() ||
+      !customer.postalCode.trim() ||
+      !customer.country.trim()
+    ) {
       setStatus({
         tone: "error",
-        message: "Name and email are required before checkout."
+        message: "Complete your phone number and shipping address before checkout."
       });
       return;
     }
@@ -89,8 +110,14 @@ export default function CheckoutPage() {
       customer: {
         name: customer.name.trim(),
         email: customer.email.trim(),
-        phone: "",
-        notes: ""
+        phone: customer.phone.trim(),
+        notes: "",
+        addressLine1: customer.addressLine1.trim(),
+        addressLine2: customer.addressLine2.trim(),
+        city: customer.city.trim(),
+        state: customer.state.trim(),
+        postalCode: customer.postalCode.trim(),
+        country: customer.country.trim()
       },
       onDismiss: () => {
         setStatus({
@@ -256,12 +283,76 @@ export default function CheckoutPage() {
                 value={customer.email}
               />
 
+              <Input
+                autoComplete="tel"
+                label="Phone *"
+                onChange={(event) => updateCustomer("phone", event.target.value)}
+                required
+                type="tel"
+                value={customer.phone}
+              />
+
+              <Input
+                autoComplete="address-line1"
+                fullWidth
+                label="Address Line 1 *"
+                onChange={(event) => updateCustomer("addressLine1", event.target.value)}
+                required
+                type="text"
+                value={customer.addressLine1}
+              />
+
+              <Input
+                autoComplete="address-line2"
+                fullWidth
+                label="Address Line 2"
+                onChange={(event) => updateCustomer("addressLine2", event.target.value)}
+                type="text"
+                value={customer.addressLine2}
+              />
+
+              <Input
+                autoComplete="address-level2"
+                label="City *"
+                onChange={(event) => updateCustomer("city", event.target.value)}
+                required
+                type="text"
+                value={customer.city}
+              />
+
+              <Input
+                autoComplete="address-level1"
+                label="State *"
+                onChange={(event) => updateCustomer("state", event.target.value)}
+                required
+                type="text"
+                value={customer.state}
+              />
+
+              <Input
+                autoComplete="postal-code"
+                label="Postal Code *"
+                onChange={(event) => updateCustomer("postalCode", event.target.value)}
+                required
+                type="text"
+                value={customer.postalCode}
+              />
+
+              <Input
+                autoComplete="country-name"
+                label="Country *"
+                onChange={(event) => updateCustomer("country", event.target.value)}
+                required
+                type="text"
+                value={customer.country}
+              />
             </div>
 
             <Button disabled={busy} type="submit" wide>
               {busy ? "Preparing Razorpay..." : `Pay ${formatPrice(total)}`}
             </Button>
 
+            <p className="checkout-form-note">We use these details to deliver the order and share courier updates.</p>
             <p className={`form-status ${status.tone === "error" ? "is-error" : ""}`}>{status.message}</p>
           </form>
         </div>

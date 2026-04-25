@@ -15,9 +15,14 @@ import HomePage from "./pages/HomePage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import TrackOrderPage from "./pages/TrackOrderPage.jsx";
 
+const activeCartStorageKey = "trendy-spice-store-cart";
+const legacyCartStorageKey = "loop-and-love-cart";
+
 function readCart() {
   try {
-    const raw = localStorage.getItem("loop-and-love-cart");
+    const raw =
+      localStorage.getItem(activeCartStorageKey) ||
+      localStorage.getItem(legacyCartStorageKey);
     return raw ? JSON.parse(raw) : [];
   } catch (error) {
     return [];
@@ -29,7 +34,7 @@ export default function App() {
   const [cartItems, setCartItems] = useState(readCart);
 
   useEffect(() => {
-    localStorage.setItem("loop-and-love-cart", JSON.stringify(cartItems));
+    localStorage.setItem(activeCartStorageKey, JSON.stringify(cartItems));
   }, [cartItems]);
 
   const addToCart = (product, quantity) => {

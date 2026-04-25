@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { getCurrentSession, onAdminAuthChange } from "../lib/adminAuth.js";
+import { getAdminSession, onAdminAuthChange } from "../lib/adminAuth.js";
 import { hasSupabaseConfig } from "../lib/supabase.js";
 
 export default function ProtectedAdminLayout() {
@@ -14,7 +14,7 @@ export default function ProtectedAdminLayout() {
     let active = true;
 
     async function loadSession() {
-      const result = await getCurrentSession();
+      const result = await getAdminSession();
 
       if (active) {
         setState({
@@ -26,13 +26,8 @@ export default function ProtectedAdminLayout() {
 
     loadSession();
 
-    const authListener = onAdminAuthChange((session) => {
-      if (active) {
-        setState({
-          checked: true,
-          session
-        });
-      }
+    const authListener = onAdminAuthChange(() => {
+      loadSession();
     });
 
     return () => {

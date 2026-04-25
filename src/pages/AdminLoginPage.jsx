@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button.jsx";
 import Input from "../components/Input.jsx";
-import { getCurrentSession, signInAdmin } from "../lib/adminAuth.js";
+import { getAdminSession, signInAdmin } from "../lib/adminAuth.js";
 import { hasSupabaseConfig } from "../lib/supabase.js";
 
 const initialForm = {
@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
     let active = true;
 
     async function loadSession() {
-      const result = await getCurrentSession();
+      const result = await getAdminSession();
 
       if (active) {
         setSessionChecked(true);

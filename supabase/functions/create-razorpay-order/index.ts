@@ -5,6 +5,11 @@ function normalizeText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function normalizePositiveInteger(value: unknown) {
+  const parsed = Number.parseInt(String(value ?? ""), 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
+
 function buildOrderNumber() {
   const timePart = Date.now().toString().slice(-8);
   const randomPart = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -12,22 +17,91 @@ function buildOrderNumber() {
 }
 
 function buildReceipt() {
-  return `ll-${crypto.randomUUID().replace(/-/g, "").slice(0, 24)}`;
+  return `tss-${crypto.randomUUID().replace(/-/g, "").slice(0, 24)}`;
 }
 
-function sanitizeItems(items: unknown) {
+function sanitizeRequestedItems(items: unknown) {
   if (!Array.isArray(items)) {
     return [];
   }
 
-  return items
-    .map((item) => ({
-      slug: normalizeText(item?.slug),
-      name: normalizeText(item?.name),
-      priceInr: Number(item?.priceInr ?? 0),
-      quantity: Number(item?.quantity ?? 0)
-    }))
-    .filter((item) => item.name && item.quantity > 0 && item.priceInr > 0);
+  const quantitiesBySlug = new Map<string, number>();
+
+  for (const item of items) {
+    const slug = normalizeText(item?.slug);
+    const quantity = normalizePositiveInteger(item?.quantity);
+
+    if (!slug || quantity <= 0) {
+      continue;
+    }
+
+    quantitiesBySlug.set(slug, (quantitiesBySlug.get(slug) || 0) + quantity);
+  }
+
+  return Array.from(quantitiesBySlug.entries()).map(([slug, quantity]) => ({
+    slug,
+    quantity
+  }));
+}
+
+function sanitizeCustomer(customer: unknown) {
+  const record =
+    typeof customer === "object" && customer !== null
+      ? (customer as Record<string, unknown>)
+      : {};
+
+  return {
+    name: normalizeText(record.name),
+    email: normalizeText(record.email).toLowerCase(),
+    phone: normalizeText(record.phone),
+    notes: normalizeText(record.notes) || null,
+    addressLine1: normalizeText(record.addressLine1),
+    addressLine2: normalizeText(record.addressLine2) || null,
+    city: normalizeText(record.city),
+    state: normalizeText(record.state),
+    postalCode: normalizeText(record.postalCode),
+    country: normalizeText(record.country) || "India"
+  };
+}
+
+async function loadValidatedItems(
+  supabase: ReturnType<typeof createClient>,
+  requestedItems: Array<{ slug: string; quantity: number }>
+) {
+  const slugs = requestedItems.map((item) => item.slug);
+
+  const { data: products, error } = await supabase
+    .from("products")
+    .select("id, slug, name, price_inr, stock_quantity, is_active")
+    .in("slug", slugs);
+
+  if (error) {
+    throw new Error(error.message || "We could not load the selected products.");
+  }
+
+  const productsBySlug = new Map(
+    (products || []).map((product) => [product.slug, product])
+  );
+
+  return requestedItems.map((item) => {
+    const product = productsBySlug.get(item.slug);
+
+    if (!product || product.is_active === false) {
+      throw new Error("One or more items are no longer available.");
+    }
+
+    if (product.stock_quantity < item.quantity) {
+      throw new Error(`Only ${product.stock_quantity} item(s) left for ${product.name}.`);
+    }
+
+    return {
+      product_id: product.id,
+      slug: product.slug,
+      name: product.name,
+      priceInr: Number(product.price_inr ?? 0),
+      quantity: item.quantity
+    };
+  });
 }
 
 function toAmountSubunits(items: Array<{ priceInr: number; quantity: number }>) {
@@ -103,21 +177,47 @@ Deno.serve(async (request) => {
   });
 
   const body = await request.json().catch(() => null);
-  const items = sanitizeItems(body?.items);
-  const customerName = normalizeText(body?.customer?.name);
-  const customerEmail = normalizeText(body?.customer?.email).toLowerCase();
-  const customerPhone = normalizeText(body?.customer?.phone) || null;
-  const customerNotes = normalizeText(body?.customer?.notes) || null;
+  const requestedItems = sanitizeRequestedItems(body?.items);
+  const customer = sanitizeCustomer(body?.customer);
 
-  if (!items.length) {
+  if (!requestedItems.length) {
     return jsonResponse({ ok: false, message: "Your cart is empty." }, 400);
   }
 
-  if (!customerName || !customerEmail) {
-    return jsonResponse({ ok: false, message: "Customer name and email are required." }, 400);
+  if (
+    !customer.name ||
+    !customer.email ||
+    !customer.phone ||
+    !customer.addressLine1 ||
+    !customer.city ||
+    !customer.state ||
+    !customer.postalCode ||
+    !customer.country
+  ) {
+    return jsonResponse(
+      {
+        ok: false,
+        message: "Full name, email, phone, and shipping address are required."
+      },
+      400
+    );
   }
 
-  const amountSubunits = toAmountSubunits(items);
+  let validatedItems;
+
+  try {
+    validatedItems = await loadValidatedItems(supabase, requestedItems);
+  } catch (error) {
+    return jsonResponse(
+      {
+        ok: false,
+        message: error instanceof Error ? error.message : "We could not validate the cart."
+      },
+      409
+    );
+  }
+
+  const amountSubunits = toAmountSubunits(validatedItems);
 
   if (amountSubunits <= 0) {
     return jsonResponse({ ok: false, message: "Invalid order amount." }, 400);
@@ -131,15 +231,21 @@ Deno.serve(async (request) => {
     .insert({
       order_number: orderNumber,
       receipt,
-      customer_name: customerName,
-      customer_email: customerEmail,
-      customer_phone: customerPhone,
-      customer_notes: customerNotes,
+      customer_name: customer.name,
+      customer_email: customer.email,
+      customer_phone: customer.phone,
+      shipping_address_line_1: customer.addressLine1,
+      shipping_address_line_2: customer.addressLine2,
+      shipping_city: customer.city,
+      shipping_state: customer.state,
+      shipping_postal_code: customer.postalCode,
+      shipping_country: customer.country,
+      customer_notes: customer.notes,
       currency: "INR",
       amount_inr: Number((amountSubunits / 100).toFixed(2)),
       amount_subunits: amountSubunits,
       status: "draft",
-      line_items: items
+      line_items: validatedItems
     })
     .select("id, order_number, amount_inr, amount_subunits, currency")
     .maybeSingle();
@@ -160,12 +266,12 @@ Deno.serve(async (request) => {
       currency: "INR",
       receipt,
       keyId: razorpayKeyId,
-      keySecret: razorpayKeySecret,
-      notes: {
-        order_number: orderNumber,
-        customer_email: customerEmail
-      }
-    });
+        keySecret: razorpayKeySecret,
+        notes: {
+          order_number: orderNumber,
+          customer_email: customer.email
+        }
+      });
 
     const { data: updatedOrder, error: updateError } = await supabase
       .from("customer_orders")

@@ -10,22 +10,6 @@ test.describe("live Supabase write flows", () => {
     return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
-  test("newsletter signup can submit to Supabase", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-status", "ready");
-    await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-source", "supabase");
-
-    const footerForm = page.locator(".newsletter-form");
-    const email = `playwright-newsletter-${buildUniqueToken()}@example.com`;
-
-    await footerForm.getByPlaceholder("Enter your email").fill(email);
-    await footerForm.getByRole("button", { name: "Join" }).click();
-
-    await expect(
-      footerForm.getByText("Thanks. You are on the list for new handmade drops.")
-    ).toBeVisible();
-  });
-
   test("contact form can submit to Supabase", async ({ page }) => {
     await page.goto("/contact");
     await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-status", "ready");

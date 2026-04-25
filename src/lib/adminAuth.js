@@ -33,6 +33,43 @@ export async function getCurrentSession() {
   };
 }
 
+async function checkAdminAccess() {
+  if (!supabase) {
+    return fail("Supabase is not configured.");
+  }
+
+  const { data, error } = await supabase.rpc("is_admin_user");
+
+  if (error) {
+    return fail(error.message || "We could not verify admin access.");
+  }
+
+  return {
+    ok: Boolean(data),
+    message: data ? "" : "This account does not have admin access."
+  };
+}
+
+export async function getAdminSession() {
+  const sessionResult = await getCurrentSession();
+
+  if (!sessionResult.ok || !sessionResult.session) {
+    return {
+      ok: sessionResult.ok,
+      session: null,
+      message: sessionResult.message
+    };
+  }
+
+  const accessResult = await checkAdminAccess();
+
+  return {
+    ok: accessResult.ok,
+    session: accessResult.ok ? sessionResult.session : null,
+    message: accessResult.message
+  };
+}
+
 export function onAdminAuthChange(callback) {
   if (!supabase) {
     return {
@@ -59,7 +96,18 @@ export async function signInAdmin({ email, password }) {
     password
   });
 
-  return error ? fail(error.message || "We could not sign you in.") : { ok: true, message: "" };
+  if (error) {
+    return fail(error.message || "We could not sign you in.");
+  }
+
+  const accessResult = await checkAdminAccess();
+
+  if (!accessResult.ok) {
+    await supabase.auth.signOut();
+    return fail(accessResult.message);
+  }
+
+  return { ok: true, message: "" };
 }
 
 export async function signOutAdmin() {

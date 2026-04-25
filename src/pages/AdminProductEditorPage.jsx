@@ -91,11 +91,21 @@ export default function AdminProductEditorPage() {
     message: "",
     tone: ""
   });
+  const [pendingImageFile, setPendingImageFile] = useState(null);
+  const [previewObjectUrl, setPreviewObjectUrl] = useState("");
   const [saveState, setSaveState] = useState({
     busy: false,
     message: "",
     tone: ""
   });
+
+  useEffect(() => {
+    return () => {
+      if (previewObjectUrl) {
+        URL.revokeObjectURL(previewObjectUrl);
+      }
+    };
+  }, [previewObjectUrl]);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -164,31 +174,20 @@ export default function AdminProductEditorPage() {
       return;
     }
 
-    setUploadState({
-      busy: true,
-      message: "Uploading image...",
-      tone: ""
-    });
-
-    const result = await uploadProductImage(file);
-
-    if (!result.ok) {
-      setUploadState({
-        busy: false,
-        message: result.message,
-        tone: "error"
-      });
-      return;
+    if (previewObjectUrl) {
+      URL.revokeObjectURL(previewObjectUrl);
     }
 
+    const objectUrl = URL.createObjectURL(file);
+    setPendingImageFile(file);
+    setPreviewObjectUrl(objectUrl);
     setForm((current) => ({
       ...current,
-      imagePath: result.storagePath,
-      imageUrl: result.publicUrl
+      imageUrl: objectUrl
     }));
     setUploadState({
       busy: false,
-      message: "Image uploaded and ready to save.",
+      message: "Image selected. It will upload when you save the product.",
       tone: "success"
     });
   };
@@ -196,7 +195,7 @@ export default function AdminProductEditorPage() {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    if (!form.imagePath) {
+    if (!form.imagePath && !pendingImageFile) {
       setSaveState({
         busy: false,
         message: "Upload a product image before saving.",
@@ -210,6 +209,42 @@ export default function AdminProductEditorPage() {
       message: "",
       tone: ""
     });
+
+    const previousImagePath = form.imagePath;
+    let nextImagePath = form.imagePath;
+    let uploadedImage = null;
+
+    if (pendingImageFile) {
+      setUploadState({
+        busy: true,
+        message: "Uploading image...",
+        tone: ""
+      });
+
+      const uploadResult = await uploadProductImage(pendingImageFile);
+
+      if (!uploadResult.ok) {
+        setUploadState({
+          busy: false,
+          message: uploadResult.message,
+          tone: "error"
+        });
+        setSaveState({
+          busy: false,
+          message: "We could not upload the product image.",
+          tone: "error"
+        });
+        return;
+      }
+
+      uploadedImage = uploadResult;
+      nextImagePath = uploadResult.storagePath;
+      setUploadState({
+        busy: false,
+        message: "Image uploaded.",
+        tone: "success"
+      });
+    }
 
     const productPayload = {
       id: editId || undefined,
@@ -228,6 +263,10 @@ export default function AdminProductEditorPage() {
     const productResult = await saveAdminRecord("products", productPayload);
 
     if (!productResult.ok || !productResult.data) {
+      if (uploadedImage) {
+        await supabase.storage.from("product-media").remove([uploadedImage.storagePath]);
+      }
+
       setSaveState({
         busy: false,
         message: productResult.message,
@@ -241,7 +280,7 @@ export default function AdminProductEditorPage() {
       product_id: productResult.data.id,
       media_kind: "image",
       bucket_name: "product-media",
-      storage_path: form.imagePath,
+      storage_path: nextImagePath,
       public_url: null,
       alt_text: form.title.trim(),
       sort_order: 0,
@@ -249,6 +288,10 @@ export default function AdminProductEditorPage() {
     });
 
     if (!mediaResult.ok) {
+      if (uploadedImage) {
+        await supabase.storage.from("product-media").remove([uploadedImage.storagePath]);
+      }
+
       setSaveState({
         busy: false,
         message: mediaResult.message,
@@ -257,6 +300,16 @@ export default function AdminProductEditorPage() {
       return;
     }
 
+    if (uploadedImage && editId && previousImagePath && previousImagePath !== nextImagePath) {
+      await supabase.storage.from("product-media").remove([previousImagePath]);
+    }
+
+    if (previewObjectUrl) {
+      URL.revokeObjectURL(previewObjectUrl);
+      setPreviewObjectUrl("");
+    }
+
+    setPendingImageFile(null);
     navigate("/admin", {
       replace: true,
       state: {
@@ -371,7 +424,7 @@ export default function AdminProductEditorPage() {
                 <label className="field">
                   <span>Image</span>
                   <input accept="image/*" onChange={handleUpload} type="file" />
-                  <small>{uploadState.busy ? "Uploading..." : "Upload starts immediately after you choose a file."}</small>
+                  <small>{uploadState.busy ? "Uploading..." : "Choose a file, then save to upload it."}</small>
                 </label>
                 {form.imageUrl ? (
                   <div className="admin-image-preview">

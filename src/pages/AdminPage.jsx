@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate, useOutletContext } from "react-router-d
 import Button from "../components/Button.jsx";
 import Icon from "../components/Icons.jsx";
 import { AdminDashboardSkeleton } from "../components/Skeletons.jsx";
-import { deleteAdminRecord, loadAdminDashboard } from "../lib/adminApi.js";
+import { deleteProductWithMedia, loadAdminDashboard } from "../lib/adminApi.js";
 import { signOutAdmin } from "../lib/adminAuth.js";
 import { formatPrice } from "../lib/formatting.js";
 import { hasSupabaseConfig, supabase } from "../lib/supabase.js";
@@ -135,7 +135,7 @@ export default function AdminPage() {
       message: ""
     });
 
-    const result = await deleteAdminRecord("products", product);
+    const result = await deleteProductWithMedia(product, dashboard?.productMedia || []);
 
     setBusyProductId("");
     setStatus({

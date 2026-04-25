@@ -196,7 +196,13 @@ create table public.customer_orders (
   receipt text not null unique,
   customer_name text not null,
   customer_email text not null,
-  customer_phone text,
+  customer_phone text not null,
+  shipping_address_line_1 text not null,
+  shipping_address_line_2 text,
+  shipping_city text not null,
+  shipping_state text not null,
+  shipping_postal_code text not null,
+  shipping_country text not null default 'India',
   customer_notes text,
   currency text not null default 'INR',
   amount_inr numeric(10, 2) not null check (amount_inr >= 0),
@@ -281,6 +287,119 @@ create trigger set_customer_orders_updated_at
 before update on public.customer_orders
 for each row
 execute function public.set_updated_at();
+
+create or replace function public.finalize_paid_order(
+  p_order_id uuid,
+  p_status text,
+  p_razorpay_payment_id text,
+  p_razorpay_signature text,
+  p_gateway_payment_payload jsonb,
+  p_gateway_order_payload jsonb,
+  p_payment_verified_at timestamptz
+)
+returns public.customer_orders
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_order public.customer_orders%rowtype;
+  v_updated_order public.customer_orders%rowtype;
+  v_item jsonb;
+  v_product_id uuid;
+  v_quantity integer;
+begin
+  if p_status not in ('authorized', 'paid') then
+    raise exception 'Invalid final order status.';
+  end if;
+
+  select *
+  into v_order
+  from public.customer_orders
+  where id = p_order_id
+  for update;
+
+  if not found then
+    raise exception 'Order record not found.';
+  end if;
+
+  if v_order.status in ('authorized', 'paid') then
+    update public.customer_orders
+    set
+      status = p_status,
+      razorpay_payment_id = p_razorpay_payment_id,
+      razorpay_signature = p_razorpay_signature,
+      gateway_payment_payload = p_gateway_payment_payload,
+      gateway_order_payload = p_gateway_order_payload,
+      payment_verified_at = p_payment_verified_at,
+      failure_message = null
+    where id = p_order_id
+    returning *
+    into v_updated_order;
+
+    return v_updated_order;
+  end if;
+
+  for v_item in
+    select value
+    from jsonb_array_elements(v_order.line_items)
+  loop
+    v_product_id := nullif(v_item ->> 'product_id', '')::uuid;
+    v_quantity := coalesce((v_item ->> 'quantity')::integer, 0);
+
+    if v_product_id is null or v_quantity <= 0 then
+      raise exception 'Order line items are invalid.';
+    end if;
+
+    update public.products
+    set
+      stock_quantity = stock_quantity - v_quantity,
+      updated_at = timezone('utc', now())
+    where id = v_product_id
+      and is_active = true
+      and stock_quantity >= v_quantity;
+
+    if not found then
+      raise exception 'One or more items are out of stock.';
+    end if;
+  end loop;
+
+  update public.customer_orders
+  set
+    status = p_status,
+    razorpay_payment_id = p_razorpay_payment_id,
+    razorpay_signature = p_razorpay_signature,
+    gateway_payment_payload = p_gateway_payment_payload,
+    gateway_order_payload = p_gateway_order_payload,
+    payment_verified_at = p_payment_verified_at,
+    failure_message = null
+  where id = p_order_id
+  returning *
+  into v_updated_order;
+
+  return v_updated_order;
+end;
+$$;
+
+revoke all on function public.finalize_paid_order(
+  uuid,
+  text,
+  text,
+  text,
+  jsonb,
+  jsonb,
+  timestamptz
+) from public;
+
+grant execute on function public.finalize_paid_order(
+  uuid,
+  text,
+  text,
+  text,
+  jsonb,
+  jsonb,
+  timestamptz
+) to service_role;
 
 alter table public.store_settings enable row level security;
 alter table public.announcements enable row level security;

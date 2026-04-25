@@ -9,8 +9,8 @@ async function waitForLiveStorefront(page) {
 test("homepage loads data from Supabase", async ({ page }) => {
   await waitForLiveStorefront(page);
 
-  await expect(page.locator(".announcement-track span").first()).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Featured Product Collections" })).toBeVisible();
+  await expect(page.locator("main h1").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Product Categories" })).toBeVisible();
   await expect(page.locator(".category-pill").first()).toBeVisible();
   await expect(page.locator(".product-card").first()).toBeVisible();
 });
@@ -26,9 +26,9 @@ test("live product detail flow opens from the collection and adds to cart locall
   await expect(
     page.locator(".product-info-panel").getByRole("heading", { name: productName, exact: true })
   ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Add to Cart" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Add to Cart" }).first()).toBeVisible();
 
-  await page.getByRole("button", { name: "Add to Cart" }).click();
+  await page.getByRole("button", { name: "Add to Cart" }).first().click();
   await page.getByRole("button", { name: "Open cart" }).click();
 
   await expect(page.locator(".cart-item").getByText(productName, { exact: true })).toBeVisible();
@@ -42,9 +42,9 @@ test("live mobile navigation can open the customize page", async ({ page }, test
 
   const mobileMenu = page.locator(".mobile-menu-panel");
   await expect(mobileMenu).toBeVisible();
-  await mobileMenu.getByRole("link", { name: "Customize" }).click();
+  await mobileMenu.getByRole("link", { name: "Custom Orders" }).click();
 
   await expect(page).toHaveURL(/\/customize$/);
   await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-source", "supabase");
-  await expect(page.getByRole("heading", { name: /custom crochet piece/i })).toBeVisible();
+  await expect(page.locator(".form-card").first()).toBeVisible();
 });

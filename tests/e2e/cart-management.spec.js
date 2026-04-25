@@ -1,22 +1,35 @@
 import { expect, test } from "@playwright/test";
 
-async function openFlowersProduct(page) {
-  await page.goto("/");
-  await page.getByRole("link", { name: "View Flowers" }).click();
-  await expect(page).toHaveURL(/\/products\/flowers$/);
+async function waitForStorefront(page, path = "/") {
+  await page.goto(path);
+  await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-status", "ready");
+  await expect(page.locator("#main-content")).toHaveAttribute("data-storefront-source", "supabase");
+}
+
+async function openFirstProduct(page) {
+  await waitForStorefront(page);
+
+  const firstCardLink = page.locator(".product-card").first().getByRole("link");
+  const label = (await firstCardLink.getAttribute("aria-label")) || "";
+  const productName = label.replace(/^View\s+/, "").trim();
+
+  await firstCardLink.click();
+  await expect(page.getByRole("heading", { name: productName, exact: true })).toBeVisible();
+
+  return productName;
 }
 
 test.describe("Cart Management Flow", () => {
   test("adds a product to the cart and shows totals in the drawer", async ({ page }) => {
-    await openFlowersProduct(page);
+    const productName = await openFirstProduct(page);
 
     await page.getByRole("button", { name: "Add to Cart" }).first().click();
-    await expect(page.getByRole("status").getByText("1 Flowers added to cart.")).toBeVisible();
+    await expect(page.getByRole("status")).toContainText(`${productName} added to cart.`);
 
     await page.getByRole("button", { name: "Open cart" }).click();
 
     const cartPanel = page.locator(".drawer-panel");
-    const cartItem = page.locator(".cart-item").filter({ hasText: "Flowers" });
+    const cartItem = page.locator(".cart-item").filter({ hasText: productName });
 
     await expect(cartPanel).toBeVisible();
     await expect(cartItem).toBeVisible();
@@ -26,12 +39,12 @@ test.describe("Cart Management Flow", () => {
   });
 
   test("can adjust quantities within the cart drawer", async ({ page }) => {
-    await openFlowersProduct(page);
+    const productName = await openFirstProduct(page);
 
     await page.getByRole("button", { name: "Add to Cart" }).first().click();
     await page.getByRole("button", { name: "Open cart" }).click();
 
-    const cartItem = page.locator(".cart-item").filter({ hasText: "Flowers" });
+    const cartItem = page.locator(".cart-item").filter({ hasText: productName });
     const increaseButton = cartItem.getByRole("button", { name: "+" });
 
     await increaseButton.click();
@@ -41,7 +54,7 @@ test.describe("Cart Management Flow", () => {
   });
 
   test("removes items and reflects the empty cart state", async ({ page }) => {
-    await openFlowersProduct(page);
+    await openFirstProduct(page);
 
     await page.getByRole("button", { name: "Add to Cart" }).first().click();
     await page.getByRole("button", { name: "Open cart" }).click();

@@ -5,7 +5,7 @@ export function useStorefrontData() {
   const [state, setState] = useState({
     data: null,
     status: "loading",
-    source: "mock",
+    source: "supabase",
     error: null
   });
 
@@ -18,7 +18,7 @@ export function useStorefrontData() {
       if (!ignore) {
         setState({
           data: result.data,
-          status: "ready",
+          status: result.ok ? "ready" : "error",
           source: result.source,
           error: result.error
         });

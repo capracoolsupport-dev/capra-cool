@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import Button from "../components/Button.jsx";
 import Input from "../components/Input.jsx";
 import { FormPageSkeleton } from "../components/Skeletons.jsx";
+import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 import { submitCustomOrderRequest } from "../lib/storefrontApi";
 
 const initialForm = {
@@ -13,12 +14,16 @@ const initialForm = {
 };
 
 export default function CustomizePage() {
-  const { data } = useOutletContext();
+  const { data, storefrontState } = useOutletContext();
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
 
   if (!data) {
+    if (storefrontState.status === "error") {
+      return <StorefrontErrorState title="Custom orders are temporarily unavailable." />;
+    }
+
     return <FormPageSkeleton />;
   }
 

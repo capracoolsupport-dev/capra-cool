@@ -19,12 +19,7 @@ export default defineConfig({
   webServer: {
     command: devCommand,
     port: 4173,
-    reuseExistingServer: !process.env.CI,
-    env: {
-      ...process.env,
-      VITE_SUPABASE_URL: "",
-      VITE_SUPABASE_ANON_KEY: ""
-    }
+    reuseExistingServer: !process.env.CI
   },
   projects: [
     {

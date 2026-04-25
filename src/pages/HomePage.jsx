@@ -2,6 +2,7 @@ import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom
 import Button from "../components/Button.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import { HomePageSkeleton } from "../components/Skeletons.jsx";
+import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 
 export default function HomePage() {
   const { data, storefrontState } = useOutletContext();
@@ -10,6 +11,15 @@ export default function HomePage() {
   const selectedCategory = searchParams.get("category") || "";
 
   if (!data) {
+    if (storefrontState.status === "error") {
+      return (
+        <StorefrontErrorState
+          message="We could not load the live catalog right now. Please try again shortly."
+          title="The catalog is temporarily unavailable."
+        />
+      );
+    }
+
     return <HomePageSkeleton />;
   }
 
@@ -63,12 +73,13 @@ export default function HomePage() {
           <p className="eyebrow">Browse by category</p>
           <h2>Product Categories</h2>
         </div>
-        <div className="category-rail" role="tablist" aria-label="Product categories">
+        <div aria-label="Product categories" className="category-rail" role="list">
           {data.categories.map((category) => {
             const selected = selectedCategory === category.slug;
 
             return (
               <button
+                aria-pressed={selected}
                 className={`category-pill ${selected ? "is-selected" : ""}`}
                 key={category.slug}
                 onClick={() => {

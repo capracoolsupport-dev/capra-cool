@@ -1,10 +1,15 @@
 import { useOutletContext } from "react-router-dom";
 import Icon from "../components/Icons.jsx";
+import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 
 export default function AboutPage() {
-  const { data } = useOutletContext();
+  const { data, storefrontState } = useOutletContext();
 
   if (!data) {
+    if (storefrontState.status === "error") {
+      return <StorefrontErrorState title="The brand story is temporarily unavailable." />;
+    }
+
     return (
       <section className="page-section">
         <div className="loading-card">Loading brand story...</div>

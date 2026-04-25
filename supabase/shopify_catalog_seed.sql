@@ -46,39 +46,39 @@ insert into public.store_settings (
   contact_title,
   contact_description
 ) values (
-  'Loop & Love',
-  'Handmade Crochet Studio',
-  'hello@loopandlove.in',
+  'Trendy Spice Store',
+  'trendyspicestore.com',
+  'trendyspicestore@gmail.com',
   '+91 90000 00000',
-  'Bengaluru, India',
+  'Indiranagar, Bengaluru, India',
   'Monday to Saturday, 10 AM to 7 PM',
   'https://www.instagram.com/',
   'https://www.facebook.com/',
-  'Handmade crochet collected from your Shopify catalog',
-  'A real crochet catalog, processed locally and prepared for a lightweight storefront.',
-  'This catalog is built from your local Shopify folder so you can relaunch the website on Supabase without manually entering every product from scratch.',
-  'Browse Collection',
+  'Premium handmade crochet',
+  'Handmade crochet that feels personal, polished, and beautifully gift-ready.',
+  'Explore a full handmade collection with soft textures, curated colors, and lightweight product pages built for smooth browsing on mobile and desktop.',
+  'Explore Collection',
   '/#featured',
   'Create Custom Order',
   '/customize',
   jsonb_build_array(
-    jsonb_build_object('value', '89', 'label', 'products imported'),
-    jsonb_build_object('value', '227', 'label', 'optimized images ready'),
-    jsonb_build_object('value', 'Supabase', 'label', 'catalog prepared for relaunch')
+    jsonb_build_object('value', '89', 'label', 'products ready to browse'),
+    jsonb_build_object('value', '227', 'label', 'optimized gallery images'),
+    jsonb_build_object('value', 'Handmade', 'label', 'crafted for gifting and everyday styling')
   ),
-  'Catalog',
-  'A processed handmade collection prepared from the Shopify source folder.',
-  'The current storefront uses optimized media paths and generated catalog rows so you can relaunch first, then refine prices, stock, and copy from the admin panel.',
+  'Showcase',
+  'Handmade details, color stories, and textures that stay clear on every screen.',
+  'The storefront pairs your real product photography with a lightweight catalog structure so customers can browse quickly without losing the handmade feel.',
   '',
   '',
-  'Handmade crochet made easier to browse, manage, and relaunch.',
-  'Loop & Love brings your existing product photography into one Supabase-ready catalog so the storefront can be rebuilt without re-entering each item manually.',
-  'The imported collection keeps the raw craftsmanship visible while staying practical for a free-tier hosting setup through optimized images and structured product rows.',
-  'Upload only optimized gallery assets, keep originals offline, and refine pricing and stock from the admin before launch.',
-  'Need a custom crochet piece instead?',
-  'Use the custom order form to collect colors, ideas, and reference images in one place.',
-  'Have a question about a product or order?',
-  'Reach out through the contact form and manage incoming messages from the admin dashboard.'
+  'Handmade crochet made to feel warm, polished, and easy to shop.',
+  'Trendy Spice Store brings together crochet accessories, gifting picks, and small handmade details in one calm storefront that stays simple to browse.',
+  'Each collection keeps the handcrafted texture visible while using structured categories, optimized media, and lightweight pages that work well on Supabase free-tier hosting.',
+  'Orders are reviewed before dispatch, packed with care, and supported through direct customer help for gifting questions and custom requests.',
+  'Design a custom crochet piece that feels personal from the start.',
+  'Share your color ideas, occasion, or reference image and we will shape a custom order around your request.',
+  'Need help choosing a handmade piece or placing an order?',
+  'Reach out for gifting help, order updates, custom order questions, or product recommendations.'
 );
 
 insert into public.categories (slug, name, short_label, accent_color, tint_color, display_order) values
@@ -99,14 +99,14 @@ insert into public.categories (slug, name, short_label, accent_color, tint_color
   ('tops', 'Tops', 'TP', '#718f47', '#e6f0d9', 15);
 
 insert into public.announcements (message, display_order) values
-  ('Optimized Shopify catalog imported for relaunch', 1),
-  ('Review prices and stock before going live', 2),
-  ('Upload processed media to the product-media bucket', 3);
+  ('Handmade crochet accessories curated for gifting and everyday styling', 1),
+  ('Custom orders available for special colors, themes, and occasions', 2),
+  ('Secure Razorpay checkout with live order tracking after purchase', 3);
 
 insert into public.trust_badges (title, detail, icon_name, display_order) values
-  ('Handmade Finish', 'Each listing comes from your real crochet catalog and can be refined further in admin.', 'yarn', 1),
-  ('Optimized Media', 'Images are prepared for a lighter storefront and better free-tier usage.', 'check', 2),
-  ('Easy Relaunch', 'Database structure, products, and media paths are ready to reuse.', 'support', 3);
+  ('Secure Payment', 'Protected Razorpay checkout with production order records and payment verification.', 'shield', 1),
+  ('Handmade Finish', 'Each piece is presented as part of a real handmade catalog with refined images and product details.', 'yarn', 2),
+  ('Responsive Support', 'Use contact and custom order forms for gifting help, updates, and special requests.', 'support', 3);
 
 insert into public.products (
   category_id,

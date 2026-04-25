@@ -144,22 +144,19 @@ Deno.serve(async (request) => {
     const paymentStatus =
       paymentPayload?.status === "captured" || orderPayload?.status === "paid" ? "paid" : "authorized";
 
-    const { data: updatedOrder, error: updateError } = await supabase
-      .from("customer_orders")
-      .update({
-        status: paymentStatus,
-        razorpay_payment_id: razorpayPaymentId,
-        razorpay_signature: razorpaySignature,
-        gateway_payment_payload: paymentPayload,
-        gateway_order_payload: orderPayload,
-        payment_verified_at: new Date().toISOString(),
-        failure_message: null
-      })
-      .eq("id", localOrder.id)
-      .select("id, order_number, status, razorpay_payment_id")
-      .maybeSingle();
+    const { data: updatedOrder, error: updateError } = await supabase.rpc("finalize_paid_order", {
+      p_order_id: localOrder.id,
+      p_status: paymentStatus,
+      p_razorpay_payment_id: razorpayPaymentId,
+      p_razorpay_signature: razorpaySignature,
+      p_gateway_payment_payload: paymentPayload,
+      p_gateway_order_payload: orderPayload,
+      p_payment_verified_at: new Date().toISOString()
+    });
 
-    if (updateError || !updatedOrder) {
+    const finalizedOrder = Array.isArray(updatedOrder) ? updatedOrder[0] : updatedOrder;
+
+    if (updateError || !finalizedOrder) {
       return jsonResponse(
         {
           ok: false,
@@ -178,10 +175,10 @@ Deno.serve(async (request) => {
       ok: true,
       message: successMessage,
       order: {
-        localOrderId: updatedOrder.id,
-        orderNumber: updatedOrder.order_number,
-        status: updatedOrder.status,
-        razorpayPaymentId: updatedOrder.razorpay_payment_id
+        localOrderId: finalizedOrder.id,
+        orderNumber: finalizedOrder.order_number,
+        status: finalizedOrder.status,
+        razorpayPaymentId: finalizedOrder.razorpay_payment_id
       }
     });
   } catch (error) {

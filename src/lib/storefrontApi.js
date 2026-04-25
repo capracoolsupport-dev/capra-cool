@@ -1,5 +1,37 @@
-import { mockStorefront } from "./mockData";
 import { hasSupabaseConfig, supabase } from "./supabase";
+
+const defaultStoreSettings = {
+  brandName: "Trendy Spice Store",
+  brandSubline: "trendyspicestore.com",
+  supportEmail: "trendyspicestore@gmail.com",
+  supportPhone: "+91 90000 00000",
+  businessLocation: "Bengaluru, India",
+  supportWindow: "Monday to Saturday, 10 AM to 7 PM",
+  instagramUrl: "https://www.instagram.com/",
+  facebookUrl: "https://www.facebook.com/",
+  heroEyebrow: "Premium handmade crochet",
+  heroTitle: "Handmade crochet that feels personal, polished, and beautifully gift-ready.",
+  heroDescription:
+    "Discover premium handmade crochet pieces with soft texture, curated color stories, and a shopping experience that feels calm, clear, and gift-ready.",
+  heroPrimaryCtaLabel: "Explore Collection",
+  heroPrimaryCtaHref: "/#featured",
+  heroSecondaryCtaLabel: "Create Custom Order",
+  heroSecondaryCtaHref: "/customize",
+  heroStats: [],
+  showcaseEyebrow: "Showcase",
+  showcaseTitle: "",
+  showcaseDescription: "",
+  showcaseVideoUrl: "",
+  showcasePosterUrl: "",
+  aboutTitle: "Handmade crochet made to feel slow, warm, and intentionally premium.",
+  aboutIntro: "",
+  aboutStory: "",
+  qualityPromise: "",
+  customizeTitle: "Design a custom crochet piece that feels personal from the start.",
+  customizeDescription: "",
+  contactTitle: "Need help choosing a handmade piece or placing an order?",
+  contactDescription: ""
+};
 
 function mapStorageUrl(bucketName, storagePath) {
   if (!supabase || !bucketName || !storagePath) {
@@ -27,6 +59,7 @@ function normalizeProduct(product, categoriesById) {
       isPrimary: Boolean(item.is_primary || item.isPrimary),
       sortOrder: item.sort_order || item.sortOrder || 0
     }))
+    .filter((item) => item.url)
     .sort((left, right) => left.sortOrder - right.sortOrder);
 
   const reviews = (product.reviews || [])
@@ -64,88 +97,84 @@ function normalizeProduct(product, categoriesById) {
 }
 
 function normalizeSettings(settings) {
-  if (!settings) {
-    return mockStorefront.settings;
-  }
-
   return {
-    brandName: settings.brand_name || settings.brandName || mockStorefront.settings.brandName,
-    brandSubline: settings.brand_subline || settings.brandSubline || mockStorefront.settings.brandSubline,
-    supportEmail: settings.support_email || settings.supportEmail || mockStorefront.settings.supportEmail,
-    supportPhone: settings.support_phone || settings.supportPhone || mockStorefront.settings.supportPhone,
+    brandName: settings.brand_name || settings.brandName || defaultStoreSettings.brandName,
+    brandSubline: settings.brand_subline || settings.brandSubline || defaultStoreSettings.brandSubline,
+    supportEmail: settings.support_email || settings.supportEmail || defaultStoreSettings.supportEmail,
+    supportPhone: settings.support_phone || settings.supportPhone || defaultStoreSettings.supportPhone,
     businessLocation:
       settings.business_location ||
       settings.businessLocation ||
-      mockStorefront.settings.businessLocation,
-    supportWindow: settings.support_window || settings.supportWindow || mockStorefront.settings.supportWindow,
-    instagramUrl: settings.instagram_url || settings.instagramUrl || mockStorefront.settings.instagramUrl,
-    facebookUrl: settings.facebook_url || settings.facebookUrl || mockStorefront.settings.facebookUrl,
-    heroEyebrow: settings.hero_eyebrow || settings.heroEyebrow || mockStorefront.settings.heroEyebrow,
-    heroTitle: settings.hero_title || settings.heroTitle || mockStorefront.settings.heroTitle,
+      defaultStoreSettings.businessLocation,
+    supportWindow: settings.support_window || settings.supportWindow || defaultStoreSettings.supportWindow,
+    instagramUrl: settings.instagram_url || settings.instagramUrl || defaultStoreSettings.instagramUrl,
+    facebookUrl: settings.facebook_url || settings.facebookUrl || defaultStoreSettings.facebookUrl,
+    heroEyebrow: settings.hero_eyebrow || settings.heroEyebrow || defaultStoreSettings.heroEyebrow,
+    heroTitle: settings.hero_title || settings.heroTitle || defaultStoreSettings.heroTitle,
     heroDescription:
       settings.hero_description ||
       settings.heroDescription ||
-      mockStorefront.settings.heroDescription,
+      defaultStoreSettings.heroDescription,
     heroPrimaryCtaLabel:
       settings.hero_primary_cta_label ||
       settings.heroPrimaryCtaLabel ||
-      mockStorefront.settings.heroPrimaryCtaLabel,
+      defaultStoreSettings.heroPrimaryCtaLabel,
     heroPrimaryCtaHref:
       settings.hero_primary_cta_href ||
       settings.heroPrimaryCtaHref ||
-      mockStorefront.settings.heroPrimaryCtaHref,
+      defaultStoreSettings.heroPrimaryCtaHref,
     heroSecondaryCtaLabel:
       settings.hero_secondary_cta_label ||
       settings.heroSecondaryCtaLabel ||
-      mockStorefront.settings.heroSecondaryCtaLabel,
+      defaultStoreSettings.heroSecondaryCtaLabel,
     heroSecondaryCtaHref:
       settings.hero_secondary_cta_href ||
       settings.heroSecondaryCtaHref ||
-      mockStorefront.settings.heroSecondaryCtaHref,
-    heroStats: settings.hero_stats || settings.heroStats || mockStorefront.settings.heroStats,
+      defaultStoreSettings.heroSecondaryCtaHref,
+    heroStats: settings.hero_stats || settings.heroStats || defaultStoreSettings.heroStats,
     showcaseEyebrow:
       settings.showcase_eyebrow ||
       settings.showcaseEyebrow ||
-      mockStorefront.settings.showcaseEyebrow,
+      defaultStoreSettings.showcaseEyebrow,
     showcaseTitle:
       settings.showcase_title ||
       settings.showcaseTitle ||
-      mockStorefront.settings.showcaseTitle,
+      defaultStoreSettings.showcaseTitle,
     showcaseDescription:
       settings.showcase_description ||
       settings.showcaseDescription ||
-      mockStorefront.settings.showcaseDescription,
+      defaultStoreSettings.showcaseDescription,
     showcaseVideoUrl:
       settings.showcase_video_url ||
       settings.showcaseVideoUrl ||
-      mockStorefront.settings.showcaseVideoUrl,
+      defaultStoreSettings.showcaseVideoUrl,
     showcasePosterUrl:
       settings.showcase_poster_url ||
       settings.showcasePosterUrl ||
-      mockStorefront.settings.showcasePosterUrl,
-    aboutTitle: settings.about_title || settings.aboutTitle || mockStorefront.settings.aboutTitle,
-    aboutIntro: settings.about_intro || settings.aboutIntro || mockStorefront.settings.aboutIntro,
-    aboutStory: settings.about_story || settings.aboutStory || mockStorefront.settings.aboutStory,
+      defaultStoreSettings.showcasePosterUrl,
+    aboutTitle: settings.about_title || settings.aboutTitle || defaultStoreSettings.aboutTitle,
+    aboutIntro: settings.about_intro || settings.aboutIntro || defaultStoreSettings.aboutIntro,
+    aboutStory: settings.about_story || settings.aboutStory || defaultStoreSettings.aboutStory,
     qualityPromise:
       settings.quality_promise ||
       settings.qualityPromise ||
-      mockStorefront.settings.qualityPromise,
+      defaultStoreSettings.qualityPromise,
     customizeTitle:
       settings.customize_title ||
       settings.customizeTitle ||
-      mockStorefront.settings.customizeTitle,
+      defaultStoreSettings.customizeTitle,
     customizeDescription:
       settings.customize_description ||
       settings.customizeDescription ||
-      mockStorefront.settings.customizeDescription,
+      defaultStoreSettings.customizeDescription,
     contactTitle:
       settings.contact_title ||
       settings.contactTitle ||
-      mockStorefront.settings.contactTitle,
+      defaultStoreSettings.contactTitle,
     contactDescription:
       settings.contact_description ||
       settings.contactDescription ||
-      mockStorefront.settings.contactDescription
+      defaultStoreSettings.contactDescription
   };
 }
 
@@ -217,9 +246,10 @@ function humanizeSupabaseError(error, fallback) {
 export async function loadStorefrontData() {
   if (!hasSupabaseConfig || !supabase) {
     return {
-      data: mockStorefront,
-      source: "mock",
-      error: null
+      ok: false,
+      data: null,
+      source: "supabase",
+      error: new Error("Supabase credentials are required to load the storefront.")
     };
   }
 
@@ -261,30 +291,32 @@ export async function loadStorefrontData() {
       throw error;
     }
 
+    if (!settingsResult.data) {
+      throw new Error("Store settings are missing.");
+    }
+
     if (!categoriesResult.data?.length || !productsResult.data?.length) {
-      return {
-        data: mockStorefront,
-        source: "mock",
-        error: new Error("No storefront content was found yet. Add catalog data to finish the collection.")
-      };
+      throw new Error("The storefront catalog is incomplete.");
     }
 
     return {
+      ok: true,
       data: normalizeStorefrontData({
-        settings: settingsResult.data || mockStorefront.settings,
-        announcements: announcementsResult.data || mockStorefront.announcements,
-        categories: categoriesResult.data || mockStorefront.categories,
-        trustBadges: trustBadgesResult.data || mockStorefront.trustBadges,
-        homepageReviews: homepageReviewsResult.data || mockStorefront.homepageReviews,
-        products: productsResult.data || mockStorefront.products
+        settings: settingsResult.data,
+        announcements: announcementsResult.data || [],
+        categories: categoriesResult.data || [],
+        trustBadges: trustBadgesResult.data || [],
+        homepageReviews: homepageReviewsResult.data || [],
+        products: productsResult.data || []
       }),
       source: "supabase",
       error: null
     };
   } catch (error) {
     return {
-      data: mockStorefront,
-      source: "mock",
+      ok: false,
+      data: null,
+      source: "supabase",
       error
     };
   }

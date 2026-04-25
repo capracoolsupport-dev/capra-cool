@@ -4,6 +4,7 @@ import Button from "../components/Button.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import RatingStars from "../components/RatingStars.jsx";
 import { ProductPageSkeleton } from "../components/Skeletons.jsx";
+import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 import { formatPrice, getRelatedProducts } from "../lib/formatting";
 
 function QuantitySelector({ quantity, onDecrease, onIncrease }) {
@@ -22,7 +23,7 @@ function QuantitySelector({ quantity, onDecrease, onIncrease }) {
 
 export default function ProductPage() {
   const { slug } = useParams();
-  const { data, addToCart } = useOutletContext();
+  const { data, storefrontState, addToCart } = useOutletContext();
   const [activeIndex, setActiveIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [statusMessage, setStatusMessage] = useState("");
@@ -42,6 +43,10 @@ export default function ProductPage() {
   }, [slug]);
 
   if (!data) {
+    if (storefrontState.status === "error") {
+      return <StorefrontErrorState title="This product is temporarily unavailable." />;
+    }
+
     return <ProductPageSkeleton />;
   }
 

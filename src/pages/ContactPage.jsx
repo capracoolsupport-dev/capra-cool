@@ -3,21 +3,27 @@ import { useOutletContext } from "react-router-dom";
 import Button from "../components/Button.jsx";
 import Input from "../components/Input.jsx";
 import { FormPageSkeleton } from "../components/Skeletons.jsx";
+import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 import { submitContactMessage } from "../lib/storefrontApi";
 
 const initialForm = {
   name: "",
   email: "",
+  phone: "",
   message: ""
 };
 
 export default function ContactPage() {
-  const { data } = useOutletContext();
+  const { data, storefrontState } = useOutletContext();
   const [form, setForm] = useState(initialForm);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
 
   if (!data) {
+    if (storefrontState.status === "error") {
+      return <StorefrontErrorState title="Support is temporarily unavailable." />;
+    }
+
     return <FormPageSkeleton />;
   }
 
@@ -64,6 +70,13 @@ export default function ContactPage() {
               required
               type="email"
               value={form.email}
+            />
+
+            <Input
+              label="Phone Number (optional)"
+              onChange={(event) => setForm({ ...form, phone: event.target.value })}
+              type="tel"
+              value={form.phone}
             />
 
             <Input
