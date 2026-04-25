@@ -1,5 +1,4 @@
 -- Production hardening for the storefront and admin.
--- Replace the UUID inside public.is_admin_user() before running this file.
 -- Run this after the base schema, and use it instead of supabase/admin_dev_access.sql.
 
 create or replace function public.is_admin_user()
@@ -7,7 +6,7 @@ returns boolean
 language sql
 stable
 as $$
-  select coalesce(auth.uid() = '00000000-0000-0000-0000-000000000000'::uuid, false);
+  select coalesce(auth.uid() = '8e2e369f-8f78-47c8-a90f-584d8a1a2f5a'::uuid, false);
 $$;
 
 alter table if exists public.store_settings enable row level security;
