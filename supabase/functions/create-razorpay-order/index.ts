@@ -72,7 +72,7 @@ async function loadValidatedItems(
 
   const { data: products, error } = await supabase
     .from("products")
-    .select("id, slug, name, price_inr, stock_quantity, is_active")
+    .select("id, slug, name, price_inr, discount_price, stock_quantity, is_active")
     .in("slug", slugs);
 
   if (error) {
@@ -98,7 +98,7 @@ async function loadValidatedItems(
       product_id: product.id,
       slug: product.slug,
       name: product.name,
-      priceInr: Number(product.price_inr ?? 0),
+      priceInr: Number(product.discount_price ?? product.price_inr ?? 0),
       quantity: item.quantity
     };
   });
@@ -179,6 +179,7 @@ Deno.serve(async (request) => {
   const body = await request.json().catch(() => null);
   const requestedItems = sanitizeRequestedItems(body?.items);
   const customer = sanitizeCustomer(body?.customer);
+  const couponCode = normalizeText(body?.couponCode);
 
   if (!requestedItems.length) {
     return jsonResponse({ ok: false, message: "Your cart is empty." }, 400);
@@ -219,7 +220,25 @@ Deno.serve(async (request) => {
 
   const amountSubunits = toAmountSubunits(validatedItems);
 
-  if (amountSubunits <= 0) {
+  let discountSubunits = 0;
+  if (couponCode) {
+    const { data: discount } = await supabase
+      .from("discounts")
+      .select("*")
+      .eq("code", couponCode.toUpperCase())
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (discount && amountSubunits >= (discount.min_order_amount || 0) * 100) {
+      discountSubunits = Math.round((amountSubunits * discount.discount_percent) / 100);
+    }
+  }
+
+  let finalAmountSubunits = amountSubunits - discountSubunits;
+  const deliveryChargeSubunits = finalAmountSubunits >= 59900 ? 0 : 7000;
+  finalAmountSubunits += deliveryChargeSubunits;
+
+  if (finalAmountSubunits <= 0) {
     return jsonResponse({ ok: false, message: "Invalid order amount." }, 400);
   }
 
@@ -242,10 +261,11 @@ Deno.serve(async (request) => {
       shipping_country: customer.country,
       customer_notes: customer.notes,
       currency: "INR",
-      amount_inr: Number((amountSubunits / 100).toFixed(2)),
-      amount_subunits: amountSubunits,
+      amount_inr: Number((finalAmountSubunits / 100).toFixed(2)),
+      amount_subunits: finalAmountSubunits,
       status: "draft",
-      line_items: validatedItems
+      line_items: validatedItems,
+      customer_notes: customer.notes || (couponCode ? `Used coupon: ${couponCode}` : null)
     })
     .select("id, order_number, amount_inr, amount_subunits, currency")
     .maybeSingle();
@@ -262,7 +282,7 @@ Deno.serve(async (request) => {
 
   try {
     const razorpayOrder = await createRazorpayOrder({
-      amount: amountSubunits,
+      amount: finalAmountSubunits,
       currency: "INR",
       receipt,
       keyId: razorpayKeyId,

@@ -250,7 +250,8 @@ function normalizeStorefrontData(payload) {
         displayOrder: item.display_order || item.displayOrder || 0
       }))
       .sort((left, right) => left.displayOrder - right.displayOrder),
-    products
+    products,
+    discounts: payload.discounts || []
   };
 }
 
@@ -283,7 +284,8 @@ export async function loadStorefrontData() {
       categoriesResult,
       trustBadgesResult,
       homepageReviewsResult,
-      productsResult
+      productsResult,
+      discountsResult
     ] = await Promise.all([
       supabase.from("store_settings").select("*").limit(1).maybeSingle(),
       supabase.from("announcements").select("*").eq("is_active", true).order("display_order"),
@@ -299,7 +301,8 @@ export async function loadStorefrontData() {
           reviews(*)
         `)
         .eq("is_active", true)
-        .order("display_order")
+        .order("display_order"),
+      supabase.from("discounts").select("*").eq("is_active", true)
     ]);
 
     const error =
@@ -308,7 +311,8 @@ export async function loadStorefrontData() {
       categoriesResult.error ||
       trustBadgesResult.error ||
       homepageReviewsResult.error ||
-      productsResult.error;
+      productsResult.error ||
+      discountsResult.error;
 
     if (error) {
       throw error;
@@ -330,7 +334,8 @@ export async function loadStorefrontData() {
         categories: categoriesResult.data || [],
         trustBadges: trustBadgesResult.data || [],
         homepageReviews: homepageReviewsResult.data || [],
-        products: productsResult.data || []
+        products: productsResult.data || [],
+        discounts: discountsResult.data || []
       }),
       source: "supabase",
       error: null

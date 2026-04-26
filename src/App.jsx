@@ -49,7 +49,7 @@ export default function App() {
       if (existing) {
         return current.map((item) =>
           item.slug === product.slug
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: Math.min(item.quantity + quantity, product.stockQuantity) }
             : item
         );
       }
@@ -61,7 +61,8 @@ export default function App() {
           name: product.name,
           priceInr: product.priceInr,
           image: product.primaryImage,
-          quantity
+          stockQuantity: product.stockQuantity,
+          quantity: Math.min(quantity, product.stockQuantity)
         }
       ];
     });
@@ -72,7 +73,7 @@ export default function App() {
       current
         .map((item) =>
           item.slug === slug
-            ? { ...item, quantity: Math.max(1, nextQuantity) }
+            ? { ...item, quantity: Math.min(Math.max(1, nextQuantity), item.stockQuantity || 999) }
             : item
         )
         .filter(Boolean)

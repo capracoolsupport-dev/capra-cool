@@ -75,11 +75,13 @@ export async function launchRazorpayCheckout({
   brandName,
   cartItems,
   customer,
+  couponCode,
   onDismiss
 }) {
   const orderResult = await createRazorpayOrder({
     items: cartItems,
-    customer
+    customer,
+    couponCode
   });
 
   if (!orderResult.ok) {

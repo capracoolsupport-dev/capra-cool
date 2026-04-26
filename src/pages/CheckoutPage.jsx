@@ -10,9 +10,6 @@ import { formatPrice } from "../lib/formatting.js";
 
 const DELIVERY_CHARGE = 70;
 const FREE_SHIPPING_THRESHOLD = 599;
-const VALID_COUPONS = {
-  WELCOME10: { percent: 10, label: "WELCOME10" }
-};
 
 function createInitialCustomer() {
   return {
@@ -72,11 +69,19 @@ export default function CheckoutPage() {
 
   const handleApplyCoupon = () => {
     const code = couponCode.trim().toUpperCase();
-    if (VALID_COUPONS[code]) {
-      setAppliedCoupon(VALID_COUPONS[code]);
+    const discountRecord = data.discounts?.find((d) => d.code === code && d.is_active);
+    
+    if (discountRecord) {
+      if (subtotal >= (discountRecord.min_order_amount || 0)) {
+        setAppliedCoupon({ code, percent: discountRecord.discount_percent, label: code });
+        setStatus({ tone: "success", message: `Coupon applied: ${discountRecord.discount_percent}% off!` });
+      } else {
+        setAppliedCoupon(null);
+        setStatus({ tone: "error", message: `This coupon requires a minimum order of ₹${discountRecord.min_order_amount}.` });
+      }
     } else {
       setAppliedCoupon(null);
-      setStatus({ tone: "error", message: "Invalid coupon code." });
+      setStatus({ tone: "error", message: "Invalid or expired coupon code." });
     }
   };
 
@@ -136,6 +141,7 @@ export default function CheckoutPage() {
         priceInr: item.priceInr,
         quantity: item.quantity
       })),
+      couponCode: appliedCoupon?.code,
       customer: {
         name: customer.name.trim(),
         email: customer.email.trim(),

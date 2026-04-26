@@ -248,7 +248,7 @@ export default function ProductPage() {
               <div style={{ marginTop: "0.4rem" }}>
                 <QuantitySelector
                   onDecrease={() => setQuantity((current) => Math.max(1, current - 1))}
-                  onIncrease={() => setQuantity((current) => current + 1)}
+                  onIncrease={() => setQuantity((current) => Math.min(product.stockQuantity, current + 1))}
                   quantity={quantity}
                 />
               </div>
