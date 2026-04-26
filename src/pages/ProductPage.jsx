@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useOutletContext, useParams } from "react-router-dom";
 import Button from "../components/Button.jsx";
+import Icon from "../components/Icons.jsx";
 import ProductCard from "../components/ProductCard.jsx";
 import RatingStars from "../components/RatingStars.jsx";
 import { ProductPageSkeleton } from "../components/Skeletons.jsx";
@@ -10,13 +11,85 @@ import { formatPrice, getRelatedProducts } from "../lib/formatting";
 function QuantitySelector({ quantity, onDecrease, onIncrease }) {
   return (
     <div className="quantity-selector">
-      <button onClick={onDecrease} type="button">
-        -
-      </button>
+      <button onClick={onDecrease} type="button" aria-label="Decrease quantity">−</button>
       <span>{quantity}</span>
-      <button onClick={onIncrease} type="button">
-        +
-      </button>
+      <button onClick={onIncrease} type="button" aria-label="Increase quantity">+</button>
+    </div>
+  );
+}
+
+function ProductSpecs({ product }) {
+  const specs = [
+    { label: "Material", value: "Premium Crochet Yarn" },
+    { label: "Type", value: product.category?.name || "Handmade" },
+    { label: "Size", value: product.highlights?.[0] || "Standard" },
+    { label: "Color", value: product.highlights?.[1] || "As shown" }
+  ];
+
+  return (
+    <div>
+      <h3 style={{ marginBottom: "0.5rem" }}>Product Specifications</h3>
+      <table className="specs-table">
+        <tbody>
+          {specs.map((spec) => (
+            <tr key={spec.label}>
+              <td>{spec.label}</td>
+              <td>{spec.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function DeliveryCheck() {
+  const [pincode, setPincode] = useState("");
+  const [result, setResult] = useState("");
+
+  const handleCheck = () => {
+    if (pincode.length >= 5) {
+      setResult("Delivery in 3 – 7 days");
+    }
+  };
+
+  return (
+    <div>
+      <h3 style={{ marginBottom: "0.5rem" }}>Check Delivery</h3>
+      <div className="delivery-check">
+        <input
+          onChange={(e) => setPincode(e.target.value)}
+          placeholder="Enter Pincode"
+          type="text"
+          value={pincode}
+        />
+        <button onClick={handleCheck} type="button">Check</button>
+      </div>
+      {result ? (
+        <div className="delivery-estimate">
+          <Icon name="truck" />
+          <span>{result}</span>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function TrustBadges() {
+  return (
+    <div className="trust-row">
+      <div className="trust-badge-card">
+        <Icon name="shield" />
+        <span>Secure Payment</span>
+      </div>
+      <div className="trust-badge-card">
+        <Icon name="refresh-cw" />
+        <span>Easy Returns</span>
+      </div>
+      <div className="trust-badge-card">
+        <Icon name="yarn" />
+        <span>Handmade Quality</span>
+      </div>
     </div>
   );
 }
@@ -63,6 +136,11 @@ export default function ProductPage() {
     setStatusMessage(`${quantity} ${product.name} added to cart.`);
   };
 
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    window.location.href = "/checkout";
+  };
+
   return (
     <>
       <section className="page-section product-page">
@@ -79,14 +157,9 @@ export default function ProductPage() {
             <div
               className="gallery-stage"
               onTouchEnd={(event) => {
-                if (!hasGalleryControls) {
-                  return;
-                }
-
+                if (!hasGalleryControls) return;
                 const delta = event.changedTouches[0].screenX - touchStart;
-                if (Math.abs(delta) < 25) {
-                  return;
-                }
+                if (Math.abs(delta) < 25) return;
                 setActiveIndex((current) =>
                   delta < 0
                     ? (current + 1) % gallery.length
@@ -104,7 +177,7 @@ export default function ProductPage() {
                   }
                   type="button"
                 >
-                  &lt;
+                  <Icon name="chevron-left" />
                 </button>
               ) : null}
               <img
@@ -118,7 +191,7 @@ export default function ProductPage() {
                   onClick={() => setActiveIndex((current) => (current + 1) % gallery.length)}
                   type="button"
                 >
-                  &gt;
+                  <Icon name="chevron-right" />
                 </button>
               ) : null}
             </div>
@@ -141,41 +214,64 @@ export default function ProductPage() {
           </div>
 
           <div className="product-info-panel">
-            <p className="eyebrow">Handmade {product.category?.name}</p>
-            <h1>{product.name}</h1>
             <RatingStars rating={product.rating} reviewCount={product.reviewCount} />
+            <h1>{product.name}</h1>
             <div className="product-price-row">
               <strong className="price-large">{formatPrice(product.priceInr)}</strong>
-              <span className="meta-text">{product.reviewCount} happy customer reviews</span>
             </div>
-            <p className="product-tagline">{product.tagline}</p>
             <p>{product.description}</p>
 
-            <div className="highlight-list">
-              {product.highlights.map((highlight) => (
-                <div className="highlight-card" key={highlight}>
-                  <strong>{highlight}</strong>
-                </div>
-              ))}
+            <ProductSpecs product={product} />
+
+            {product.highlights.length > 0 ? (
+              <div>
+                <h3 style={{ marginBottom: "0.5rem" }}>Features</h3>
+                <ul className="features-list">
+                  {product.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <div>
+              <span className="quantity-label">Quantity</span>
+              <div style={{ marginTop: "0.4rem" }}>
+                <QuantitySelector
+                  onDecrease={() => setQuantity((current) => Math.max(1, current - 1))}
+                  onIncrease={() => setQuantity((current) => current + 1)}
+                  quantity={quantity}
+                />
+              </div>
             </div>
 
-            <div className="quantity-card product-purchase-card">
-              <span className="quantity-label">Quantity</span>
-              <QuantitySelector
-                onDecrease={() => setQuantity((current) => Math.max(1, current - 1))}
-                onIncrease={() => setQuantity((current) => current + 1)}
-                quantity={quantity}
-              />
-              <Button onClick={handleAddToCart} type="button" wide>
+            <div className="purchase-actions">
+              <button className="btn-add-cart" onClick={handleAddToCart} type="button">
                 Add to Cart
-              </Button>
+              </button>
+              <button className="btn-buy-now" onClick={handleBuyNow} type="button">
+                Buy Now
+              </button>
+            </div>
+
+            <div className="action-btns-row">
+              <button className="action-btn-outline" type="button">
+                <Icon name="heart" /> Wishlist
+              </button>
+              <button className="action-btn-outline" type="button">
+                <Icon name="share" /> Share
+              </button>
             </div>
 
             {statusMessage ? (
               <div className="add-to-cart-status" role="status">
+                <Icon name="check-circle" />
                 <p>{statusMessage}</p>
               </div>
             ) : null}
+
+            <DeliveryCheck />
+            <TrustBadges />
           </div>
         </div>
 
@@ -220,9 +316,9 @@ export default function ProductPage() {
           <p className="eyebrow">You may also like</p>
           <h2>Related Handmade Picks</h2>
         </div>
-        <div className="product-grid editorial-grid">
+        <div className="product-grid">
           {related.map((item) => (
-            <ProductCard badge="Related" key={item.slug} product={item} />
+            <ProductCard key={item.slug} product={item} />
           ))}
         </div>
       </section>

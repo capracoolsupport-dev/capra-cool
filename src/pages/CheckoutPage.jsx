@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import Button from "../components/Button.jsx";
+import Icon from "../components/Icons.jsx";
 import Input from "../components/Input.jsx";
 import { CheckoutPageSkeleton } from "../components/Skeletons.jsx";
 import StorefrontErrorState from "../components/StorefrontErrorState.jsx";
 import { launchRazorpayCheckout } from "../lib/paymentApi.js";
 import { formatPrice } from "../lib/formatting.js";
+
+const DELIVERY_CHARGE = 70;
+const FREE_SHIPPING_THRESHOLD = 599;
+const VALID_COUPONS = {
+  WELCOME10: { percent: 10, label: "WELCOME10" }
+};
 
 function createInitialCustomer() {
   return {
@@ -30,6 +37,8 @@ export default function CheckoutPage() {
     message: ""
   });
   const [successOrder, setSuccessOrder] = useState(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   useEffect(() => {
     if (data?.settings?.brandName) {
@@ -54,8 +63,21 @@ export default function CheckoutPage() {
     return <CheckoutPageSkeleton />;
   }
 
-  const total = cartItems.reduce((sum, item) => sum + item.priceInr * item.quantity, 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + item.priceInr * item.quantity, 0);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const deliveryCharge = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : DELIVERY_CHARGE;
+  const discount = appliedCoupon ? Math.round(subtotal * appliedCoupon.percent / 100) : 0;
+  const total = subtotal - discount + deliveryCharge;
+
+  const handleApplyCoupon = () => {
+    const code = couponCode.trim().toUpperCase();
+    if (VALID_COUPONS[code]) {
+      setAppliedCoupon(VALID_COUPONS[code]);
+    } else {
+      setAppliedCoupon(null);
+      setStatus({ tone: "error", message: "Invalid coupon code." });
+    }
+  };
 
   const updateCustomer = (name, value) => {
     setCustomer((current) => ({
@@ -202,8 +224,19 @@ export default function CheckoutPage() {
     <section className="page-section">
       <div className="checkout-page">
         <div className="checkout-copy">
-          <p className="eyebrow">Secure checkout</p>
-          <h1>Pay for your handmade picks with Razorpay.</h1>
+          <h1>Checkout</h1>
+          <div className="checkout-stepper">
+            <span className="stepper-step is-active"><Icon name="map-pin" /> Address</span>
+            <span className="stepper-line" />
+            <span className="stepper-step"><Icon name="truck" /> Delivery</span>
+            <span className="stepper-line" />
+            <span className="stepper-step"><Icon name="shield" /> Payment</span>
+          </div>
+        </div>
+        <div className="checkout-assurance-row">
+          <span>🔒 Secure Payments</span>
+          <span>🚚 Fast Delivery</span>
+          <span>✋ Handmade Quality</span>
         </div>
 
         <div className="checkout-layout">
@@ -246,12 +279,49 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            <div className="checkout-total-box">
-              <div className="cart-total-row">
-                <span>Subtotal</span>
-                <strong>{formatPrice(total)}</strong>
+            <div style={{ marginTop: '0.75rem' }}>
+              <p className="eyebrow" style={{ marginBottom: '0.4rem' }}>Apply Coupon</p>
+              <div className="coupon-row">
+                <input
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  placeholder="Enter coupon code"
+                  type="text"
+                  value={couponCode}
+                />
+                <button onClick={handleApplyCoupon} type="button">Apply</button>
               </div>
-              <p>Use your email to receive order updates and tracking details.</p>
+              {appliedCoupon ? (
+                <div className="coupon-success">
+                  <Icon name="check-circle" />
+                  <span>{appliedCoupon.label} applied! You saved {formatPrice(discount)}</span>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="checkout-total-box">
+              <div className="total-row">
+                <span>Subtotal</span>
+                <span>{formatPrice(subtotal)}</span>
+              </div>
+              {discount > 0 ? (
+                <div className="total-row" style={{ color: 'var(--success)' }}>
+                  <span>Discount ({appliedCoupon?.label})</span>
+                  <span>-{formatPrice(discount)}</span>
+                </div>
+              ) : null}
+              <div className="total-row">
+                <span>Delivery Charges</span>
+                <span>{deliveryCharge === 0 ? 'Free' : formatPrice(deliveryCharge)}</span>
+              </div>
+              {subtotal < FREE_SHIPPING_THRESHOLD && subtotal > 0 ? (
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-soft)' }}>
+                  Free above {formatPrice(FREE_SHIPPING_THRESHOLD)} for prepaid
+                </p>
+              ) : null}
+              <div className="total-row final">
+                <span>Total Amount</span>
+                <span>{formatPrice(total)}</span>
+              </div>
             </div>
           </div>
 
@@ -349,7 +419,7 @@ export default function CheckoutPage() {
             </div>
 
             <Button disabled={busy} type="submit" wide>
-              {busy ? "Preparing Razorpay..." : `Pay ${formatPrice(total)}`}
+              {busy ? "Preparing Razorpay..." : `Proceed to Pay ${formatPrice(total)}`}
             </Button>
 
             <p className="checkout-form-note">We use these details to deliver the order and share courier updates.</p>

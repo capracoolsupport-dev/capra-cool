@@ -8,20 +8,48 @@ import MobileMenu from "./MobileMenu.jsx";
 
 const navLinks = [
   { to: "/", label: "Home", end: true },
-  { to: "/#featured", label: "Products" },
-  { to: "/about", label: "About Us" },
-  { to: "/blog", label: "Blog" },
+  { to: "/#featured", label: "Shop All" },
+  { to: "/customize", label: "Custom Order" },
   { to: "/track-order", label: "Track Order" },
-  { to: "/customize", label: "Custom Orders" },
-  { to: "/contact", label: "Contact" }
+  { to: "/blog", label: "Our Blogs" },
+  { to: "/about", label: "Our Story" },
+  { to: "/contact", label: "Get in Touch" }
 ];
 
-const footerPolicyLinks = [
+const footerQuickLinks = [
   { to: "/shipping-policy", label: "Shipping Policy" },
   { to: "/return-policy", label: "Return Policy" },
   { to: "/privacy-policy", label: "Privacy Policy" },
   { to: "/faq", label: "FAQ" }
 ];
+
+const footerHelpLinks = [
+  { to: "/track-order", label: "Track Order" },
+  { to: "/customize", label: "Custom Order" },
+  { to: "/contact", label: "Contact Us" }
+];
+
+function AnnouncementBar({ announcements }) {
+  const items = announcements?.length
+    ? announcements.map((a) => a.message)
+    : [
+        "🚚 Free shipping above ₹599",
+        "📦 Delivery charges ₹70",
+        "🏷️ Get 10% discount using code WELCOME10"
+      ];
+
+  const tripled = [...items, ...items, ...items];
+
+  return (
+    <div className="announcement-bar">
+      <div className="announcement-track">
+        {tripled.map((msg, i) => (
+          <span key={i}>{msg}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function SiteLayout({
   storefrontState,
@@ -49,6 +77,7 @@ export default function SiteLayout({
     settings?.instagramUrl || "https://www.instagram.com/muskan_crochet_?igsh=MWk1eWdvYTR6NDR5";
   const facebookUrl = settings?.facebookUrl || "https://www.facebook.com/share/1CDKXCNsFq/";
   const categories = data?.categories || [];
+  const announcements = data?.announcements || [];
   const overlayOpen = mobileMenuOpen || cartOpen;
   const isCheckoutRoute = location.pathname === "/checkout";
 
@@ -148,6 +177,8 @@ export default function SiteLayout({
         Skip to content
       </a>
 
+      <AnnouncementBar announcements={announcements} />
+
       <Header
         brandName={brandName}
         cartCount={cartCount}
@@ -158,13 +189,14 @@ export default function SiteLayout({
       {mobileMenuOpen ? (
         <MobileMenu
           brandName={brandName}
+          businessLocation={businessLocation}
           categories={categories}
           facebookUrl={facebookUrl}
           instagramHandle="@muskan_crochet_"
           instagramUrl={instagramUrl}
           navLinks={navLinks}
           onClose={() => setMobileMenuOpen(false)}
-          panelRef={mobileMenuPanelRef}
+          ref={mobileMenuPanelRef}
           supportEmail={supportEmail}
           supportPhone={supportPhone}
         />
@@ -183,8 +215,8 @@ export default function SiteLayout({
           >
             <div className="overlay-head">
               <div>
-                <p className="eyebrow">Your cart</p>
-                <h2 id="cart-dialog-title">Handmade picks saved</h2>
+                <p className="eyebrow">Your Cart</p>
+                <h2 id="cart-dialog-title">{cartCount} {cartCount === 1 ? "item" : "items"}</h2>
               </div>
               <button
                 aria-label="Close cart"
@@ -209,7 +241,7 @@ export default function SiteLayout({
                           onClick={() => updateCartQuantity(item.slug, item.quantity - 1)}
                           type="button"
                         >
-                          -
+                          −
                         </button>
                         <span>{item.quantity}</span>
                         <button
@@ -226,7 +258,7 @@ export default function SiteLayout({
                   </article>
                 ))
               ) : (
-                <p className="empty-state">Your cart is empty. Add a handmade favorite to get started.</p>
+                <p className="empty-state">Your cart is empty. Browse our handmade collection!</p>
               )}
             </div>
 
@@ -264,15 +296,17 @@ export default function SiteLayout({
 
       <footer className={`site-footer ${isCheckoutRoute ? "checkout-footer" : ""}`}>
         <div className="footer-stack">
-          <div>
-            <p className="eyebrow">{brandName}</p>
-            <h2>Simple handmade shopping.</h2>
+          <div className="footer-section">
+            <h4>About Us</h4>
+            <p style={{ fontSize: "0.85rem" }}>
+              {brandName} brings you premium handmade crochet products crafted with love.
+            </p>
           </div>
 
           <div className="footer-section">
-            <p className="eyebrow">Quick Links</p>
+            <h4>Quick Links</h4>
             <div className="footer-links">
-              {navLinks.map((link) => (
+              {footerQuickLinks.map((link) => (
                 <Link key={link.label} to={link.to}>
                   {link.label}
                 </Link>
@@ -281,9 +315,9 @@ export default function SiteLayout({
           </div>
 
           <div className="footer-section">
-            <p className="eyebrow">Policies</p>
+            <h4>Help</h4>
             <div className="footer-links">
-              {footerPolicyLinks.map((link) => (
+              {footerHelpLinks.map((link) => (
                 <Link key={link.label} to={link.to}>
                   {link.label}
                 </Link>
@@ -291,31 +325,37 @@ export default function SiteLayout({
             </div>
           </div>
 
-          <div className="footer-meta">
-            <p>
-              <strong>Business Location:</strong> {businessLocation}
-            </p>
-            <p>
-              <strong>Email:</strong> {supportEmail}
-            </p>
-            <p>
-              <strong>Contact:</strong> {supportPhone}
-            </p>
-            <p>
-              <strong>Support:</strong> {supportWindow}
-            </p>
-          </div>
+          <div className="footer-section">
+            <h4>Contact Us</h4>
+            <div className="footer-contact-item">
+              <Icon name="phone" />
+              <a href={`tel:${supportPhone}`}>{supportPhone}</a>
+            </div>
+            <div className="footer-contact-item">
+              <Icon name="mail" />
+              <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+            </div>
+            <div className="footer-contact-item">
+              <Icon name="map-pin" />
+              <span>{businessLocation}</span>
+            </div>
 
-          <div className="social-row">
-            <a className="social-link" href={instagramUrl} rel="noreferrer" target="_blank">
-              <Icon name="instagram" />
-              <span>@muskan_crochet_</span>
-            </a>
-            <a className="social-link" href={facebookUrl} rel="noreferrer" target="_blank">
-              <Icon name="facebook" />
-              <span>Facebook</span>
-            </a>
+            <h4 style={{ marginTop: "0.75rem" }}>Follow Us</h4>
+            <div className="social-row">
+              <a className="social-link" href={instagramUrl} rel="noreferrer" target="_blank">
+                <Icon name="instagram" />
+                <span>@muskan_crochet_</span>
+              </a>
+              <a className="social-link" href={facebookUrl} rel="noreferrer" target="_blank">
+                <Icon name="facebook" />
+                <span>Facebook</span>
+              </a>
+            </div>
           </div>
+        </div>
+
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} {brandName}. All rights reserved.</p>
         </div>
       </footer>
     </>

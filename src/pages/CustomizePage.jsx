@@ -9,6 +9,7 @@ import { submitCustomOrderRequest } from "../lib/storefrontApi";
 const initialForm = {
   name: "",
   email: "",
+  phone: "",
   productType: "",
   details: ""
 };
@@ -18,6 +19,14 @@ export default function CustomizePage() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   if (!data) {
     if (storefrontState.status === "error") {
@@ -60,7 +69,7 @@ export default function CustomizePage() {
 
           <form className="stack-form" onSubmit={handleSubmit}>
             <Input
-              label="Name"
+              label="Name *"
               onChange={(event) => setForm({ ...form, name: event.target.value })}
               required
               type="text"
@@ -68,7 +77,7 @@ export default function CustomizePage() {
             />
 
             <Input
-              label="Email"
+              label="Email *"
               onChange={(event) => setForm({ ...form, email: event.target.value })}
               required
               type="email"
@@ -76,9 +85,17 @@ export default function CustomizePage() {
             />
 
             <Input
+              label="Phone *"
+              onChange={(event) => setForm({ ...form, phone: event.target.value })}
+              required
+              type="tel"
+              value={form.phone}
+            />
+
+            <Input
               as="select"
               emptyOptionLabel="Select a crochet type"
-              label="Product Type"
+              label="Product Type *"
               onChange={(event) => setForm({ ...form, productType: event.target.value })}
               required
               value={form.productType}
@@ -92,12 +109,38 @@ export default function CustomizePage() {
 
             <Input
               as="textarea"
-              label="Customization Details"
+              label="Customization Details *"
               onChange={(event) => setForm({ ...form, details: event.target.value })}
               required
               rows={6}
               value={form.details}
             />
+
+            <div className="field field-full">
+              <span>Reference Image (optional)</span>
+              <input
+                accept="image/*"
+                onChange={handleImageChange}
+                type="file"
+                style={{
+                  border: '1px dashed var(--border-strong)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '0.75rem',
+                  background: 'var(--surface-soft)'
+                }}
+              />
+              {imagePreview ? (
+                <img
+                  alt="Reference preview"
+                  src={imagePreview}
+                  style={{
+                    maxWidth: '12rem',
+                    borderRadius: 'var(--radius-md)',
+                    marginTop: '0.5rem'
+                  }}
+                />
+              ) : null}
+            </div>
 
             <Button disabled={busy} type="submit" wide>
               {busy ? "Saving..." : "Request Custom Order"}

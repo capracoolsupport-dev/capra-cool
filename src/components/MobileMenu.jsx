@@ -12,7 +12,8 @@ const MobileMenu = forwardRef(function MobileMenu(
     navLinks,
     onClose,
     supportEmail,
-    supportPhone
+    supportPhone,
+    businessLocation
   },
   ref
 ) {
@@ -27,16 +28,16 @@ const MobileMenu = forwardRef(function MobileMenu(
         role="dialog"
         tabIndex={-1}
       >
-        <div className="overlay-head">
-          <div>
-            <p className="eyebrow">Menu</p>
-            <strong className="mobile-menu-brand" id="mobile-menu-title">
+        <div className="mobile-menu-header">
+          <Link className="mobile-menu-brand" onClick={onClose} to="/">
+            <span className="mobile-brand-name" id="mobile-menu-title">
               {brandName}
-            </strong>
-          </div>
+            </span>
+            <span className="mobile-brand-tagline">HANDMADE WITH LOVE</span>
+          </Link>
           <button
             aria-label="Close menu"
-            className="icon-button"
+            className="mobile-close-btn"
             onClick={onClose}
             type="button"
           >
@@ -47,46 +48,46 @@ const MobileMenu = forwardRef(function MobileMenu(
         <nav className="mobile-nav" aria-label="Mobile navigation">
           {navLinks.map((link) => (
             <NavLink
+              className="mobile-nav-item"
               end={link.end}
               key={link.label}
               onClick={onClose}
               to={link.to}
             >
-              {link.label}
+              <span>{link.label}</span>
+              {link.badge ? <span className="nav-badge">{link.badge}</span> : null}
+              <Icon name="chevron-right" />
             </NavLink>
           ))}
         </nav>
 
-        {categories.length ? (
-          <div className="mobile-category-block">
-            <p className="eyebrow">Categories</p>
-            <div className="mobile-category-grid">
-              {categories.map((category) => (
-                <Link
-                  key={category.slug}
-                  onClick={onClose}
-                  to={`/?category=${encodeURIComponent(category.slug)}#featured`}
-                >
-                  {category.name}
-                </Link>
-              ))}
+        <div className="mobile-support-section">
+          <p className="mobile-section-title">Customer Support</p>
+          <a className="mobile-support-item" href={`tel:${supportPhone}`}>
+            <Icon name="phone" />
+            <span>{supportPhone}</span>
+          </a>
+          <a className="mobile-support-item" href={`mailto:${supportEmail}`}>
+            <Icon name="mail" />
+            <span>{supportEmail}</span>
+          </a>
+          {businessLocation ? (
+            <div className="mobile-support-item">
+              <Icon name="map-pin" />
+              <span>{businessLocation}</span>
             </div>
-          </div>
-        ) : null}
-
-        <div className="mobile-support-block">
-          <p className="eyebrow">Support</p>
-          <a href={`tel:${supportPhone}`}>{supportPhone}</a>
-          <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+          ) : null}
         </div>
 
-        <div className="mobile-support-block">
-          <p className="eyebrow">Follow Us</p>
-          <a href={instagramUrl} rel="noreferrer" target="_blank">
-            {instagramHandle}
+        <div className="mobile-support-section">
+          <p className="mobile-section-title">Follow Us</p>
+          <a className="mobile-support-item" href={instagramUrl} rel="noreferrer" target="_blank">
+            <Icon name="instagram" />
+            <span>{instagramHandle}</span>
           </a>
-          <a href={facebookUrl} rel="noreferrer" target="_blank">
-            Facebook
+          <a className="mobile-support-item" href={facebookUrl} rel="noreferrer" target="_blank">
+            <Icon name="facebook" />
+            <span>Facebook</span>
           </a>
         </div>
       </aside>

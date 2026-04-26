@@ -4,36 +4,44 @@ import { formatPrice } from "../lib/formatting";
 
 export default function ProductCard({ product, badge }) {
   const detailHref = `/products/${product.slug}`;
-  const supportingText =
-    product.tagline || product.reviewSnippet || "Handmade crochet with a soft, gift-ready finish.";
+  const displayBadge = badge || product.badgeText;
+  const isBestseller = displayBadge?.toLowerCase().includes("best");
+  const isNew = displayBadge?.toLowerCase().includes("new") || displayBadge?.toLowerCase().includes("drop");
 
   return (
     <article className="product-card">
-      <Link aria-label={`View ${product.name}`} className="product-card-shell product-card-link" to={detailHref}>
-        <div
-          className="product-card-media"
-          style={{ "--card-tint": product.category?.tintColor || "#f3ddd3" }}
-        >
+      <Link aria-label={`View ${product.name}`} className="product-card-link" to={detailHref}>
+        <div className="product-card-media">
           <img src={product.primaryImage} alt={product.name} loading="lazy" />
-          <span className="product-badge">{badge || product.badgeText}</span>
+          {displayBadge ? (
+            <span
+              className={`product-badge ${isBestseller ? "badge-bestseller" : ""} ${isNew ? "badge-new" : ""}`}
+            >
+              {displayBadge}
+            </span>
+          ) : null}
+          <button
+            aria-label={`Add ${product.name} to wishlist`}
+            className="product-wishlist-btn"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            type="button"
+          >
+            <Icon name="heart" />
+          </button>
         </div>
         <div className="product-card-body">
-          <span className="product-card-category">{product.category?.name || "Handmade Collection"}</span>
-          <div className="product-card-title-row">
-            <div className="product-card-copy">
-              <h3>{product.name}</h3>
-              <p className="product-card-snippet">{supportingText}</p>
+          <h3 className="product-card-name">{product.name}</h3>
+          <div className="product-card-rating">
+            <div className="rating-stars-compact">
+              {new Array(5).fill(null).map((_, index) => (
+                <span className="rating-star-sm" key={`${product.slug}-star-${index}`}>
+                  <Icon name={index < Math.round(product.rating) ? "star-filled" : "star"} />
+                </span>
+              ))}
             </div>
-            <span aria-hidden="true" className="button button-secondary button-icon product-card-icon">
-              <span className="button-icon-slot">
-                <Icon name="arrow-right" />
-              </span>
-            </span>
+            <span className="rating-count">{Number(product.rating).toFixed(1)} ({product.reviewCount})</span>
           </div>
-          <div className="product-card-meta">
-            <strong>{formatPrice(product.priceInr)}</strong>
-            <span>{product.reviewCount} reviews</span>
-          </div>
+          <strong className="product-card-price">{formatPrice(product.priceInr)}</strong>
         </div>
       </Link>
     </article>
