@@ -444,15 +444,16 @@ export default function AdminPage() {
           ) : null}
 
           {/* Bottom Nav */}
-          <div className="admin-tab-row">
-            {["dashboard", "orders", "products"].map((view) => (
+          <div className="admin-tab-row" style={{ overflowX: "auto", paddingBottom: "0.5rem" }}>
+            {["dashboard", "orders", "products", "categories", "discounts"].map((view) => (
               <button
                 className={`admin-tab ${adminView === view ? "is-active" : ""}`}
                 key={view}
                 onClick={() => setAdminView(view)}
+                style={{ whiteSpace: "nowrap" }}
                 type="button"
               >
-                {view === "dashboard" ? "📊 Dashboard" : view === "orders" ? "📦 Orders" : "🛍️ Products"}
+                {view === "dashboard" ? "📊 Dashboard" : view === "orders" ? "📦 Orders" : view === "products" ? "🛍️ Products" : view === "categories" ? "📂 Categories" : "🏷️ Discounts"}
               </button>
             ))}
           </div>
@@ -656,6 +657,141 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <div className="admin-empty">No products yet. Add the first product to start the catalog.</div>
+          ) : null}
+
+          {/* Categories View */}
+          {adminView === "categories" ? (
+            <section className="admin-panel admin-table-card">
+              <div className="admin-panel-head">
+                <div>
+                  <p className="eyebrow">Categories</p>
+                  <h2>Category Management</h2>
+                </div>
+                <Button onClick={() => window.alert('Category editor coming soon')} variant="secondary">
+                  New Category
+                </Button>
+              </div>
+              
+              {metricsLoading ? (
+                <AdminDashboardSkeleton />
+              ) : (dashboard?.categories || []).length ? (
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Category</th>
+                        <th>Color Theme</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(dashboard?.categories || []).map((category) => (
+                        <tr key={category.id}>
+                          <td>
+                            <div className="admin-table-product">
+                              {category.image_url ? (
+                                <img alt={category.name} src={category.image_url} style={{ borderRadius: '50%' }} />
+                              ) : (
+                                <div className="admin-table-placeholder" style={{ borderRadius: '50%', background: category.tint_color, color: category.accent_color, display: 'grid', placeItems: 'center', fontWeight: 'bold' }}>
+                                  {category.short_label}
+                                </div>
+                              )}
+                              <div>
+                                <strong>{category.name}</strong>
+                                <span>{category.slug}</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                              <div style={{ width: 16, height: 16, borderRadius: '50%', background: category.accent_color }} />
+                              <div style={{ width: 16, height: 16, borderRadius: '50%', background: category.tint_color }} />
+                            </div>
+                          </td>
+                          <td>
+                            <span style={{
+                              fontSize: "0.72rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "999px",
+                              background: category.is_active ? "#4CAF5018" : "#F4433618",
+                              color: category.is_active ? "#4CAF50" : "#F44336"
+                            }}>
+                              {category.is_active ? "Active" : "Hidden"}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="admin-table-actions">
+                              <button aria-label="Edit" className="icon-button" onClick={() => window.alert('Coming soon')} type="button">
+                                <Icon name="edit" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="admin-empty">No categories found.</div>
+              )}
+            </section>
+          ) : null}
+
+          {/* Discounts View */}
+          {adminView === "discounts" ? (
+            <section className="admin-panel admin-table-card">
+              <div className="admin-panel-head">
+                <div>
+                  <p className="eyebrow">Discounts</p>
+                  <h2>Discount Codes</h2>
+                </div>
+                <Button onClick={() => window.alert('Discount editor coming soon')} variant="secondary">
+                  New Discount
+                </Button>
+              </div>
+              
+              {metricsLoading ? (
+                <AdminDashboardSkeleton />
+              ) : (dashboard?.discounts || []).length ? (
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Code</th>
+                        <th>Discount</th>
+                        <th>Usage</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(dashboard?.discounts || []).map((discount) => (
+                        <tr key={discount.id}>
+                          <td><strong>{discount.code}</strong></td>
+                          <td>{discount.discount_percent}% off</td>
+                          <td>{discount.uses_count} {discount.max_uses ? `/ ${discount.max_uses}` : "uses"}</td>
+                          <td>
+                            <span style={{
+                              fontSize: "0.72rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "999px",
+                              background: discount.is_active ? "#4CAF5018" : "#F4433618",
+                              color: discount.is_active ? "#4CAF50" : "#F44336"
+                            }}>
+                              {discount.is_active ? "Active" : "Disabled"}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="admin-table-actions">
+                              <button aria-label="Edit" className="icon-button" onClick={() => window.alert('Coming soon')} type="button">
+                                <Icon name="edit" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="admin-empty">No discounts created yet.</div>
               )}
             </section>
           ) : null}

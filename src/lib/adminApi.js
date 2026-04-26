@@ -48,7 +48,8 @@ export async function loadAdminDashboard() {
     reviewsResult,
     ordersResult,
     contactResult,
-    customOrdersResult
+    customOrdersResult,
+    discountsResult
   ] = await Promise.all([
     supabase.from("store_settings").select("*").limit(1).maybeSingle(),
     supabase.from("announcements").select("*").order("display_order"),
@@ -62,7 +63,8 @@ export async function loadAdminDashboard() {
     supabase
       .from("custom_order_requests")
       .select("*")
-      .order("created_at", { ascending: false })
+      .order("created_at", { ascending: false }),
+    supabase.from("discounts").select("*").order("created_at", { ascending: false })
   ]);
 
   const error =
@@ -75,7 +77,8 @@ export async function loadAdminDashboard() {
     reviewsResult.error ||
     ordersResult.error ||
     contactResult.error ||
-    customOrdersResult.error;
+    customOrdersResult.error ||
+    discountsResult.error;
 
   if (error) {
     return {
@@ -101,7 +104,8 @@ export async function loadAdminDashboard() {
       reviews: reviewsResult.data || [],
       customerOrders: ordersResult.data || [],
       contactMessages: contactResult.data || [],
-      customOrderRequests: customOrdersResult.data || []
+      customOrderRequests: customOrdersResult.data || [],
+      discounts: discountsResult.data || []
     }
   };
 }
