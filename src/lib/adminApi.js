@@ -202,3 +202,20 @@ export async function deleteProductWithMedia(product, productMedia = []) {
 
   return succeed("Product deleted.");
 }
+
+export async function updateOrderStatus(orderId, nextStatus) {
+  if (!supabase) {
+    return fail("Supabase is not configured.");
+  }
+
+  const { error } = await supabase
+    .from("customer_orders")
+    .update({ order_status: nextStatus })
+    .eq("id", orderId);
+
+  if (error) {
+    return fail(normalizeError(error, "We could not update the order status."));
+  }
+
+  return succeed("Order status updated to " + nextStatus);
+}

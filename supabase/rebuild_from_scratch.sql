@@ -36,7 +36,7 @@ drop table if exists public.product_media cascade;
 drop table if exists public.products cascade;
 drop table if exists public.trust_badges cascade;
 drop table if exists public.categories cascade;
-drop table if exists public.announcements cascade;
+drop table if exists public.discounts cascade;
 drop table if exists public.store_settings cascade;
 
 drop function if exists public.is_admin_user();
@@ -95,6 +95,19 @@ create table public.announcements (
   created_at timestamptz not null default timezone('utc', now())
 );
 
+create table public.discounts (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,
+  discount_percent integer not null check (discount_percent > 0 and discount_percent <= 100),
+  min_order_amount numeric(10, 2) default 0,
+  max_uses integer,
+  uses_count integer not null default 0,
+  valid_from timestamptz,
+  valid_until timestamptz,
+  is_active boolean not null default true,
+  created_at timestamptz not null default timezone('utc', now())
+);
+
 create table public.categories (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique,
@@ -102,6 +115,7 @@ create table public.categories (
   short_label text not null,
   accent_color text not null,
   tint_color text not null,
+  image_url text,
   display_order integer not null default 0,
   is_active boolean not null default true,
   created_at timestamptz not null default timezone('utc', now()),
@@ -124,6 +138,7 @@ create table public.products (
   slug text not null unique,
   name text not null,
   price_inr numeric(10, 2) not null check (price_inr >= 0),
+  discount_price numeric(10, 2) check (discount_price >= 0),
   stock_quantity integer not null default 0 check (stock_quantity >= 0),
   rating numeric(2, 1) not null default 0 check (rating >= 0 and rating <= 5),
   review_count integer not null default 0 check (review_count >= 0),
@@ -209,6 +224,12 @@ create table public.customer_orders (
   amount_subunits bigint not null check (amount_subunits >= 0),
   status text not null default 'draft' check (
     status in ('draft', 'created', 'authorized', 'paid', 'failed', 'verification_failed', 'cancelled')
+  ),
+  order_status text not null default 'pending' check (
+    order_status in ('pending', 'accepted', 'packed', 'shipped', 'delivered', 'cancelled')
+  ),
+  payment_method text not null default 'prepaid' check (
+    payment_method in ('prepaid', 'cod')
   ),
   line_items jsonb not null default '[]'::jsonb,
   razorpay_order_id text unique,

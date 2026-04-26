@@ -54,7 +54,10 @@ const MobileMenu = forwardRef(function MobileMenu(
               onClick={onClose}
               to={link.to}
             >
-              <span>{link.label}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                {link.icon ? <Icon name={link.icon} /> : null}
+                <span>{link.label}</span>
+              </div>
               {link.badge ? <span className="nav-badge">{link.badge}</span> : null}
               <Icon name="chevron-right" />
             </NavLink>

@@ -424,6 +424,11 @@ body.overlay-open { overflow: hidden; }
 .category-pill-icon img {
   width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
 }
+.category-pill-icon.has-image {
+  background: transparent;
+  padding: 0;
+  display: block;
+}
 .category-pill:hover .category-pill-icon,
 .category-pill.is-selected .category-pill-icon {
   border-color: var(--primary);

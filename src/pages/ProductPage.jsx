@@ -217,7 +217,16 @@ export default function ProductPage() {
             <RatingStars rating={product.rating} reviewCount={product.reviewCount} />
             <h1>{product.name}</h1>
             <div className="product-price-row">
-              <strong className="price-large">{formatPrice(product.priceInr)}</strong>
+              {product.discountPriceInr ? (
+                <>
+                  <strong className="price-large">{formatPrice(product.discountPriceInr)}</strong>
+                  <span style={{ textDecoration: "line-through", color: "var(--text-soft)", fontSize: "1.25rem", fontWeight: 400 }}>
+                    {formatPrice(product.priceInr)}
+                  </span>
+                </>
+              ) : (
+                <strong className="price-large">{formatPrice(product.priceInr)}</strong>
+              )}
             </div>
             <p>{product.description}</p>
 

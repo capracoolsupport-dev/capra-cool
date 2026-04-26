@@ -41,7 +41,18 @@ export default function ProductCard({ product, badge }) {
             </div>
             <span className="rating-count">{Number(product.rating).toFixed(1)} ({product.reviewCount})</span>
           </div>
-          <strong className="product-card-price">{formatPrice(product.priceInr)}</strong>
+          <strong className="product-card-price">
+            {product.discountPriceInr ? (
+              <>
+                <span style={{ textDecoration: "line-through", color: "var(--text-soft)", fontSize: "0.85em", marginRight: "0.5rem", fontWeight: 400 }}>
+                  {formatPrice(product.priceInr)}
+                </span>
+                <span style={{ color: "var(--primary)" }}>{formatPrice(product.discountPriceInr)}</span>
+              </>
+            ) : (
+              formatPrice(product.priceInr)
+            )}
+          </strong>
         </div>
       </Link>
     </article>

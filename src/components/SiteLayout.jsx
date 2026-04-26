@@ -9,11 +9,12 @@ import MobileMenu from "./MobileMenu.jsx";
 const navLinks = [
   { to: "/", label: "Home", end: true },
   { to: "/#featured", label: "Shop All" },
+  { to: "/#just-dropped", label: "Just Dropped", badge: "NEW" },
   { to: "/customize", label: "Custom Order" },
   { to: "/track-order", label: "Track Order" },
   { to: "/blog", label: "Our Blogs" },
-  { to: "/about", label: "Our Story" },
-  { to: "/contact", label: "Get in Touch" }
+  { to: "/about", label: "Our Story", icon: "heart" },
+  { to: "/contact", label: "Get in Touch", icon: "heart" }
 ];
 
 const footerQuickLinks = [

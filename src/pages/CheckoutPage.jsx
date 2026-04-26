@@ -39,6 +39,7 @@ export default function CheckoutPage() {
   const [successOrder, setSuccessOrder] = useState(null);
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [step, setStep] = useState("address");
 
   useEffect(() => {
     if (data?.settings?.brandName) {
@@ -111,6 +112,12 @@ export default function CheckoutPage() {
         tone: "error",
         message: "Complete your phone number and shipping address before checkout."
       });
+      return;
+    }
+
+    if (step === "address") {
+      setStep("payment");
+      setStatus({ tone: "", message: "" });
       return;
     }
 
@@ -226,11 +233,9 @@ export default function CheckoutPage() {
         <div className="checkout-copy">
           <h1>Checkout</h1>
           <div className="checkout-stepper">
-            <span className="stepper-step is-active"><Icon name="map-pin" /> Address</span>
+            <span className={`stepper-step ${step === "address" ? "is-active" : ""}`}><Icon name="map-pin" /> Address</span>
             <span className="stepper-line" />
-            <span className="stepper-step"><Icon name="truck" /> Delivery</span>
-            <span className="stepper-line" />
-            <span className="stepper-step"><Icon name="shield" /> Payment</span>
+            <span className={`stepper-step ${step === "payment" ? "is-active" : ""}`}><Icon name="shield" /> Payment</span>
           </div>
         </div>
         <div className="checkout-assurance-row">
@@ -326,12 +331,14 @@ export default function CheckoutPage() {
           </div>
 
           <form className="checkout-form-card" onSubmit={handlePayNow}>
-            <div className="checkout-card-head">
-              <div>
-                <p className="eyebrow">Customer details</p>
-                <h2>Ready for payment</h2>
-              </div>
-            </div>
+            {step === "address" ? (
+              <>
+                <div className="checkout-card-head">
+                  <div>
+                    <p className="eyebrow">Customer details</p>
+                    <h2>Shipping Address</h2>
+                  </div>
+                </div>
 
             <div className="admin-form-grid">
               <Input
@@ -417,9 +424,37 @@ export default function CheckoutPage() {
                 value={customer.country}
               />
             </div>
+              </>
+            ) : (
+              <>
+                <div className="checkout-card-head">
+                  <div>
+                    <p className="eyebrow">Checkout</p>
+                    <h2>Ready for payment</h2>
+                  </div>
+                </div>
+                
+                <div className="checkout-summary-card" style={{ marginBottom: "1.5rem", background: "var(--surface-soft)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+                    <strong style={{ fontSize: "1.1rem" }}>Deliver to: {customer.name}</strong>
+                    <button type="button" onClick={() => setStep("address")} style={{ background: "none", border: "none", color: "var(--primary)", fontWeight: 600, cursor: "pointer", fontSize: "0.85rem", textDecoration: "underline" }}>
+                      Change
+                    </button>
+                  </div>
+                  <p style={{ fontSize: "0.9rem", color: "var(--text-soft)", lineHeight: 1.5 }}>
+                    {customer.addressLine1}<br />
+                    {customer.addressLine2 ? <>{customer.addressLine2}<br /></> : null}
+                    {customer.city}, {customer.state} {customer.postalCode}
+                  </p>
+                  <p style={{ fontSize: "0.9rem", color: "var(--text-soft)", marginTop: "0.5rem" }}>
+                    {customer.phone} | {customer.email}
+                  </p>
+                </div>
+              </>
+            )}
 
             <Button disabled={busy} type="submit" wide>
-              {busy ? "Preparing Razorpay..." : `Proceed to Pay ${formatPrice(total)}`}
+              {step === "address" ? "Continue to Payment" : busy ? "Preparing Razorpay..." : `Proceed to Pay ${formatPrice(total)}`}
             </Button>
 
             <p className="checkout-form-note">We use these details to deliver the order and share courier updates.</p>

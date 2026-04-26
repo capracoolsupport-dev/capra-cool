@@ -135,7 +135,13 @@ export default function HomePage() {
                 }}
                 type="button"
               >
-                <span className="category-pill-icon">{category.shortLabel}</span>
+                <span className={`category-pill-icon ${category.imageUrl ? "has-image" : ""}`}>
+                  {category.imageUrl ? (
+                    <img src={category.imageUrl} alt={category.name} loading="lazy" />
+                  ) : (
+                    category.shortLabel
+                  )}
+                </span>
                 <span>{category.name}</span>
               </button>
             );

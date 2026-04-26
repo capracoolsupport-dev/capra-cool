@@ -78,6 +78,7 @@ function normalizeProduct(product, categoriesById) {
     slug: product.slug,
     name: product.name,
     priceInr: Number(product.price_inr ?? product.priceInr ?? 0),
+    discountPriceInr: product.discount_price != null ? Number(product.discount_price) : null,
     stockQuantity: Number(product.stock_quantity ?? product.stockQuantity ?? 0),
     rating: Number(product.rating ?? 0),
     reviewCount: Number(product.review_count ?? product.reviewCount ?? reviews.length),
@@ -206,7 +207,8 @@ function normalizeStorefrontData(payload) {
     name: category.name,
     shortLabel: category.short_label || category.shortLabel,
     accentColor: category.accent_color || category.accentColor,
-    tintColor: category.tint_color || category.tintColor
+    tintColor: category.tint_color || category.tintColor,
+    imageUrl: category.image_url || category.imageUrl || null
   }));
 
   const categoriesById = categories.reduce((accumulator, category) => {

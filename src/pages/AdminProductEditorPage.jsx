@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../components/Button.jsx";
+import Icon from "../components/Icons.jsx";
 import Input from "../components/Input.jsx";
 import { loadAdminDashboard, saveAdminRecord } from "../lib/adminApi.js";
 import { hasSupabaseConfig, supabase } from "../lib/supabase.js";
@@ -18,6 +19,7 @@ function createInitialForm() {
     title: "",
     description: "",
     price: "",
+    discountPrice: "",
     categoryId: "",
     stock: "",
     imagePath: "",
@@ -146,6 +148,7 @@ export default function AdminProductEditorPage() {
           title: editingProduct.name || "",
           description: editingProduct.description || "",
           price: editingProduct.price_inr === null || editingProduct.price_inr === undefined ? "" : String(editingProduct.price_inr),
+          discountPrice: editingProduct.discount_price === null || editingProduct.discount_price === undefined ? "" : String(editingProduct.discount_price),
           categoryId: editingProduct.category_id || "",
           stock:
             editingProduct.stock_quantity === null || editingProduct.stock_quantity === undefined
@@ -257,6 +260,7 @@ export default function AdminProductEditorPage() {
       slug: slugifyText(form.title),
       description: form.description.trim(),
       price_inr: Number(form.price),
+      discount_price: form.discountPrice ? Number(form.discountPrice) : null,
       stock_quantity: Number(form.stock || 0),
       badge_text:
         categories.find((category) => category.id === form.categoryId)?.name || "Handmade",
@@ -369,20 +373,26 @@ export default function AdminProductEditorPage() {
           <section className="admin-panel">
             <div className="admin-panel-head">
               <div>
-                <p className="eyebrow">Product editor</p>
-                <h1>{editId ? "Update product essentials." : "Add a new product."}</h1>
+                <nav className="breadcrumbs" style={{ marginBottom: "0.5rem" }}>
+                  <Link to="/admin">Dashboard</Link>
+                  <span>/</span>
+                  <span>{editId ? "Edit Product" : "New Product"}</span>
+                </nav>
+                <h1>{editId ? "Update Product" : "Add New Product"}</h1>
                 <p className="section-lead">
-                  Keep this form lean: title, description, price, category, image, and stock only.
+                  Fill in the product details below. All fields marked with * are required.
                 </p>
               </div>
               <Button to="/admin" variant="secondary">
-                Back to Dashboard
+                <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                  <Icon name="arrow-left" /> Back
+                </span>
               </Button>
             </div>
 
             <form className="admin-product-form" onSubmit={handleSave}>
               <Input
-                label="Title"
+                label="Title *"
                 onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                 required
                 type="text"
@@ -391,25 +401,35 @@ export default function AdminProductEditorPage() {
 
               <Input
                 as="textarea"
-                label="Description"
+                label="Description *"
                 onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
                 required
                 rows={5}
                 value={form.description}
               />
 
-              <Input
-                label="Price"
-                min="0"
-                onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))}
-                required
-                step="0.01"
-                type="number"
-                value={form.price}
-              />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <Input
+                  label="Price (₹) *"
+                  min="0"
+                  onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))}
+                  required
+                  step="0.01"
+                  type="number"
+                  value={form.price}
+                />
+                <Input
+                  label="Discount Price (Optional)"
+                  min="0"
+                  onChange={(event) => setForm((current) => ({ ...current, discountPrice: event.target.value }))}
+                  step="0.01"
+                  type="number"
+                  value={form.discountPrice}
+                />
+              </div>
 
               <label className="field">
-                <span>Category</span>
+                <span>Category *</span>
                 <select
                   onChange={(event) => setForm((current) => ({ ...current, categoryId: event.target.value }))}
                   required
@@ -426,14 +446,24 @@ export default function AdminProductEditorPage() {
 
               <div className="admin-file-upload">
                 <label className="field">
-                  <span>Image</span>
-                  <input accept="image/*" onChange={handleUpload} type="file" />
-                  <small>
+                  <span>Product Image *</span>
+                  <input
+                    accept="image/*"
+                    onChange={handleUpload}
+                    type="file"
+                    style={{
+                      border: '1px dashed var(--border-strong)',
+                      borderRadius: 'var(--radius-md)',
+                      padding: '0.75rem',
+                      background: 'var(--surface-soft)'
+                    }}
+                  />
+                  <small style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                     {uploadState.busy
                       ? "Uploading..."
                       : editId && !pendingImageFile
-                        ? "Leave this unchanged to keep the current product image."
-                        : "Choose a file, then save to upload it."}
+                        ? "Leave unchanged to keep current image."
+                        : "⭐ First image will be the main product image."}
                   </small>
                 </label>
                 {form.imageUrl ? (
@@ -447,7 +477,7 @@ export default function AdminProductEditorPage() {
               </div>
 
               <Input
-                label="Stock"
+                label="Stock Quantity *"
                 min="0"
                 onChange={(event) => setForm((current) => ({ ...current, stock: event.target.value }))}
                 required

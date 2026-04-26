@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button.jsx";
+import Icon from "../components/Icons.jsx";
 import Input from "../components/Input.jsx";
 import { getAdminSession, signInAdmin } from "../lib/adminAuth.js";
 import { hasSupabaseConfig } from "../lib/supabase.js";
@@ -44,8 +45,17 @@ export default function AdminLoginPage() {
     return (
       <section className="page-section admin-auth-page">
         <div className="admin-auth-card">
-          <p className="eyebrow">Admin login</p>
-          <h1>Supabase credentials are required first.</h1>
+          <div style={{ textAlign: "center" }}>
+            <div style={{
+              width: "3.5rem", height: "3.5rem", borderRadius: "50%",
+              background: "var(--primary-tint)", display: "grid", placeItems: "center",
+              color: "var(--primary)", margin: "0 auto 0.75rem"
+            }}>
+              <Icon name="shield" />
+            </div>
+            <p className="eyebrow">Admin login</p>
+            <h1>Supabase credentials required</h1>
+          </div>
           <p>Add your Supabase environment values before trying to sign in to the admin workspace.</p>
         </div>
       </section>
@@ -55,7 +65,14 @@ export default function AdminLoginPage() {
   if (!sessionChecked) {
     return (
       <section className="page-section admin-auth-page">
-        <div className="admin-auth-card">
+        <div className="admin-auth-card" style={{ textAlign: "center" }}>
+          <div style={{
+            width: "3.5rem", height: "3.5rem", borderRadius: "50%",
+            background: "var(--primary-tint)", display: "grid", placeItems: "center",
+            color: "var(--primary)", margin: "0 auto 0.75rem"
+          }}>
+            <Icon name="user" />
+          </div>
           <p className="eyebrow">Admin login</p>
           <h1>Checking your session...</h1>
         </div>
@@ -90,14 +107,22 @@ export default function AdminLoginPage() {
   return (
     <section className="page-section admin-auth-page">
       <div className="admin-auth-card">
-        <p className="eyebrow">Admin login</p>
-        <h1>Sign in to the studio dashboard.</h1>
-        <p>Use the admin email and password from your Supabase Auth users before editing products.</p>
+        <div style={{ textAlign: "center" }}>
+          <div style={{
+            width: "3.5rem", height: "3.5rem", borderRadius: "50%",
+            background: "var(--primary-tint)", display: "grid", placeItems: "center",
+            color: "var(--primary)", margin: "0 auto 0.75rem"
+          }}>
+            <Icon name="shield" />
+          </div>
+          <h1 style={{ fontSize: "1.5rem" }}>Trendy Spice Store</h1>
+          <p style={{ color: "var(--text-soft)", fontSize: "0.88rem" }}>Sign in to manage your store</p>
+        </div>
 
         <form className="stack-form" onSubmit={handleSubmit}>
           <Input
             autoComplete="email"
-            label="Admin Email"
+            label="Email"
             onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
             required
             type="email"
