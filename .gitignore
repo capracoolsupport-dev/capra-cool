@@ -4,3 +4,11 @@ dist/
 playwright-report/
 test-results/
 Shopify_optimized/
+*.log
+*.zip
+zip_extracted/
+original_zip_assets/
+mobile_*.png
+capra_*.png
+test_*.cjs
+push_to_github.cjs
