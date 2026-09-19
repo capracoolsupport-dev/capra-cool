@@ -432,7 +432,7 @@ function renderProducts() {
     return `
       <article class="product" data-product-id="${p.id}" data-cat="${p.category}" data-name="${p.name}" data-price="${p.price}">
         <div class="visual">
-          <span class="visual-badge">${p.badge || p.gsm}</span>
+          <span class="visual-badge">${p.gsm}</span>
           <button type="button" class="wish-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', this)" aria-label="Add to wishlist">
             ${isWished ? '♥' : '♡'}
           </button>
@@ -445,16 +445,12 @@ function renderProducts() {
           </div>
           <div class="product-price">${formatMoney(p.price)}</div>
         </div>
-        <div class="product-rating">
-          <span class="stars">★★★★★</span>
-          <span>${p.rating} (${p.reviews})</span>
-        </div>
         <div class="color-dots">${colorDots}</div>
         <div class="product-actions">
           <button type="button" class="add-btn" onclick="triggerSizeSelector('${p.id}')">
-            <span>Choose Size</span>
+            <span>Add to Bag</span>
           </button>
-          <button type="button" class="details-btn" onclick="triggerQuickView('${p.id}')" title="Product details">ℹ</button>
+          <button type="button" class="details-btn" onclick="triggerQuickView('${p.id}')" title="Product details">Specs ↗</button>
         </div>
       </article>
     `;
