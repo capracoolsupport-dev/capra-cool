@@ -5,7 +5,7 @@
  */
 
 // --- AUTHENTIC PRODUCT CATALOG (DIRECT FROM CAPRA BRAND BOARD) ---
-const PRODUCTS = [
+let PRODUCTS = [
   {
     id: "summit-tee",
     name: "Summit Tee",
@@ -176,14 +176,81 @@ let activeSort = "featured";
 const CONFIG = {
   FREE_SHIPPING_THRESHOLD: 999, // As shown on brand board: Free Shipping (₹999+)
   SHIPPING_FEE: 99,
-  WHATSAPP_NUMBER: "919999999999",
-  STORE_EMAIL: "care@capracool.com"
+  WHATSAPP_NUMBER: "919876543210",
+  STORE_EMAIL: "support@capracool.com",
+  SUPABASE_URL: (typeof import.meta !== "undefined" && import.meta.env && (import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL)) || "https://qhaheskahldwcvggrvbu.supabase.co",
+  SUPABASE_KEY: (typeof import.meta !== "undefined" && import.meta.env && (import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) || "sb_publishable_kxaAQiApVfqqNI4mbR8tTw_AanAVrci"
 };
 
 // Utilities
 const $ = sel => document.querySelector(sel);
 const $$ = sel => document.querySelectorAll(sel);
 const formatMoney = num => "₹" + Number(num).toLocaleString("en-IN");
+
+// --- SUPABASE DATA SYNC ---
+async function saveOrderToSupabase(orderData) {
+  if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_KEY) return;
+  try {
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/customer_orders`, {
+      method: "POST",
+      headers: {
+        "apikey": CONFIG.SUPABASE_KEY,
+        "Authorization": `Bearer ${CONFIG.SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(orderData)
+    });
+    if (res.ok) {
+      console.log("Order successfully saved to Supabase:", orderData.order_number);
+    } else {
+      console.warn("Supabase order sync response:", res.status);
+    }
+  } catch (err) {
+    console.warn("Supabase order sync error (order saved locally):", err);
+  }
+}
+
+async function loadProductsFromSupabase() {
+  if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_KEY) return;
+  try {
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/products?select=*&is_active=eq.true&order=display_order.asc`, {
+      headers: {
+        "apikey": CONFIG.SUPABASE_KEY,
+        "Authorization": `Bearer ${CONFIG.SUPABASE_KEY}`
+      }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        PRODUCTS = data.map(item => ({
+          id: item.id,
+          name: item.name,
+          category: item.category,
+          price: Number(item.price),
+          image: item.image,
+          color: item.color,
+          fabric: item.fabric,
+          gsm: item.gsm,
+          fit: item.fit,
+          sku: item.sku,
+          badge: item.badge,
+          rating: Number(item.rating || 4.8),
+          reviews: item.reviews_count || 50,
+          colors: Array.isArray(item.colors) ? item.colors : ["#191a17"],
+          desc: item.description,
+          care: item.care,
+          sizes: Array.isArray(item.sizes) ? item.sizes : ["S", "M", "L", "XL", "XXL"],
+          chart: item.size_chart || {}
+        }));
+        renderProducts();
+        console.log(`Loaded ${data.length} Capra Cool products dynamically from Supabase`);
+      }
+    }
+  } catch (e) {
+    console.log("Using built-in Capra Cool catalog");
+  }
+}
 
 // --- PERSISTENCE & CART ---
 function saveCart() {
@@ -782,6 +849,25 @@ Please confirm order receipt and share delivery tracking once dispatched. Thank 
 
   const encodedUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   const orderId = `CC-${Date.now().toString().slice(-6)}`;
+  
+  // Sync to Supabase
+  saveOrderToSupabase({
+    id: orderId,
+    order_number: orderId,
+    customer_name: name,
+    customer_phone: phone,
+    delivery_address: address,
+    pincode: pincode,
+    notes: notes,
+    payment_method: "whatsapp",
+    order_channel: "whatsapp_concierge",
+    items: [...cart],
+    subtotal: subtotal,
+    shipping_fee: shippingFee,
+    grand_total: grandTotal,
+    order_status: "pending_whatsapp_confirmation"
+  });
+
   showOrderSuccess(orderId, name, grandTotal, "WhatsApp Order");
   window.open(encodedUrl, "_blank");
 }
@@ -822,6 +908,26 @@ function handleDirectOrder(e) {
   existingOrders.unshift(orderRecord);
   localStorage.setItem("capraCoolOrders", JSON.stringify(existingOrders));
 
+  // Sync to Supabase
+  saveOrderToSupabase({
+    id: orderId,
+    order_number: orderId,
+    customer_name: name,
+    customer_phone: phone,
+    customer_email: email,
+    delivery_address: address,
+    city: city,
+    state: state,
+    pincode: pincode,
+    payment_method: paymentMethod,
+    order_channel: "web_checkout",
+    items: [...cart],
+    subtotal: subtotal,
+    shipping_fee: shippingFee,
+    grand_total: grandTotal,
+    order_status: "confirmed"
+  });
+
   cart = [];
   saveCart();
 
@@ -856,6 +962,7 @@ function showOrderSuccess(orderId, customerName, total, paymentMethod) {
 function initApp() {
   renderProducts();
   renderCart();
+  loadProductsFromSupabase();
 
   // Category filter clicks
   $$(".filter").forEach(btn => {
