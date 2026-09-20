@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>CAPRA COOL — Orders</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="admin.js"></script>
+</head>
+<body class="admin-page">
+  <main class="admin-shell">
+    <section class="admin-head">
+      <div>
+        <p class="eyebrow">ADMIN</p>
+        <h1>Order desk</h1>
+        <p>View recent web orders. Keep the dashboard token private.</p>
+      </div>
+      <a class="button button-ghost" href="/">Storefront</a>
+    </section>
+
+    <form class="admin-login" id="adminLogin">
+      <label class="field"><span>Dashboard token</span><input name="token" type="password" autocomplete="current-password" required></label>
+      <button class="button button-dark" type="submit">Load orders</button>
+    </form>
+
+    <section class="admin-panel">
+      <div class="admin-panel-head"><strong>Recent orders</strong><span id="adminStatus">Not loaded</span></div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Order</th><th>Customer</th><th>Contact</th><th>Location</th><th>Total</th><th>Status</th><th>Created</th></tr></thead>
+          <tbody id="ordersTable"><tr><td colspan="7">Enter the dashboard token to load orders.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

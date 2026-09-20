@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "predev": "node scripts/optimize-images.mjs",
-    "dev": "vite",
+    "dev": "vite --configLoader runner",
     "prebuild": "node scripts/optimize-images.mjs",
-    "build": "vite build",
-    "preview": "vite preview",
+    "build": "vite build --configLoader runner",
+    "preview": "vite preview --configLoader runner",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed"
   },

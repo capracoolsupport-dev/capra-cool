@@ -1,6 +1,10 @@
 node_modules/
 dist/
+public/optimized/
 .env
+.env.local
+.env*.local
+.npm-cache/
 playwright-report/
 test-results/
 Shopify_optimized/
