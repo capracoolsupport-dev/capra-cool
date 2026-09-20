@@ -163,7 +163,7 @@
       <div class="cat-cards-grid">
         <!-- Category Card 1: T-Shirts -->
         <div class="cat-card" onclick="filterProducts('tee'); document.getElementById('shop').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0" aria-label="Explore T-Shirts Collection">
-          <img src="assets/collection_tees.jpg" alt="Capra Cool T-Shirts — Everyday Comfort" loading="lazy">
+          <img src="assets/collection_tees.jpg" alt="Capra Cool T-Shirts — Everyday Comfort" loading="lazy" decoding="async">
           <div class="cat-card-overlay">
             <span class="cat-eyebrow">CAPSULE 01 · 180 GSM</span>
             <h3 class="cat-title">T-Shirts</h3>
@@ -174,7 +174,7 @@
 
         <!-- Category Card 2: Hoodies -->
         <div class="cat-card" onclick="filterProducts('hoodie'); document.getElementById('shop').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0" aria-label="Explore Hoodies Collection">
-          <img src="assets/collection_hoodies.jpg" alt="Capra Cool Hoodies — Built for Higher Days" loading="lazy">
+          <img src="assets/collection_hoodies.jpg" alt="Capra Cool Hoodies — Built for Higher Days" loading="lazy" decoding="async">
           <div class="cat-card-overlay">
             <span class="cat-eyebrow">CAPSULE 02 · 380 GSM</span>
             <h3 class="cat-title">Hoodies</h3>
@@ -185,7 +185,7 @@
 
         <!-- Category Card 3: Tracksuits -->
         <div class="cat-card" onclick="filterProducts('track'); document.getElementById('shop').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0" aria-label="Explore Tracksuits Collection">
-          <img src="assets/collection_tracksuits.jpg" alt="Capra Cool Tracksuits — Move with Purpose" loading="lazy">
+          <img src="assets/collection_tracksuits.jpg" alt="Capra Cool Tracksuits — Move with Purpose" loading="lazy" decoding="async">
           <div class="cat-card-overlay">
             <span class="cat-eyebrow">CAPSULE 03 · 2-PIECE</span>
             <h3 class="cat-title">Tracksuits</h3>
@@ -206,13 +206,45 @@
             <p>Custom T-shirts, hoodies, and tracksuits for IITs, NITs, IIITs, IISc, IIMs, AIIMS, and other colleges.</p>
           </div>
 
-          <div class="custom-preview-frame" id="customPreviewFrame">
-            <img id="customPreviewImage" src="assets/collection_hoodies.jpg" alt="Custom IIT campus hoodie preview">
-            <div class="custom-preview-shade"></div>
-            <div class="custom-preview-mark">
+          <div class="custom-preview-frame custom-preview-studio" id="customPreviewFrame" data-garment="hoodie" aria-live="polite">
+            <div class="custom-preview-toolbar">
               <span id="customPreviewInstitute">IIT</span>
-              <strong id="customPreviewName">YOUR INSTITUTE</strong>
-              <small id="customPreviewGarment">HOODIE · LEFT CHEST + BACK</small>
+              <strong id="customPreviewGarment">HOODIE · LEFT CHEST + BACK</strong>
+            </div>
+
+            <div class="custom-mockup-grid">
+              <article class="garment-card garment-card-front" aria-label="Front product preview">
+                <span class="preview-label">Front chest</span>
+                <div class="garment-silhouette garment-front">
+                  <span class="hood-line"></span>
+                  <span class="zip-line"></span>
+                  <span class="tracksuit-pants"></span>
+                  <div class="custom-chest-print">
+                    <span class="mini-crest">⌃</span>
+                    <strong id="customPreviewFrontName">YOUR INSTITUTE</strong>
+                  </div>
+                </div>
+                <small id="customPreviewFrontType">IIT · Hoodie</small>
+              </article>
+
+              <article class="garment-card garment-card-back" aria-label="Back product preview">
+                <span class="preview-label">Back print</span>
+                <div class="garment-silhouette garment-back">
+                  <span class="hood-line"></span>
+                  <span class="tracksuit-pants"></span>
+                  <div class="custom-back-print">
+                    <span class="back-crest">CAPRA COOL</span>
+                    <strong id="customPreviewName">YOUR INSTITUTE</strong>
+                    <small id="customPreviewPlacement">LEFT CHEST + BACK</small>
+                  </div>
+                </div>
+                <small>Live colour and print preview</small>
+              </article>
+            </div>
+
+            <div class="custom-preview-note">
+              <span>Base colour updates from your selection.</span>
+              <span>Final artwork is checked by the design concierge before production.</span>
             </div>
           </div>
         </div>
@@ -402,7 +434,7 @@
 
     <section class="craft-section" id="craft">
       <div class="craft-image">
-        <img src="assets/crop_editorial_3x4.jpg" alt="Capra Cool garment in the Himalayan landscape" loading="lazy">
+        <img src="assets/crop_editorial_3x4.jpg" alt="Capra Cool garment in the Himalayan landscape" loading="lazy" decoding="async">
       </div>
       <div class="craft-copy">
         <p class="eyebrow">MATERIAL STUDY 01</p>
@@ -428,7 +460,7 @@
         </div>
       </div>
       <div class="packaging-visual">
-        <img src="assets/box_packaging_logo.png" alt="Capra Cool branded presentation box" loading="lazy">
+        <img src="assets/box_packaging_logo.png" alt="Capra Cool branded presentation box" loading="lazy" decoding="async">
       </div>
     </section>
 
@@ -483,7 +515,7 @@
         </div>
 
         <div class="philosophy-visual">
-          <img src="assets/story.jpg" alt="Capra Cool Signboard — More Than Clothing" loading="lazy">
+          <img src="assets/story.jpg" alt="Capra Cool Signboard — More Than Clothing" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
@@ -506,7 +538,7 @@
         <p>Complete visual identity board, garment tags, packaging, and digital storefront system.</p>
       </div>
       <div class="brand-board-frame" onclick="openBrandBoardModal()">
-        <img src="assets/brand-board.jpg" alt="Capra Cool Brand Board Moodboard" loading="lazy">
+        <img src="assets/brand-board.jpg" alt="Capra Cool Brand Board Moodboard" loading="lazy" decoding="async">
         <div class="brand-board-hint">CLICK TO ZOOM 🔍</div>
       </div>
     </section>

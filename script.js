@@ -927,7 +927,7 @@ function renderProducts() {
           <button type="button" class="wish-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', this)" aria-label="Add to wishlist">
             ${isWished ? '♥' : '♡'}
           </button>
-          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          <img src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
         </div>
         <div class="product-meta">
           <div>
@@ -1136,7 +1136,7 @@ function triggerQuickView(productId, updateUrl = true) {
   if (thumbnails) {
     thumbnails.innerHTML = prod.gallery.map((src, index) => `
       <button type="button" class="quickview-thumb ${index === 0 ? "active" : ""}" onclick="setQuickViewImage('${src}', this)" aria-label="View image ${index + 1}">
-        <img src="${src}" alt="" loading="lazy">
+        <img src="${src}" alt="" loading="lazy" decoding="async">
       </button>
     `).join("");
   }
@@ -1228,7 +1228,7 @@ function runSearch(query) {
   resultsContainer.innerHTML = matched.map(p => `
     <div class="search-result-item" onclick="jumpToProduct('${p.id}', '${p.category}')">
       <div style="display:flex;align-items:center;gap:14px">
-        <div class="search-result-thumb"><img src="${p.image}" alt="${p.name}"></div>
+        <div class="search-result-thumb"><img src="${p.image}" alt="${p.name}" loading="lazy" decoding="async"></div>
         <div>
           <div style="font:700 15px var(--display)">${p.name}</div>
           <div style="font-size:11px;color:var(--muted)">${p.fabric} · ${p.color}</div>
@@ -1317,6 +1317,16 @@ function getCustomOrderData() {
   };
 }
 
+function getReadablePrintColour(hex) {
+  const value = String(hex || "#171717").replace("#", "");
+  const full = value.length === 3 ? value.split("").map(char => char + char).join("") : value;
+  const red = parseInt(full.slice(0, 2), 16) || 0;
+  const green = parseInt(full.slice(2, 4), 16) || 0;
+  const blue = parseInt(full.slice(4, 6), 16) || 0;
+  const brightness = (red * 299 + green * 587 + blue * 114) / 1000;
+  return brightness > 150 ? "#161613" : "#f7f2e8";
+}
+
 function updateCustomPreview() {
   const order = getCustomOrderData();
   if (!order) return;
@@ -1325,23 +1335,33 @@ function updateCustomPreview() {
   const previewImage = $("#customPreviewImage");
   const previewInstitute = $("#customPreviewInstitute");
   const previewName = $("#customPreviewName");
+  const previewFrontName = $("#customPreviewFrontName");
   const previewGarment = $("#customPreviewGarment");
+  const previewPlacement = $("#customPreviewPlacement");
+  const previewFrontType = $("#customPreviewFrontType");
   const summary = $("#customOrderSummary");
   const instituteInput = $("#customInstituteName");
   const placement = CUSTOM_PLACEMENTS[order.placementKey] || CUSTOM_PLACEMENTS["left-chest-back"];
+  const defaultName = order.institutionType === "Other College" ? "YOUR COLLEGE" : `YOUR ${order.institutionType}`;
+  const displayName = (order.instituteName || defaultName).toUpperCase();
+  const printColour = getReadablePrintColour(order.colourHex);
 
-  if (previewFrame) previewFrame.style.setProperty("--custom-colour", order.colourHex);
+  if (previewFrame) {
+    previewFrame.style.setProperty("--custom-colour", order.colourHex);
+    previewFrame.style.setProperty("--custom-print-colour", printColour);
+    previewFrame.dataset.garment = order.garmentKey;
+  }
   if (previewImage) {
     previewImage.src = order.garment.image;
     previewImage.alt = `Custom ${order.institutionType} campus ${order.garment.label.toLowerCase()} preview`;
   }
   if (previewInstitute) previewInstitute.textContent = order.institutionType;
-  if (previewName) {
-    const defaultName = order.institutionType === "Other College" ? "YOUR COLLEGE" : `YOUR ${order.institutionType}`;
-    previewName.textContent = (order.instituteName || defaultName).toUpperCase();
-  }
+  if (previewName) previewName.textContent = displayName;
+  if (previewFrontName) previewFrontName.textContent = displayName;
   if (instituteInput) instituteInput.placeholder = CUSTOM_INSTITUTION_EXAMPLES[order.institutionType] || "e.g. your college name";
   if (previewGarment) previewGarment.textContent = `${order.garment.label.toUpperCase()} · ${placement.toUpperCase()}`;
+  if (previewPlacement) previewPlacement.textContent = placement.toUpperCase();
+  if (previewFrontType) previewFrontType.textContent = `${order.institutionType} · ${order.garment.label}`;
   if (summary) {
     const pieces = order.quantity === 1 ? "piece" : "pieces";
     summary.textContent = `${order.institutionType} · ${order.garment.label} · ${order.quantity} ${pieces}`;
