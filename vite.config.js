@@ -1,16 +1,16 @@
-import { defineConfig } from "vite";
-import { resolve } from "path";
-import { fileURLToPath } from "url";
+import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const projectRoot = fileURLToPath(new URL(".", import.meta.url));
+const root = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(projectRoot, "index.html"),
-        policies: resolve(projectRoot, "policies.html"),
-      },
-    },
-  },
+        main: resolve(root, 'index.html'),
+        policies: resolve(root, 'policies.html')
+      }
+    }
+  }
 });

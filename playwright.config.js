@@ -1,43 +1,23 @@
-import { defineConfig, devices } from "@playwright/test";
-
-const isWindows = process.platform === "win32";
-const devCommand = isWindows
-  ? "npm.cmd run dev -- --host 127.0.0.1 --port 4173 --strictPort"
-  : "npm run dev -- --host 127.0.0.1 --port 4173 --strictPort";
-const localBrowser = process.env.PLAYWRIGHT_EXECUTABLE_PATH
-  ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } }
-  : {};
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./tests/e2e",
-  fullyParallel: true,
-  forbidOnly: Boolean(process.env.CI),
-  retries: process.env.CI ? 2 : 0,
-  reporter: "html",
+  testDir: './tests/e2e',
   timeout: 30_000,
+  expect: { timeout: 5_000 },
+  fullyParallel: true,
   use: {
-    baseURL: "http://127.0.0.1:4173",
-    trace: "on-first-retry"
+    baseURL: 'http://127.0.0.1:4173',
+    trace: 'retain-on-failure'
   },
   webServer: {
-    command: devCommand,
-    port: 4173,
-    reuseExistingServer: !process.env.CI
+    command: 'npm run dev -- --host 127.0.0.1 --port 4173',
+    url: 'http://127.0.0.1:4173',
+    reuseExistingServer: true,
+    timeout: 120_000
   },
   projects: [
-    {
-      name: "desktop-chromium",
-      use: {
-        ...devices["Desktop Chrome"],
-        ...localBrowser
-      }
-    },
-    {
-      name: "mobile-chrome",
-      use: {
-        ...devices["Pixel 7"],
-        ...localBrowser
-      }
-    }
+    { name: 'desktop-chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 1000 } } },
+    { name: 'tablet-chromium', use: { ...devices['iPad (gen 7)'], viewport: { width: 834, height: 1112 } } },
+    { name: 'mobile-chromium', use: { ...devices['iPhone 13'], viewport: { width: 390, height: 844 } } }
   ]
 });
