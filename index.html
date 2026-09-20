@@ -6,33 +6,14 @@
   <meta name="theme-color" content="#11120f">
   <meta name="description" content="CAPRA COOL — Himalayan streetwear and custom campus merchandise. Heavyweight tees, fleece hoodies, tracksuits, and made-to-order institutional drops.">
   <meta name="keywords" content="Capra Cool, Himalayan streetwear, custom campus merchandise, college hoodies, heavyweight t-shirts, tracksuits">
-  <link rel="canonical" href="https://capra-cool.vercel.app/">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://capra-cool.vercel.app/">
   <meta property="og:title" content="CAPRA COOL — Wear Higher">
   <meta property="og:description" content="Heavyweight Himalayan essentials and custom campus editions, designed in Himachal Pradesh.">
-  <meta property="og:image" content="https://capra-cool.vercel.app/assets/crop_hero_model_3x4.jpg">
+  <meta property="og:image" content="assets/crop_hero_model_3x4.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <title>CAPRA COOL — Himalayan Streetwear & Campus Editions</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ClothingStore",
-      "name": "CAPRA COOL",
-      "url": "https://capra-cool.vercel.app/",
-      "email": "care@capracool.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Mandi",
-        "addressRegion": "Himachal Pradesh",
-        "addressCountry": "IN"
-      },
-      "areaServed": "IN",
-      "sameAs": []
-    }
-  </script>
   <script type="module" src="script.js"></script>
 </head>
 <body>
@@ -51,7 +32,7 @@
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a class="brand" href="#home" aria-label="CAPRA COOL home">
-        <img src="assets/capra_logo_full.svg" alt="" class="brand-mark" width="220" height="168">
+        <img src="assets/capra_crest.svg" alt="" class="brand-mark" width="42" height="42">
         <span class="brand-type"><strong>CAPRA COOL</strong><small>WEAR HIGHER.</small></span>
       </a>
 
@@ -75,10 +56,7 @@
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <div class="mobile-menu-panel">
       <div class="mobile-menu-head">
-        <a class="mobile-brand" href="#home" aria-label="CAPRA COOL home">
-          <img src="assets/capra_logo_full.svg" alt="" width="220" height="168">
-          <span><strong>CAPRA COOL</strong><small>WEAR HIGHER.</small></span>
-        </a>
+        <span>CAPRA COOL</span>
         <button class="round-button" id="menuClose" type="button" aria-label="Close menu">×</button>
       </div>
       <nav aria-label="Mobile navigation">
@@ -186,20 +164,6 @@
       </div>
 
       <div class="product-grid" id="productsGrid" aria-live="polite"></div>
-
-      <aside class="fit-assistant" data-reveal>
-        <div>
-          <p class="eyebrow">FIT CONCIERGE</p>
-          <h3>Ask before you buy.</h3>
-          <p>Get quick help choosing between sizes, fabrics, and silhouettes. For order issues, email support.</p>
-        </div>
-        <form id="assistantForm" class="assistant-form">
-          <label class="sr-only" for="assistantQuestion">Ask a product or size question</label>
-          <input id="assistantQuestion" name="question" type="text" maxlength="240" placeholder="e.g. I am between M and L for hoodies" autocomplete="off">
-          <button class="button button-dark" type="submit">Ask</button>
-        </form>
-        <p class="assistant-answer" id="assistantAnswer" hidden></p>
-      </aside>
     </section>
 
     <section class="editorial-split" id="story">
@@ -233,47 +197,57 @@
       </div>
 
       <div class="atelier-layout">
-        <div class="mockup-studio" id="mockupStudio" data-garment="hoodie" data-placement="left" data-back-placement="center" style="--garment:#171717;--print:#121212" data-reveal>
+        <div class="mockup-studio" id="mockupStudio" data-garment="hoodie" data-placement="left" data-back-placement="center" style="--garment:#171717;--print:#f6f1e7" data-reveal>
           <div class="mockup-toolbar">
-            <span id="previewGarmentLabel">Hoodie · White reference</span>
-            <span>Reference mockup</span>
+            <span id="previewGarmentLabel">Hoodie · Black</span>
+            <span>Live preview</span>
           </div>
           <div class="mockup-grid">
             <article class="mockup-card">
               <span class="mockup-side">Front</span>
-              <div class="garment-reference garment-reference-front" aria-label="Front garment preview">
-                <img id="frontReferenceImage" src="/custom-hoodie-reference.png" alt="Front hoodie reference mockup">
+              <div class="garment garment-front" aria-label="Front garment preview">
+                <span class="garment-body"></span>
+                <span class="garment-arm arm-left"></span>
+                <span class="garment-arm arm-right"></span>
+                <span class="garment-hood"></span>
+                <span class="garment-pants left-leg"></span>
+                <span class="garment-pants right-leg"></span>
                 <div class="front-print print-block">
-                  <img src="assets/capra_print_mark.svg" alt="" aria-hidden="true">
+                  <img src="assets/capra_crest.svg" alt="" aria-hidden="true">
                   <strong id="previewFrontInstitute">YOUR INSTITUTE</strong>
                 </div>
               </div>
-              <small id="previewFrontMeta">Left chest · Black print</small>
+              <small id="previewFrontMeta">Left chest · Ivory print</small>
             </article>
 
             <article class="mockup-card">
               <span class="mockup-side">Back</span>
-              <div class="garment-reference garment-reference-back" aria-label="Back garment preview">
-                <img id="backReferenceImage" src="/custom-hoodie-reference.png" alt="Back hoodie reference mockup">
+              <div class="garment garment-back" aria-label="Back garment preview">
+                <span class="garment-body"></span>
+                <span class="garment-arm arm-left"></span>
+                <span class="garment-arm arm-right"></span>
+                <span class="garment-hood"></span>
+                <span class="garment-pants left-leg"></span>
+                <span class="garment-pants right-leg"></span>
                 <div class="back-print print-block">
-                  <img src="assets/capra_print_mark.svg" alt="" aria-hidden="true">
+                  <img src="assets/capra_crest.svg" alt="" aria-hidden="true">
                   <strong id="previewBackInstitute">YOUR INSTITUTE</strong>
                   <span>CAPRA COOL · CAMPUS EDITION</span>
                 </div>
               </div>
-              <small id="previewBackMeta">Centre back · Black print</small>
+              <small id="previewBackMeta">Centre back · Ivory print</small>
             </article>
           </div>
-          <div class="mockup-note">Reference images show front/back design placement for polo T-shirts, hoodies, and tracksuits. Final garment colour, exact scale, print method, and artwork files are confirmed during design review before production.</div>
+          <div class="mockup-note">Artwork shown is a live layout preview. Final dimensions, print method, and colours are confirmed during design review before production.</div>
         </div>
 
         <form class="atelier-form" id="atelierForm" data-reveal>
           <div class="form-section">
             <span class="form-step">01 / Garment</span>
             <div class="choice-grid garment-choices">
-              <label><input type="radio" name="garment" value="tshirt"><span><b>Polo / T-Shirt</b><small>White reference</small></span></label>
-              <label><input type="radio" name="garment" value="hoodie" checked><span><b>Hoodie</b><small>White reference</small></span></label>
-              <label><input type="radio" name="garment" value="tracksuit"><span><b>Tracksuit</b><small>Black reference</small></span></label>
+              <label><input type="radio" name="garment" value="tshirt"><span><b>T-Shirt</b><small>180–230 GSM</small></span></label>
+              <label><input type="radio" name="garment" value="hoodie" checked><span><b>Hoodie</b><small>380 GSM fleece</small></span></label>
+              <label><input type="radio" name="garment" value="tracksuit"><span><b>Tracksuit</b><small>2-piece set</small></span></label>
             </div>
           </div>
 
@@ -291,11 +265,6 @@
           <div class="form-section">
             <span class="form-step">03 / Identity</span>
             <label class="field"><span>College / institute name</span><input id="instituteName" name="instituteName" type="text" placeholder="e.g. IIT Bombay" maxlength="60" required></label>
-            <div class="form-grid three">
-              <label class="field"><span>Contact name</span><input name="contactName" type="text" maxlength="80" required></label>
-              <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
-              <label class="field"><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel"></label>
-            </div>
             <div class="form-grid two">
               <label class="field"><span>Front logo placement</span>
                 <select name="frontPlacement" id="frontPlacement">
@@ -315,8 +284,8 @@
             <div class="form-grid two">
               <label class="field"><span>Print colour</span>
                 <select name="printColor" id="printColor">
-                  <option value="Black" data-color="#121212">Black</option>
                   <option value="Ivory" data-color="#f6f1e7">Ivory</option>
+                  <option value="Black" data-color="#121212">Black</option>
                   <option value="Moss" data-color="#a9b18e">Moss</option>
                   <option value="Ochre" data-color="#d1a25d">Ochre</option>
                 </select>
@@ -382,7 +351,7 @@
 
   <footer class="site-footer">
     <div class="footer-top">
-      <div class="footer-brand"><img src="assets/capra_logo_footer.svg" alt="" width="64" height="64"><strong>CAPRA COOL</strong><span>WEAR HIGHER.</span><p>Himalayan streetwear and campus editions designed in Himachal Pradesh.</p></div>
+      <div class="footer-brand"><img src="assets/capra_crest.svg" alt="" width="58" height="58"><strong>CAPRA COOL</strong><span>WEAR HIGHER.</span><p>Himalayan streetwear and campus editions designed in Himachal Pradesh.</p></div>
       <div class="footer-column"><strong>Shop</strong><a href="#shop">Core collection</a><a href="#atelier">Campus Atelier</a><a href="#accessories">Campus Accessories</a></div>
       <div class="footer-column"><strong>Care</strong><a href="policies.html#shipping">Shipping</a><a href="policies.html#returns">Returns & exchanges</a><a href="policies.html#custom">Custom orders</a><a href="#faq">FAQ</a></div>
       <div class="footer-column"><strong>Contact</strong><a href="mailto:care@capracool.com">care@capracool.com</a><button class="footer-link-button" id="whatsappSupport" type="button">WhatsApp support</button><span>Mon–Sat · 10 AM–7 PM IST</span></div>
@@ -431,13 +400,12 @@
       <div class="checkout-head"><p class="eyebrow">CHECKOUT</p><h2 id="checkoutTitle">Complete your order.</h2><p>Cash on delivery is currently available. Your order details are submitted securely and confirmed with a reference ID.</p></div>
       <div class="checkout-preview" id="checkoutPreview"></div>
       <form id="checkoutForm">
-        <div class="form-grid two"><label class="field"><span>Full name</span><input name="name" required autocomplete="name"></label><label class="field"><span>Phone</span><input name="phone" required inputmode="tel" autocomplete="tel" minlength="10"></label></div>
+        <div class="form-grid two"><label class="field"><span>Full name</span><input name="name" required autocomplete="name"></label><label class="field"><span>Phone</span><input name="phone" required inputmode="tel" autocomplete="tel"></label></div>
         <label class="field"><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
         <label class="field"><span>Delivery address</span><textarea name="address" rows="3" required autocomplete="street-address"></textarea></label>
         <div class="form-grid three"><label class="field"><span>City</span><input name="city" required autocomplete="address-level2"></label><label class="field"><span>State</span><input name="state" required autocomplete="address-level1"></label><label class="field"><span>PIN code</span><input name="pincode" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="postal-code"></label></div>
         <label class="field"><span>Payment</span><select name="payment_method"><option value="cod">Cash on Delivery</option></select></label>
         <label class="field"><span>Order notes</span><textarea name="notes" rows="2" placeholder="Optional"></textarea></label>
-        <label class="consent-row"><input name="consent" type="checkbox" required><span>I agree to be contacted for order confirmation and dispatch updates.</span></label>
         <div class="secure-note"><span>🔒 HTTPS protected form</span><span>Order reference generated on submit</span></div>
         <button class="button button-dark full" type="submit">Place order</button>
       </form>

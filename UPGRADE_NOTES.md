@@ -23,12 +23,9 @@ This package contains the completed premium storefront overhaul for `capracoolsu
 - Safer reveal animations: content is visible by default, so an animation or IntersectionObserver failure can never leave blank sections.
 - Responsive design verified at 1440px desktop, 834px tablet and 390px mobile without horizontal overflow or zero-height sections.
 - Newsletter now submits to Supabase instead of only displaying a toast.
-- Checkout, newsletter, and custom campus quote submissions now go through Vercel API routes instead of exposing database writes directly in browser code.
-- Added an optional OpenAI-powered fit concierge at `/api/product-assistant`; it uses `OPENAI_API_KEY` only on the server.
-- Added a protected admin order desk at `/admin.html`, backed by `/api/admin/orders`.
+- Checkout creates pending customer orders through Supabase REST and does not make unsupported online-payment claims.
 - New image optimization pipeline generates WebP and AVIF derivatives from existing source photography at build time.
 - Supabase hardening migration removes public SELECT access to customer order data.
-- Added richer SEO metadata, canonical URL, structured data, security headers, checkout consent, stock labels, and a server-side total recalculation for orders.
 
 ## Files to replace
 
@@ -40,14 +37,10 @@ This package contains the completed premium storefront overhaul for `capracoolsu
 - `vite.config.js`
 - `vercel.json`
 - `playwright.config.js`
-- `admin.html`
-- `admin.js`
 
 ## Files to add
 
 - `scripts/optimize-images.mjs`
-- `api/`
-- `supabase/capra_cool_api_updates.sql`
 - `supabase/security_hardening.sql`
 - `tests/e2e/premium-storefront.spec.js`
 
@@ -65,7 +58,7 @@ npm run test:e2e
 
 `npm install` is important because the upgrade adds `sharp` as a development dependency and regenerates `package-lock.json`.
 
-## Supabase migrations
+## Supabase security migration
 
 Before accepting real customer orders, execute:
 
@@ -73,27 +66,15 @@ Before accepting real customer orders, execute:
 
 in the Supabase SQL editor. This removes anonymous/public read access to the `customer_orders` table while retaining validated public inserts.
 
-Also execute:
-
-`supabase/capra_cool_api_updates.sql`
-
-This adds `campus_quote_requests` for the custom campus quote workflow.
-
 ## Environment variables
 
-Add these in Vercel Project Settings → Environment Variables:
+The storefront can use the existing Supabase public URL/key. For WhatsApp support, optionally add a digits-only number including country code, for example:
 
 ```text
-OPENAI_API_KEY=sk-proj-...
-SUPABASE_URL=https://qhaheskahldwcvggrvbu.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=...
-ADMIN_DASHBOARD_TOKEN=choose-a-long-private-token
 VITE_WHATSAPP_NUMBER=91XXXXXXXXXX
 ```
 
-`OPENAI_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `ADMIN_DASHBOARD_TOKEN` are server-only. Do not prefix them with `VITE_`.
-
-If WhatsApp is not configured, the site automatically uses email support instead of showing a broken WhatsApp action.
+If it is not configured, the site automatically uses email support instead of showing a broken WhatsApp action.
 
 ## Validation completed
 
@@ -107,8 +88,7 @@ Validated:
 
 - no horizontal overflow
 - no hidden/blank/zero-height content sections
-- production build completes with `npm run build`
-- serverless API modules import successfully
+- no page or JavaScript console errors in tested flows
 - mobile menu open/close
 - search results
 - product detail + size selection + cart flow

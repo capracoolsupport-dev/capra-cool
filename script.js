@@ -6,7 +6,9 @@ const CONFIG = {
   freeShipping: 999,
   shippingFee: 99,
   supportEmail: 'care@capracool.com',
-  whatsapp: String(import.meta.env?.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')
+  whatsapp: String(import.meta.env?.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, ''),
+  supabaseUrl: import.meta.env?.VITE_SUPABASE_URL || 'https://qhaheskahldwcvggrvbu.supabase.co',
+  supabaseKey: import.meta.env?.VITE_SUPABASE_ANON_KEY || import.meta.env?.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_kxaAQiApVfqqNI4mbR8tTw_AanAVrci'
 };
 
 const SIZE_CHARTS = {
@@ -25,42 +27,42 @@ const PRODUCTS = [
   {
     id: 'summit-tee', name: 'Summit Tee', category: 'tee', price: 799, rating: 4.8,
     image: 'assets/product_summit_tee.jpg', badge: 'Bestseller', color: 'Ivory', gsm: '180 GSM',
-    fabric: 'Premium combed cotton', fit: 'Regular everyday fit', sku: 'CC-TEE-001', stock: 'In stock',
+    fabric: 'Premium combed cotton', fit: 'Regular everyday fit', sku: 'CC-TEE-001',
     description: 'A clean everyday tee in breathable 180 GSM combed cotton, finished with the CAPRA COOL mountain-ridge language and a dependable neck rib.',
     care: 'Cold machine wash with similar colours. Line dry in shade.', sizes: ['S','M','L','XL','XXL']
   },
   {
     id: 'alpine-hoodie', name: 'Alpine Hoodie', category: 'hoodie', price: 1499, rating: 4.9,
     image: 'assets/product_alpine_hoodie.jpg', badge: 'Signature', color: 'Olive Drab', gsm: '380 GSM',
-    fabric: 'Brushed cotton fleece', fit: 'Structured athletic fit', sku: 'CC-HD-001', stock: 'Low stock',
+    fabric: 'Brushed cotton fleece', fit: 'Structured athletic fit', sku: 'CC-HD-001',
     description: 'Dense brushed fleece for cold mornings and late-night campus movement, with a structured hood and restrained alpine insignia.',
     care: 'Gentle cold wash. Hang dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
   },
   {
     id: 'trail-tracksuit', name: 'Trail Tracksuit', category: 'track', price: 1999, rating: 4.7,
     image: 'assets/product_trail_tracksuit.jpg', badge: '2-piece set', color: 'Deep Olive', gsm: '340 GSM',
-    fabric: 'Technical double-knit', fit: 'Tapered outerwear set', sku: 'CC-TRK-001', stock: 'In stock',
+    fabric: 'Technical double-knit', fit: 'Tapered outerwear set', sku: 'CC-TRK-001',
     description: 'A coordinated zip jacket and tapered track pant built for easy layering, travel, and daily movement without losing shape.',
     care: 'Fasten zips, cold wash, air dry.', sizes: ['S','M','L','XL','XXL']
   },
   {
     id: 'classic-tee', name: 'Capra Classic Tee', category: 'tee', price: 799, rating: 4.6,
     image: 'assets/sharp_product_classic_tee.jpg', badge: 'Core icon', color: 'Jet Black', gsm: '180 GSM',
-    fabric: 'Heavy combed cotton', fit: 'Relaxed boxy cut', sku: 'CC-TEE-002', imageFit: 'contain', stock: 'In stock',
+    fabric: 'Heavy combed cotton', fit: 'Relaxed boxy cut', sku: 'CC-TEE-002', imageFit: 'contain',
     description: 'The wordmark essential: long-staple cotton, a relaxed streetwear shape, and a collar engineered to hold its line through repeat wear.',
     care: 'Wash cold inside-out. Do not bleach. Cool iron.', sizes: ['S','M','L','XL','XXL']
   },
   {
     id: 'horizon-hoodie', name: 'Horizon Hoodie', category: 'hoodie', price: 1499, rating: 4.8,
     image: 'assets/product_horizon_hoodie.jpg', badge: 'Mountain art', color: 'Desert Cream', gsm: '380 GSM',
-    fabric: 'Heavy brushed fleece', fit: 'Drop-shoulder structure', sku: 'CC-HD-002', stock: 'Made to order',
+    fabric: 'Heavy brushed fleece', fit: 'Drop-shoulder structure', sku: 'CC-HD-002',
     description: 'A heavyweight fleece hoodie with a scenic Himalayan back graphic and a relaxed shoulder line designed for winter layering.',
     care: 'Cold gentle wash. Line dry. Do not tumble dry.', sizes: ['S','M','L','XL','XXL']
   },
   {
     id: 'peak-tracksuit', name: 'Peak Tracksuit', category: 'track', price: 1999, rating: 4.7,
     image: 'assets/product_peak_tracksuit_clean.jpg', badge: 'Utility', color: 'Basalt Black', gsm: '340 GSM',
-    fabric: 'Technical double-knit jersey', fit: 'Tapered performance cut', sku: 'CC-TRK-002', imageFit: 'contain', stock: 'In stock',
+    fabric: 'Technical double-knit jersey', fit: 'Tapered performance cut', sku: 'CC-TRK-002', imageFit: 'contain',
     description: 'A technical black two-piece with clean piping, useful pockets, and a tapered profile that moves easily between training, travel, and campus.',
     care: 'Wash with like colours. Do not iron over logo. Air dry.', sizes: ['S','M','L','XL','XXL']
   }
@@ -74,11 +76,6 @@ const ACCESSORIES = [
 ];
 
 const CATEGORY_LABELS = { tee:'T-Shirt', hoodie:'Hoodie', track:'Tracksuit' };
-const ATELIER_GARMENTS = {
-  tshirt: { label: 'Polo / T-Shirt', reference: '/custom-polo-reference.png', colour: 'White reference' },
-  hoodie: { label: 'Hoodie', reference: '/custom-hoodie-reference.png', colour: 'White reference' },
-  tracksuit: { label: 'Tracksuit', reference: '/custom-tracksuit-reference.png', colour: 'Black reference' }
-};
 let currentFilter = 'all';
 let currentSort = 'featured';
 let activeProduct = null;
@@ -138,7 +135,7 @@ function renderProducts() {
       <div class="product-info">
         <div class="product-line"><h3 class="product-title">${escapeHtml(product.name)}</h3><span class="product-price">${money(product.price)}</span></div>
         <p class="product-sub">${escapeHtml(product.color)} · ${escapeHtml(product.fit)}</p>
-        <div class="product-spec-row"><span>${escapeHtml(product.gsm)}</span><span>${escapeHtml(product.fabric)}</span><span>${escapeHtml(product.stock)}</span></div>
+        <div class="product-spec-row"><span>${escapeHtml(product.gsm)}</span><span>${escapeHtml(product.fabric)}</span></div>
         <button class="product-detail-link" type="button" data-open-product="${product.id}">View details & size guide</button>
       </div>
     </article>
@@ -179,7 +176,7 @@ function openProduct(id) {
   $('#productModalRating').textContent = `★ ${product.rating.toFixed(1)} · ${product.sku}`;
   $('#productModalDescription').textContent = product.description;
   $('#productModalSpecs').innerHTML = [
-    ['Fabric', product.fabric], ['Fit', product.fit], ['Colour', product.color], ['Stock', product.stock], ['Care', product.care]
+    ['Fabric', product.fabric], ['Fit', product.fit], ['Colour', product.color], ['Care', product.care]
   ].map(([label,value]) => `<div><small>${label}</small><strong>${escapeHtml(value)}</strong></div>`).join('');
   $('#productModalSizes').innerHTML = product.sizes.map(size => `<button class="size-chip" type="button" data-size="${size}">${size}</button>`).join('');
   $('#productSizeChart').innerHTML = sizeChartTable(product.category);
@@ -289,12 +286,10 @@ function updateAtelier() {
   const form = $('#atelierForm'); if (!form) return;
   const data = new FormData(form);
   const garment = data.get('garment') || 'hoodie';
-  const garmentMeta = ATELIER_GARMENTS[garment] || ATELIER_GARMENTS.hoodie;
   const garmentInput = form.querySelector('input[name="garmentColor"]:checked');
   const garmentColor = garmentInput?.value || 'Black';
   const garmentHex = garmentInput?.dataset.color || '#171717';
   const printSelect = $('#printColor');
-  if (garment === 'tracksuit' && printSelect?.value === 'Black') printSelect.value = 'Ivory';
   const printOption = printSelect?.selectedOptions?.[0];
   const printHex = printOption?.dataset.color || '#f6f1e7';
   const printName = printOption?.value || 'Ivory';
@@ -308,74 +303,37 @@ function updateAtelier() {
   studio.dataset.backPlacement = backPlacement;
   studio.style.setProperty('--garment', garmentHex);
   studio.style.setProperty('--print', printHex);
-  $('#frontReferenceImage').src = garmentMeta.reference;
-  $('#frontReferenceImage').alt = `Front ${garmentMeta.label} reference mockup`;
-  $('#backReferenceImage').src = garmentMeta.reference;
-  $('#backReferenceImage').alt = `Back ${garmentMeta.label} reference mockup`;
   $('#previewFrontInstitute').textContent = institute;
   $('#previewBackInstitute').textContent = institute;
-  $('#previewGarmentLabel').textContent = `${garmentMeta.label} · ${garmentMeta.colour} · Requested ${garmentColor}`;
+  $('#previewGarmentLabel').textContent = `${garment === 'tshirt' ? 'T-Shirt' : garment[0].toUpperCase()+garment.slice(1)} · ${garmentColor}`;
   $('#previewFrontMeta').textContent = `${frontPlacement[0].toUpperCase()+frontPlacement.slice(1)} chest · ${printName} print`;
   $('#previewBackMeta').textContent = `${backPlacement[0].toUpperCase()+backPlacement.slice(1)} back · ${printName} print`;
-  $('#atelierSummary').textContent = `${garmentMeta.label} · Requested ${garmentColor} · ${quantity} pieces`;
+  $('#atelierSummary').textContent = `${garment === 'tshirt' ? 'T-Shirt' : garment[0].toUpperCase()+garment.slice(1)} · ${garmentColor} · ${quantity} pieces`;
 }
 
 function atelierMessage() {
   const data = new FormData($('#atelierForm'));
   const colour = $('#atelierForm input[name="garmentColor"]:checked')?.value || 'Black';
-  return `CAPRA COOL — CUSTOM CAMPUS QUOTE\n\nInstitute: ${data.get('instituteName')}\nContact: ${data.get('contactName')}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone') || '—'}\nGarment: ${data.get('garment')}\nGarment colour: ${colour}\nFront placement: ${data.get('frontPlacement')}\nBack placement: ${data.get('backPlacement')}\nPrint colour: ${data.get('printColor')}\nQuantity: ${data.get('quantity')}\nNotes: ${data.get('notes') || '—'}\n\nPlease share artwork guidance, production timeline, and a quote.`;
+  return `CAPRA COOL — CUSTOM CAMPUS QUOTE\n\nInstitute: ${data.get('instituteName')}\nGarment: ${data.get('garment')}\nGarment colour: ${colour}\nFront placement: ${data.get('frontPlacement')}\nBack placement: ${data.get('backPlacement')}\nPrint colour: ${data.get('printColor')}\nQuantity: ${data.get('quantity')}\nNotes: ${data.get('notes') || '—'}\n\nPlease share artwork guidance, production timeline, and a quote.`;
 }
 
-async function submitAtelier(event) {
+function submitAtelier(event) {
   event.preventDefault();
   if (!event.currentTarget.reportValidity()) return;
-  const form = event.currentTarget;
-  const button = $('button[type="submit"]', form);
-  const data = new FormData(form);
-  const colour = form.querySelector('input[name="garmentColor"]:checked')?.value || 'Black';
-  button.disabled = true; button.textContent = 'Sending…';
-  try {
-    const result = await apiPost('/api/campus-quote', {
-      instituteName: data.get('instituteName'),
-      contactName: data.get('contactName'),
-      email: data.get('email'),
-      phone: data.get('phone'),
-      garment: data.get('garment'),
-      garmentColor: colour,
-      frontPlacement: data.get('frontPlacement'),
-      backPlacement: data.get('backPlacement'),
-      printColor: data.get('printColor'),
-      quantity: data.get('quantity'),
-      notes: data.get('notes')
-    });
-    showToast(`Quote request received: ${result.quote_id}.`);
-  } catch (error) {
-    console.error('Quote request failed:', error);
-    emailFallback('CAPRA COOL custom campus quote request', atelierMessage());
-    showToast('Quote service is unavailable, so we opened an email request instead.');
-  } finally {
-    button.disabled = false; button.textContent = 'Request custom quote';
-  }
+  const subject = encodeURIComponent('CAPRA COOL custom campus quote request');
+  const body = encodeURIComponent(atelierMessage());
+  window.location.href = `mailto:${CONFIG.supportEmail}?subject=${subject}&body=${body}`;
+  showToast('Opening your custom quote request in email.');
 }
 
-async function apiPost(path, payload) {
-  const response = await fetch(path, {
+async function postSupabase(table, payload) {
+  if (!CONFIG.supabaseUrl || !CONFIG.supabaseKey) throw new Error('Store data service is not configured.');
+  const response = await fetch(`${CONFIG.supabaseUrl}/rest/v1/${table}`, {
     method:'POST',
-    headers:{ 'Content-Type':'application/json' },
+    headers:{ 'Content-Type':'application/json', apikey:CONFIG.supabaseKey, Authorization:`Bearer ${CONFIG.supabaseKey}`, Prefer:'return=minimal' },
     body:JSON.stringify(payload)
   });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const error = new Error(data.error || `Request failed with ${response.status}.`);
-    error.status = response.status;
-    error.data = data;
-    throw error;
-  }
-  return data;
-}
-
-function emailFallback(subject, body) {
-  window.location.href = `mailto:${CONFIG.supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  if (!response.ok) throw new Error(`Store service returned ${response.status}.`);
 }
 
 function openCheckout() {
@@ -402,31 +360,36 @@ async function submitCheckout(event) {
   const button = $('button[type="submit"]', form);
   button.disabled = true; button.textContent = 'Submitting…';
   const data = new FormData(form);
+  const subtotal = cartTotal();
+  const shipping = subtotal >= CONFIG.freeShipping ? 0 : CONFIG.shippingFee;
+  const orderId = `CC-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
+  const payload = {
+    id: orderId,
+    order_number: orderId,
+    customer_name: String(data.get('name') || '').trim(),
+    customer_phone: String(data.get('phone') || '').trim(),
+    customer_email: String(data.get('email') || '').trim(),
+    delivery_address: String(data.get('address') || '').trim(),
+    city: String(data.get('city') || '').trim(),
+    state: String(data.get('state') || '').trim(),
+    pincode: String(data.get('pincode') || '').trim(),
+    notes: String(data.get('notes') || '').trim(),
+    payment_method: String(data.get('payment_method') || 'cod'),
+    order_channel: 'web',
+    items: cart.map(item => { const p = productById(item.id); return { id:item.id, name:p.name, size:item.size, qty:item.qty, unit_price:p.price }; }),
+    subtotal,
+    shipping_fee: shipping,
+    grand_total: subtotal + shipping,
+    order_status: 'pending'
+  };
   try {
-    const result = await apiPost('/api/orders', {
-      customer: {
-        name: data.get('name'),
-        phone: data.get('phone'),
-        email: data.get('email'),
-        address: data.get('address'),
-        city: data.get('city'),
-        state: data.get('state'),
-        pincode: data.get('pincode'),
-        notes: data.get('notes')
-      },
-      items: cart.map(item => ({ id:item.id, size:item.size, qty:item.qty }))
-    });
+    await postSupabase('customer_orders', payload);
     cart = []; persistCart(); form.reset();
-    $('#successOrderId').textContent = result.order_id;
+    $('#successOrderId').textContent = orderId;
     form.hidden = true; $('#checkoutSuccess').hidden = false;
   } catch (error) {
     console.error('Order submission failed:', error);
-    const summary = cart.map(item => {
-      const product = productById(item.id);
-      return `${product.name} · ${item.size} × ${item.qty}`;
-    }).join('\n');
-    emailFallback('CAPRA COOL order support', `Please help place this order:\n\n${summary}\n\nName: ${data.get('name')}\nPhone: ${data.get('phone')}\nEmail: ${data.get('email')}\nAddress: ${data.get('address')}, ${data.get('city')}, ${data.get('state')} ${data.get('pincode')}\nNotes: ${data.get('notes') || '—'}`);
-    showToast('Order service is unavailable, so we opened an email order request.');
+    showToast('We could not submit the order. Please email care@capracool.com and we’ll help immediately.');
   } finally {
     button.disabled = false; button.textContent = 'Place order';
   }
@@ -439,35 +402,12 @@ async function submitNewsletter(event) {
   if (!email) return;
   const button = $('button', form); button.disabled = true;
   try {
-    await apiPost('/api/newsletter', { email });
+    await postSupabase('newsletter_signups', { email });
     form.reset(); showToast('You’re on the CAPRA COOL field-notes list.');
   } catch (error) {
-    console.error('Newsletter signup failed:', error);
-    showToast(error.message || 'Signup did not go through. Please try again.');
-  } finally { button.disabled = false; button.textContent = 'Join the list'; }
-}
-
-async function submitAssistant(event) {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const input = $('#assistantQuestion');
-  const answer = $('#assistantAnswer');
-  const question = String(new FormData(form).get('question') || '').trim();
-  if (!question) return;
-  const button = $('button', form);
-  button.disabled = true; button.textContent = 'Thinking…';
-  answer.hidden = false;
-  answer.textContent = 'Checking the collection…';
-  try {
-    const result = await apiPost('/api/product-assistant', { question });
-    answer.textContent = result.answer;
-    input.value = '';
-  } catch (error) {
-    console.error('Fit assistant failed:', error);
-    answer.textContent = error.message || 'The fit concierge is unavailable right now. Email care@capracool.com and we will help you choose.';
-  } finally {
-    button.disabled = false; button.textContent = 'Ask';
-  }
+    if (String(error).includes('409')) showToast('That email is already on the list.');
+    else { console.error('Newsletter signup failed:', error); showToast('Signup did not go through. Please try again.'); }
+  } finally { button.disabled = false; }
 }
 
 function showToast(message) {
@@ -533,7 +473,6 @@ function bindEvents() {
   $('#bulkEmailButton')?.addEventListener('click', () => window.location.href = `mailto:${CONFIG.supportEmail}?subject=CAPRA%20COOL%20Bulk%20Order`);
   $('#checkoutForm')?.addEventListener('submit', submitCheckout);
   $('#newsletterForm')?.addEventListener('submit', submitNewsletter);
-  $('#assistantForm')?.addEventListener('submit', submitAssistant);
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeAll();
     if (event.key === '/' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); openSearch(); }

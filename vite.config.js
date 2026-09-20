@@ -9,8 +9,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(root, 'index.html'),
-        policies: resolve(root, 'policies.html'),
-        admin: resolve(root, 'admin.html')
+        policies: resolve(root, 'policies.html')
       }
     }
   }
