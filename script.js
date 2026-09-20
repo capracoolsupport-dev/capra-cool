@@ -4,7 +4,7 @@
  * IIT Mandi, Himalayas | 31.7086° N, 76.9419° E
  */
 
-// --- AUTHENTIC PRODUCT CATALOG (DIRECT FROM CAPRA BRAND BOARD) ---
+// --- AUTHENTIC PRODUCT CATALOG (CAPRA BRAND BOARD + IIT MANDI ORDER FORM) ---
 let PRODUCTS = [
   {
     id: "summit-tee",
@@ -164,6 +164,423 @@ let PRODUCTS = [
   }
 ];
 
+const IIT_MANDI_PRODUCTS = [
+  {
+    id: "iit-black-tshirt",
+    name: "Black IIT T-Shirt",
+    category: "tee",
+    price: 469,
+    image: "assets/iit-black-tshirt.png",
+    color: "Black",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-001",
+    badge: "IIT MANDI",
+    colors: ["#171717"],
+    desc: "A breathable 230 GSM pure-cotton black T-shirt from the IIT Mandi merchandise collection.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-gray-tshirt",
+    name: "Gray IIT T-Shirt",
+    category: "tee",
+    price: 469,
+    image: "assets/iit-gray-tshirt.png",
+    color: "Gray",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-002",
+    badge: "IIT MANDI",
+    colors: ["#777777"],
+    desc: "A breathable 230 GSM pure-cotton gray T-shirt from the IIT Mandi merchandise collection.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-maroon-tshirt",
+    name: "Maroon IIT T-Shirt",
+    category: "tee",
+    price: 469,
+    image: "assets/iit-maroon-tshirt.png",
+    color: "Maroon",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-003",
+    badge: "IIT MANDI",
+    colors: ["#6f1d2b"],
+    desc: "A breathable 230 GSM pure-cotton maroon T-shirt from the IIT Mandi merchandise collection.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-ith-black-tshirt",
+    name: "All Black ITH T-Shirt",
+    category: "tee",
+    price: 469,
+    image: "assets/iit-ith-black-tshirt.png",
+    color: "All Black",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-004",
+    badge: "ITH",
+    colors: ["#111111"],
+    desc: "An all-black 230 GSM pure-cotton T-shirt featuring the ITH design.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-mandi-black-tshirt",
+    name: "All Black IIT Mandi T-Shirt",
+    category: "tee",
+    price: 469,
+    image: "assets/iit-mandi-black-tshirt.png",
+    color: "All Black",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-005",
+    badge: "IIT MANDI",
+    colors: ["#111111"],
+    desc: "An all-black 230 GSM pure-cotton T-shirt featuring the IIT Mandi design.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-iiith-black-tshirt",
+    name: "All Black IIITH T-Shirt",
+    category: "tee",
+    price: 469,
+    image: "assets/iit-iiith-black-tshirt.png",
+    color: "All Black",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-006",
+    badge: "IIITH",
+    colors: ["#111111"],
+    desc: "An all-black 230 GSM pure-cotton T-shirt featuring the IIITH design.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-acid-wash-tshirt",
+    name: "ITH Acid Wash T-Shirt",
+    category: "tee",
+    price: 649,
+    image: "assets/iit-acid-wash-tshirt.png",
+    color: "Acid Wash Black",
+    fabric: "100% Pure Cotton",
+    gsm: "230 GSM",
+    fit: "Unisex Campus Fit",
+    sku: "CC-IIT-TEE-007",
+    badge: "ACID WASH",
+    colors: ["#3e3e3e", "#777777"],
+    desc: "A 230 GSM pure-cotton acid-wash T-shirt featuring the ITH design.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-iih-classic-hoodie",
+    name: "IIH Classic Black Hoodie",
+    category: "hoodie",
+    price: 969,
+    image: "assets/iit-iih-classic-hoodie.png",
+    color: "Black",
+    fabric: "100% Pure Cotton",
+    gsm: "400 GSM",
+    fit: "Unisex Hoodie Fit",
+    sku: "CC-IIT-HD-001",
+    badge: "IIH CLASSIC",
+    colors: ["#111111"],
+    desc: "The classic IIH black hoodie in heavyweight 400 GSM pure cotton.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-name-hoodie",
+    name: "IIT Name Black Hoodie",
+    category: "hoodie",
+    price: 969,
+    image: "assets/iit-name-hoodie.png",
+    color: "Black",
+    fabric: "100% Pure Cotton",
+    gsm: "400 GSM",
+    fit: "Unisex Hoodie Fit",
+    sku: "CC-IIT-HD-002",
+    badge: "CUSTOMIZABLE",
+    colors: ["#111111"],
+    desc: "A heavyweight IIT black hoodie with optional name or department printing available for an additional charge.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-iih-new-hoodie",
+    name: "IIH New Black Hoodie",
+    category: "hoodie",
+    price: 969,
+    image: "assets/iit-iih-new-hoodie.png",
+    color: "Black",
+    fabric: "100% Pure Cotton",
+    gsm: "400 GSM",
+    fit: "Unisex Hoodie Fit",
+    sku: "CC-IIT-HD-003",
+    badge: "NEW DESIGN",
+    colors: ["#111111"],
+    desc: "The new IIH black hoodie design in heavyweight 400 GSM pure cotton.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-iih-zipper",
+    name: "IIH New Black Zipper",
+    category: "hoodie",
+    price: 1059,
+    image: "assets/iit-iih-zipper.png",
+    color: "Black",
+    fabric: "100% Pure Cotton",
+    gsm: "400 GSM",
+    fit: "Unisex Full-Zip Fit",
+    sku: "CC-IIT-HD-004",
+    badge: "FULL ZIP",
+    colors: ["#111111"],
+    desc: "A heavyweight full-zip black layer featuring the new IIH design.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "iit-acid-wash-hoodie",
+    name: "IIH Acid Wash Hoodie",
+    category: "hoodie",
+    price: 1150,
+    image: "assets/iit-acid-wash-hoodie.png",
+    color: "Acid Wash Black",
+    fabric: "100% Pure Cotton",
+    gsm: "400 GSM",
+    fit: "Unisex Hoodie Fit",
+    sku: "CC-IIT-HD-005",
+    badge: "ACID WASH",
+    colors: ["#343434", "#777777"],
+    desc: "A heavyweight 400 GSM acid-wash hoodie featuring the new IIH design.",
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL"]
+  },
+  {
+    id: "handmade-muffler",
+    name: "Handmade Muffler",
+    category: "accessory",
+    price: 460,
+    image: "assets/handmade-muffler.jpg",
+    color: "Custom Colour",
+    fabric: "Handmade Textile",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-001",
+    badge: "ALL COLOURS",
+    colors: ["#8c2633", "#384c72", "#c58b37"],
+    desc: "A handmade winter muffler available in multiple colours.",
+    sizes: ["One Size"]
+  },
+  {
+    id: "handmade-winter-cap",
+    name: "Handmade Winter Cap",
+    category: "accessory",
+    price: 210,
+    image: "assets/handmade-winter-cap.jpg",
+    color: "Custom Colour",
+    fabric: "Handmade Textile",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-002",
+    badge: "ALL COLOURS",
+    colors: ["#252525", "#7a2636", "#385b48"],
+    desc: "A handmade winter cap available in multiple colours.",
+    sizes: ["One Size"]
+  },
+  {
+    id: "sunflower-keychain",
+    name: "Sunflower Keychain",
+    category: "accessory",
+    price: 99,
+    image: "assets/sunflower-keychain.jpg",
+    color: "Yellow",
+    fabric: "Handmade Crochet",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-003",
+    badge: "HANDMADE",
+    colors: ["#e3b83c", "#6f4a2c"],
+    desc: "A handmade sunflower keychain with a soft crochet finish.",
+    sizes: ["One Size"]
+  },
+  {
+    id: "spiderman-keychain",
+    name: "Spider-Man Keychain",
+    category: "accessory",
+    price: 299,
+    image: "assets/spiderman-keychain.jpg",
+    color: "Red and Blue",
+    fabric: "Handmade Crochet",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-004",
+    badge: "HANDMADE",
+    colors: ["#b4202a", "#254d87"],
+    desc: "A handmade Spider-Man-inspired crochet keychain.",
+    sizes: ["One Size"]
+  },
+  {
+    id: "handmade-octopus",
+    name: "Handmade Octopus",
+    category: "accessory",
+    price: 399,
+    image: "assets/handmade-octopus.jpg",
+    color: "As Shown",
+    fabric: "Handmade Crochet",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-005",
+    badge: "HANDMADE",
+    colors: ["#b8567c", "#6b4f90"],
+    desc: "A soft handmade crochet octopus.",
+    sizes: ["One Size"]
+  },
+  {
+    id: "handmade-krishna",
+    name: "Handmade Krishna",
+    category: "accessory",
+    price: 1199,
+    image: "assets/handmade-krishna.jpg",
+    color: "As Shown",
+    fabric: "Handmade Crochet",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-006",
+    badge: "HANDMADE",
+    colors: ["#2c7398", "#e1b847"],
+    desc: "A detailed handmade crochet Krishna figure.",
+    sizes: ["One Size"]
+  },
+  {
+    id: "handmade-charms",
+    name: "Handmade Charms",
+    category: "accessory",
+    price: 99,
+    image: "assets/handmade-charms.jpg",
+    color: "Assorted",
+    fabric: "Handmade Crochet",
+    gsm: "HANDMADE",
+    fit: "One Size",
+    sku: "CC-ACC-007",
+    badge: "HANDMADE",
+    colors: ["#d9a83f", "#4d826d", "#aa4b55"],
+    desc: "Small handmade crochet charms in assorted designs and colours.",
+    sizes: ["One Size"]
+  }
+].map(product => ({
+  rating: 4.8,
+  reviews: 0,
+  care: product.category === "accessory"
+    ? "Spot clean gently and allow to air dry."
+    : "Machine wash cold inside-out. Do not iron directly on the print.",
+  imageFit: product.category === "accessory" ? "cover" : "contain",
+  chart: {},
+  ...product
+}));
+
+const REFERENCE_TEE_PRICE = 469;
+const TARGET_TEE_MRP = 999;
+const PRICE_MARKUP_MULTIPLIER = TARGET_TEE_MRP / REFERENCE_TEE_PRICE;
+const SALE_DISCOUNT_PERCENT = 40;
+
+const PRODUCT_GALLERIES = {
+  "summit-tee": ["assets/product_summit_tee.jpg", "assets/product_summit_tee_portrait.jpg", "assets/pdp_summit_model.png"],
+  "alpine-hoodie": ["assets/product_alpine_hoodie.jpg", "assets/crop_alpine_3x4.jpg", "assets/model_prod2_alpine.png"],
+  "trail-tracksuit": ["assets/product_trail_tracksuit.jpg", "assets/crop_trail_3x4.jpg", "assets/model_prod3_trail.png"],
+  "classic-tee": ["assets/product_classic_tee.jpg", "assets/sharp_product_classic_tee.jpg", "assets/model_prod4_classic.png"],
+  "horizon-hoodie": ["assets/product_horizon_hoodie.jpg", "assets/sharp_product_horizon_hoodie.jpg", "assets/model_prod5_horizon.png"],
+  "peak-tracksuit": ["assets/product_peak_tracksuit.jpg", "assets/sharp_product_peak_tracksuit.jpg", "assets/model_prod6_peak.png"]
+};
+
+const CATEGORY_NOTES = {
+  tee: {
+    edition: "EVERYDAY COTTON STUDY",
+    material: "Combed cotton selected for a smooth hand feel and dependable breathability.",
+    construction: "Reinforced neck rib and shoulder seams help the silhouette hold its shape."
+  },
+  hoodie: {
+    edition: "HEAVYWEIGHT FLEECE STUDY",
+    material: "Brushed fleece balances substantial warmth with a soft interior finish.",
+    construction: "Structured shoulders, reinforced rib, and clean twin-needle finishing."
+  },
+  track: {
+    edition: "TECHNICAL MOVEMENT STUDY",
+    material: "Dense double-knit fabric gives stretch, recovery, and a clean technical drape.",
+    construction: "Tapered patterning and reinforced high-movement seams support daily wear."
+  },
+  accessory: {
+    edition: "SMALL OBJECTS EDIT",
+    material: "Selected in small batches for tactile detail and everyday utility.",
+    construction: "Each piece is inspected and packed by hand before dispatch."
+  }
+};
+
+const STANDARD_SIZE_CHARTS = {
+  tee: {
+    S: { chest: '38-40"', length: '27"', shoulder: '18.5"' },
+    M: { chest: '40-42"', length: '28"', shoulder: '19.5"' },
+    L: { chest: '42-44"', length: '29"', shoulder: '20.5"' },
+    XL: { chest: '44-46"', length: '30"', shoulder: '21.5"' },
+    XXL: { chest: '46-48"', length: '31"', shoulder: '22.5"' },
+    XXXL: { chest: '48-50"', length: '32"', shoulder: '23.5"' }
+  },
+  hoodie: {
+    S: { chest: '42-44"', length: '27"', shoulder: '20"' },
+    M: { chest: '44-46"', length: '28"', shoulder: '21"' },
+    L: { chest: '46-48"', length: '29"', shoulder: '22"' },
+    XL: { chest: '48-50"', length: '30"', shoulder: '23"' },
+    XXL: { chest: '50-52"', length: '31"', shoulder: '24"' },
+    XXXL: { chest: '52-54"', length: '32"', shoulder: '25"' }
+  },
+  track: {
+    S: { chest: 'Chest 40" / Waist 30"', length: 'Top 27" / Pants 39"', shoulder: "Raglan" },
+    M: { chest: 'Chest 42" / Waist 32"', length: 'Top 28" / Pants 40"', shoulder: "Raglan" },
+    L: { chest: 'Chest 44" / Waist 34"', length: 'Top 29" / Pants 41"', shoulder: "Raglan" },
+    XL: { chest: 'Chest 46" / Waist 36"', length: 'Top 30" / Pants 42"', shoulder: "Raglan" },
+    XXL: { chest: 'Chest 48" / Waist 38"', length: 'Top 31" / Pants 43"', shoulder: "Raglan" },
+    XXXL: { chest: 'Chest 50" / Waist 40"', length: 'Top 32" / Pants 44"', shoulder: "Raglan" }
+  },
+  accessory: {
+    "One Size": { chest: "Universal fit", length: "Varies by design", shoulder: "Not applicable" }
+  }
+};
+
+function applySalePricing(product) {
+  const basePrice = Number(product.basePrice ?? product.price) || 0;
+  const compareAtPrice = Math.round(basePrice * PRICE_MARKUP_MULTIPLIER);
+  const price = Math.round(compareAtPrice * (1 - SALE_DISCOUNT_PERCENT / 100));
+  const chart = Object.keys(product.chart || {}).length > 0
+    ? product.chart
+    : STANDARD_SIZE_CHARTS[product.category] || STANDARD_SIZE_CHARTS.accessory;
+
+  const notes = CATEGORY_NOTES[product.category] || CATEGORY_NOTES.accessory;
+  const categoryGallery = product.category === "tee"
+    ? "assets/collection_tees.jpg"
+    : product.category === "hoodie"
+      ? "assets/collection_hoodies.jpg"
+      : product.category === "track"
+        ? "assets/collection_tracksuits.jpg"
+        : product.image;
+
+  return {
+    ...product,
+    chart,
+    basePrice,
+    compareAtPrice,
+    price,
+    discountPercent: SALE_DISCOUNT_PERCENT,
+    edition: product.edition || notes.edition,
+    materialNote: product.materialNote || notes.material,
+    constructionNote: product.constructionNote || notes.construction,
+    gallery: product.gallery || PRODUCT_GALLERIES[product.id] || [...new Set([product.image, categoryGallery])]
+  };
+}
+
+PRODUCTS = [...PRODUCTS, ...IIT_MANDI_PRODUCTS].map(applySalePricing);
+const LOCAL_PRODUCTS = [...PRODUCTS];
+
 // --- STATE MANAGEMENT ---
 let cart = JSON.parse(localStorage.getItem("capraCoolCart") || "[]");
 let wishlist = JSON.parse(localStorage.getItem("capraCoolWishlist") || "[]");
@@ -186,6 +603,67 @@ const CONFIG = {
 const $ = sel => document.querySelector(sel);
 const $$ = sel => document.querySelectorAll(sel);
 const formatMoney = num => "₹" + Number(num).toLocaleString("en-IN");
+const salePriceMarkup = (product, showTaxNote = false) => {
+  const currentPrice = Number(product.price) || 0;
+  const compareAtPrice = Number(product.compareAtPrice) || currentPrice;
+  const discountPercent = Number(product.discountPercent) || SALE_DISCOUNT_PERCENT;
+
+  return `
+    <span class="sale-pricing">
+      <span class="sale-price-line">
+        <strong class="sale-price-current">${formatMoney(currentPrice)}</strong>
+        <del class="sale-price-mrp">${formatMoney(compareAtPrice)}</del>
+      </span>
+      ${showTaxNote ? `<span class="sale-discount">Private edit · ${discountPercent}% below MRP</span>` : ''}
+      ${showTaxNote ? '<small class="sale-tax-note">Inclusive of all taxes</small>' : ''}
+    </span>
+  `;
+};
+
+function sizeChartMarkup(product) {
+  const chartEntries = Object.entries(product.chart || {});
+  if (chartEntries.length === 0) return "";
+
+  const isAccessory = product.category === "accessory";
+  const heading = isAccessory ? "Size & fit" : "Size chart · Measurements in inches";
+  const headers = isAccessory
+    ? ["Option", "Fit", "Dimensions", "Notes"]
+    : ["Size", "Chest/Waist", "Length", "Shoulder"];
+  const rows = chartEntries.map(([size, measurements]) => `
+    <tr>
+      <td><strong>${size}</strong></td>
+      <td>${measurements.chest}</td>
+      <td>${measurements.length}</td>
+      <td>${measurements.shoulder}</td>
+    </tr>
+  `).join("");
+
+  return `
+    <div class="size-chart-title">${heading}</div>
+    <div class="size-table-wrap">
+      <table class="size-table">
+        <thead><tr>${headers.map(header => `<th>${header}</th>`).join("")}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function syncCartPricing() {
+  cart = cart.map(item => {
+    const product = PRODUCTS.find(candidate => candidate.id === item.id);
+    if (!product) return item;
+    return {
+      ...item,
+      price: product.price,
+      compareAtPrice: product.compareAtPrice,
+      discountPercent: product.discountPercent
+    };
+  });
+  localStorage.setItem("capraCoolCart", JSON.stringify(cart));
+}
+
+syncCartPricing();
 
 // --- SUPABASE DATA SYNC ---
 async function saveOrderToSupabase(orderData) {
@@ -223,7 +701,7 @@ async function loadProductsFromSupabase() {
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        PRODUCTS = data.map(item => ({
+        const remoteProducts = data.map(item => applySalePricing({
           id: item.id,
           name: item.name,
           category: item.category,
@@ -243,8 +721,15 @@ async function loadProductsFromSupabase() {
           sizes: Array.isArray(item.sizes) ? item.sizes : ["S", "M", "L", "XL", "XXL"],
           chart: item.size_chart || {}
         }));
+        const remoteProductIds = new Set(remoteProducts.map(product => product.id));
+        PRODUCTS = [
+          ...remoteProducts,
+          ...LOCAL_PRODUCTS.filter(product => !remoteProductIds.has(product.id))
+        ];
+        syncCartPricing();
         renderProducts();
-        console.log(`Loaded ${data.length} Capra Cool products dynamically from Supabase`);
+        renderCart();
+        console.log(`Loaded ${data.length} Supabase products and ${PRODUCTS.length - data.length} local catalog products`);
       }
     }
   } catch (e) {
@@ -270,6 +755,8 @@ function addToCart(productId, size, qty = 1) {
       id: prod.id,
       name: prod.name,
       price: prod.price,
+      compareAtPrice: prod.compareAtPrice,
+      discountPercent: prod.discountPercent,
       image: prod.image,
       color: prod.color,
       category: prod.category,
@@ -369,7 +856,11 @@ function renderCart() {
                 <span>${item.qty}</span>
                 <button type="button" onclick="updateItemQty(${idx}, 1)" aria-label="Increase">+</button>
               </div>
-              <div class="cart-item-price">${formatMoney(item.price * item.qty)}</div>
+              <div class="cart-item-price">${salePriceMarkup({
+                price: item.price * item.qty,
+                compareAtPrice: item.compareAtPrice * item.qty,
+                discountPercent: item.discountPercent
+              })}</div>
             </div>
             <button type="button" class="cart-remove-btn" onclick="removeItem(${idx})">Remove</button>
           </div>
@@ -431,8 +922,8 @@ function renderProducts() {
 
     return `
       <article class="product" data-product-id="${p.id}" data-cat="${p.category}" data-name="${p.name}" data-price="${p.price}">
-        <div class="visual">
-          <span class="visual-badge">${p.gsm}</span>
+        <div class="visual ${p.imageFit === "contain" ? "contain-image" : ""}" onclick="triggerQuickView('${p.id}')" role="button" tabindex="0" aria-label="View ${p.name}">
+          <span class="visual-badge">${p.badge || p.gsm}</span>
           <button type="button" class="wish-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', this)" aria-label="Add to wishlist">
             ${isWished ? '♥' : '♡'}
           </button>
@@ -441,16 +932,16 @@ function renderProducts() {
         <div class="product-meta">
           <div>
             <h3 onclick="triggerQuickView('${p.id}')">${p.name}</h3>
-            <small>${p.fabric} · ${p.color}</small>
+            <small>${p.category === "accessory" ? "Small object" : p.gsm} · ${p.color}</small>
           </div>
-          <div class="product-price">${formatMoney(p.price)}</div>
+          <div class="product-price">${salePriceMarkup(p)}</div>
         </div>
         <div class="color-dots">${colorDots}</div>
         <div class="product-actions">
           <button type="button" class="add-btn" onclick="triggerSizeSelector('${p.id}')">
             <span>Add to Bag</span>
           </button>
-          <button type="button" class="details-btn" onclick="triggerQuickView('${p.id}')" title="Product details">Specs ↗</button>
+          <button type="button" class="details-btn" onclick="triggerQuickView('${p.id}')">View piece</button>
         </div>
       </article>
     `;
@@ -474,6 +965,9 @@ function openModal(id) {
 function closeModal(id) {
   const modal = $(id);
   if (modal) modal.classList.remove("open");
+  if (id === "#quickViewModal" && window.location.hash.startsWith("#product/")) {
+    history.replaceState(null, "", "#shop");
+  }
   if (!document.querySelector(".modal.open") && !$("#bagDrawer")?.classList.contains("open")) {
     const shade = $("#shade");
     if (shade) shade.classList.remove("open");
@@ -552,7 +1046,7 @@ function triggerSizeSelector(productId) {
   selectedSize = null;
 
   $("#sizeModalTitle").textContent = prod.name;
-  $("#sizeModalPrice").textContent = formatMoney(prod.price);
+  $("#sizeModalPrice").innerHTML = salePriceMarkup(prod);
   $("#sizeModalColor").textContent = `${prod.fabric} · ${prod.color}`;
   $("#sizeModalThumb").src = prod.image;
   $("#sizeModalThumb").alt = prod.name;
@@ -563,22 +1057,19 @@ function triggerSizeSelector(productId) {
   `).join("");
 
   const tableContainer = $("#sizeModalChart");
-  if (tableContainer && prod.chart) {
-    let rows = Object.entries(prod.chart).map(([sz, meas]) => `
-      <tr>
-        <td><strong>${sz}</strong></td>
-        <td>${meas.chest}</td>
-        <td>${meas.length}</td>
-        <td>${meas.shoulder}</td>
-      </tr>
-    `).join("");
-    tableContainer.innerHTML = `
-      <table class="size-table">
-        <thead><tr><th>Size</th><th>Chest/Waist</th><th>Length</th><th>Shoulder</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `;
+  const chartToggle = $("#sizeGuideToggleText");
+  const chartMarkup = sizeChartMarkup(prod);
+  if (tableContainer && chartMarkup) {
+    tableContainer.innerHTML = chartMarkup;
     tableContainer.style.display = "none";
+    if (chartToggle) {
+      chartToggle.style.display = "inline-block";
+      chartToggle.textContent = "View garment size chart ▼";
+    }
+  } else if (tableContainer) {
+    tableContainer.innerHTML = "";
+    tableContainer.style.display = "none";
+    if (chartToggle) chartToggle.style.display = "none";
   }
 
   openModal("#sizeModal");
@@ -601,7 +1092,7 @@ function toggleSizeGuide() {
 
 function confirmSizeSelection() {
   if (!selectedSize) {
-    showToast("Please pick a size (S–XXL)");
+    showToast("Please pick an option");
     return;
   }
   if (!selectedProduct) return;
@@ -610,7 +1101,14 @@ function confirmSizeSelection() {
 }
 
 // --- QUICK VIEW MODAL ---
-function triggerQuickView(productId) {
+function setQuickViewImage(src, button) {
+  const image = $("#quickViewImg");
+  if (image) image.src = src;
+  $$("#quickViewThumbnails .quickview-thumb").forEach(thumb => thumb.classList.remove("active"));
+  if (button) button.classList.add("active");
+}
+
+function triggerQuickView(productId, updateUrl = true) {
   const prod = PRODUCTS.find(p => p.id === productId);
   if (!prod) return;
   selectedProduct = prod;
@@ -618,8 +1116,12 @@ function triggerQuickView(productId) {
 
   $("#quickViewImg").src = prod.image;
   $("#quickViewImg").alt = prod.name;
+  $("#quickViewImg").style.objectFit = prod.imageFit || "cover";
+  $("#quickViewCategory").textContent = prod.category === "track" ? "TRACKSUITS" : `${prod.category.toUpperCase()}S`;
+  $("#quickViewEdition").textContent = prod.edition;
   $("#quickViewTitle").textContent = prod.name;
-  $("#quickViewPrice").textContent = `${formatMoney(prod.price)} (Inclusive of all taxes)`;
+  $("#quickViewPrice").innerHTML = salePriceMarkup(prod, true);
+  $("#quickViewRating").textContent = `★ ${Number(prod.rating || 4.8).toFixed(1)} · ${prod.reviews || "New"} ${prod.reviews === 1 ? "review" : "reviews"}`;
   $("#quickViewDesc").textContent = prod.desc;
   $("#quickViewSpecs").innerHTML = `
     <div><strong>Fabric:</strong> ${prod.fabric}</div>
@@ -630,30 +1132,36 @@ function triggerQuickView(productId) {
     <div><strong>Care:</strong> ${prod.care}</div>
   `;
 
+  const thumbnails = $("#quickViewThumbnails");
+  if (thumbnails) {
+    thumbnails.innerHTML = prod.gallery.map((src, index) => `
+      <button type="button" class="quickview-thumb ${index === 0 ? "active" : ""}" onclick="setQuickViewImage('${src}', this)" aria-label="View image ${index + 1}">
+        <img src="${src}" alt="" loading="lazy">
+      </button>
+    `).join("");
+  }
+
+  const notes = $("#quickViewNotes");
+  if (notes) {
+    notes.innerHTML = `
+      <details open><summary>Material & hand feel</summary><p>${prod.materialNote}</p></details>
+      <details><summary>Construction</summary><p>${prod.constructionNote}</p></details>
+      <details><summary>Care</summary><p>${prod.care}</p></details>
+    `;
+  }
+
   const sizesGrid = $("#quickViewSizes");
   sizesGrid.innerHTML = prod.sizes.map(s => `
     <button type="button" class="size-btn" data-size="${s}" onclick="selectQuickViewSize(this, '${s}')">${s}</button>
   `).join("");
 
   const chartEl = $("#quickViewChart");
-  if (chartEl && prod.chart) {
-    let rows = Object.entries(prod.chart).map(([sz, meas]) => `
-      <tr>
-        <td><strong>${sz}</strong></td>
-        <td>${meas.chest}</td>
-        <td>${meas.length}</td>
-        <td>${meas.shoulder}</td>
-      </tr>
-    `).join("");
-    chartEl.innerHTML = `
-      <table class="size-table">
-        <thead><tr><th>Size</th><th>Chest/Waist</th><th>Length</th><th>Shoulder</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    `;
-  }
+  if (chartEl) chartEl.innerHTML = sizeChartMarkup(prod);
 
   openModal("#quickViewModal");
+  if (updateUrl && window.location.hash !== `#product/${prod.id}`) {
+    history.replaceState({ productId: prod.id }, "", `#product/${prod.id}`);
+  }
 }
 
 function selectQuickViewSize(btn, size) {
@@ -726,7 +1234,7 @@ function runSearch(query) {
           <div style="font-size:11px;color:var(--muted)">${p.fabric} · ${p.color}</div>
         </div>
       </div>
-      <div style="font:700 15px var(--display)">${formatMoney(p.price)}</div>
+      <div class="search-result-price">${salePriceMarkup(p)}</div>
     </div>
   `).join("");
 }
@@ -753,6 +1261,172 @@ function filterProducts(cat) {
 function sortProducts(sortBy) {
   activeSort = sortBy;
   renderProducts();
+}
+
+// --- CUSTOM CAMPUS MERCHANDISE ---
+const CUSTOM_GARMENTS = {
+  tshirt: {
+    label: "T-Shirt",
+    image: "assets/collection_tees.jpg"
+  },
+  hoodie: {
+    label: "Hoodie",
+    image: "assets/collection_hoodies.jpg"
+  },
+  tracksuit: {
+    label: "Tracksuit",
+    image: "assets/collection_tracksuits.jpg"
+  }
+};
+
+const CUSTOM_PLACEMENTS = {
+  "left-chest-back": "Left chest + back",
+  "center-chest": "Centre chest",
+  "sleeve-back": "Sleeve + back",
+  "full-custom": "Full custom layout"
+};
+
+const CUSTOM_INSTITUTION_EXAMPLES = {
+  IIT: "e.g. IIT Bombay",
+  NIT: "e.g. NIT Trichy",
+  IIIT: "e.g. IIIT Hyderabad",
+  IISc: "e.g. IISc Bengaluru",
+  IIM: "e.g. IIM Ahmedabad",
+  AIIMS: "e.g. AIIMS Delhi",
+  "Other College": "e.g. your college name"
+};
+
+function getCustomOrderData() {
+  const form = $("#customOrderForm");
+  if (!form) return null;
+
+  const data = new FormData(form);
+  const garmentKey = data.get("garment") || "hoodie";
+  const colourInput = form.querySelector('input[name="colour"]:checked');
+
+  return {
+    institutionType: data.get("institutionType") || "IIT",
+    instituteName: String(data.get("instituteName") || "").trim(),
+    garmentKey,
+    garment: CUSTOM_GARMENTS[garmentKey] || CUSTOM_GARMENTS.hoodie,
+    colour: data.get("colour") || "Black",
+    colourHex: colourInput?.dataset.hex || "#171717",
+    placementKey: data.get("printPlacement") || "left-chest-back",
+    quantity: Math.max(1, Number(data.get("quantity")) || 1),
+    personalisation: data.get("personalisation") === "on"
+  };
+}
+
+function updateCustomPreview() {
+  const order = getCustomOrderData();
+  if (!order) return;
+
+  const previewFrame = $("#customPreviewFrame");
+  const previewImage = $("#customPreviewImage");
+  const previewInstitute = $("#customPreviewInstitute");
+  const previewName = $("#customPreviewName");
+  const previewGarment = $("#customPreviewGarment");
+  const summary = $("#customOrderSummary");
+  const instituteInput = $("#customInstituteName");
+  const placement = CUSTOM_PLACEMENTS[order.placementKey] || CUSTOM_PLACEMENTS["left-chest-back"];
+
+  if (previewFrame) previewFrame.style.setProperty("--custom-colour", order.colourHex);
+  if (previewImage) {
+    previewImage.src = order.garment.image;
+    previewImage.alt = `Custom ${order.institutionType} campus ${order.garment.label.toLowerCase()} preview`;
+  }
+  if (previewInstitute) previewInstitute.textContent = order.institutionType;
+  if (previewName) {
+    const defaultName = order.institutionType === "Other College" ? "YOUR COLLEGE" : `YOUR ${order.institutionType}`;
+    previewName.textContent = (order.instituteName || defaultName).toUpperCase();
+  }
+  if (instituteInput) instituteInput.placeholder = CUSTOM_INSTITUTION_EXAMPLES[order.institutionType] || "e.g. your college name";
+  if (previewGarment) previewGarment.textContent = `${order.garment.label.toUpperCase()} · ${placement.toUpperCase()}`;
+  if (summary) {
+    const pieces = order.quantity === 1 ? "piece" : "pieces";
+    summary.textContent = `${order.institutionType} · ${order.garment.label} · ${order.quantity} ${pieces}`;
+  }
+}
+
+function handleCustomQuote(e) {
+  e.preventDefault();
+  const form = e.target;
+  if (!form.reportValidity()) return;
+
+  const order = getCustomOrderData();
+  if (!order) return;
+  const placement = CUSTOM_PLACEMENTS[order.placementKey] || CUSTOM_PLACEMENTS["left-chest-back"];
+  const message =
+`*CAPRA COOL — CUSTOM CAMPUS MERCH REQUEST*
+
+*INSTITUTION:* ${order.instituteName} (${order.institutionType})
+*GARMENT:* ${order.garment.label}
+*BASE COLOUR:* ${order.colour}
+*PRINT PLACEMENT:* ${placement}
+*QUANTITY:* ${order.quantity}
+*NAMES / DEPARTMENTS:* ${order.personalisation ? "Yes" : "No"}
+
+Please share the available customization options and quote.`;
+
+  window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
+  showToast("Opening your custom quote on WhatsApp");
+}
+
+let customStep = 1;
+
+function showCustomStep(step) {
+  customStep = Math.max(1, Math.min(3, Number(step) || 1));
+  $$(".custom-step").forEach(panel => panel.classList.toggle("active", Number(panel.dataset.customStep) === customStep));
+  $$(".custom-progress-step").forEach(button => {
+    const target = Number(button.dataset.stepTarget);
+    button.classList.toggle("active", target === customStep);
+    button.classList.toggle("complete", target < customStep);
+  });
+
+  const back = $("#customStepBack");
+  const next = $("#customStepNext");
+  const submit = $("#customQuoteSubmit");
+  if (back) back.disabled = customStep === 1;
+  if (next) next.style.display = customStep === 3 ? "none" : "inline-flex";
+  if (submit) submit.style.display = customStep === 3 ? "inline-flex" : "none";
+}
+
+function advanceCustomStep() {
+  if (customStep === 1) {
+    const institute = $("#customInstituteName");
+    if (institute && !institute.reportValidity()) return;
+  }
+  showCustomStep(customStep + 1);
+}
+
+function setupCustomSteps() {
+  $("#customStepBack")?.addEventListener("click", () => showCustomStep(customStep - 1));
+  $("#customStepNext")?.addEventListener("click", advanceCustomStep);
+  $$(".custom-progress-step").forEach(button => {
+    button.addEventListener("click", () => {
+      const target = Number(button.dataset.stepTarget);
+      if (target <= customStep) showCustomStep(target);
+    });
+  });
+  showCustomStep(1);
+}
+
+function setupScrollReveals() {
+  if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const sections = $$('main > section:not(.hero-wrapper)');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.08, rootMargin: "0px 0px -40px" });
+
+  sections.forEach(section => {
+    section.classList.add("reveal-ready");
+    observer.observe(section);
+  });
 }
 
 // --- CHECKOUT FLOW ---
@@ -959,6 +1633,8 @@ function initApp() {
   renderProducts();
   renderCart();
   loadProductsFromSupabase();
+  setupCustomSteps();
+  setupScrollReveals();
 
   // Category filter clicks
   $$(".filter").forEach(btn => {
@@ -1057,6 +1733,18 @@ function initApp() {
       e.target.reset();
     });
   }
+
+  const customOrderForm = $("#customOrderForm");
+  if (customOrderForm) {
+    customOrderForm.addEventListener("input", updateCustomPreview);
+    customOrderForm.addEventListener("change", updateCustomPreview);
+    customOrderForm.addEventListener("submit", handleCustomQuote);
+    updateCustomPreview();
+  }
+
+  const productFromHash = window.location.hash.match(/^#product\/(.+)$/)?.[1];
+  if (productFromHash) triggerQuickView(productFromHash, false);
+
 }
 
 if (document.readyState === "loading") {
@@ -1076,6 +1764,7 @@ window.selectSizeButton = selectSizeButton;
 window.toggleSizeGuide = toggleSizeGuide;
 window.confirmSizeSelection = confirmSizeSelection;
 window.triggerQuickView = triggerQuickView;
+window.setQuickViewImage = setQuickViewImage;
 window.selectQuickViewSize = selectQuickViewSize;
 window.confirmQuickViewAdd = confirmQuickViewAdd;
 window.openBrandBoardModal = openBrandBoardModal;

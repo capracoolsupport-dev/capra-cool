@@ -4,6 +4,9 @@ const isWindows = process.platform === "win32";
 const devCommand = isWindows
   ? "npm.cmd run dev -- --host 127.0.0.1 --port 4173 --strictPort"
   : "npm run dev -- --host 127.0.0.1 --port 4173 --strictPort";
+const localBrowser = process.env.PLAYWRIGHT_EXECUTABLE_PATH
+  ? { launchOptions: { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH } }
+  : {};
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -25,13 +28,15 @@ export default defineConfig({
     {
       name: "desktop-chromium",
       use: {
-        ...devices["Desktop Chrome"]
+        ...devices["Desktop Chrome"],
+        ...localBrowser
       }
     },
     {
       name: "mobile-chrome",
       use: {
-        ...devices["Pixel 7"]
+        ...devices["Pixel 7"],
+        ...localBrowser
       }
     }
   ]

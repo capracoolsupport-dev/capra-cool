@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CAPRA COOL — Wear Higher | Mountain-Inspired Streetwear</title>
-  <meta name="description" content="CAPRA COOL — Premium everyday clothing inspired by the Himalayas. Heavyweight tees, brushed fleece hoodies, and technical tracksuits. Free shipping above ₹999.">
+  <meta name="description" content="CAPRA COOL — Premium Himalayan streetwear and custom campus merchandise for IIT, NIT, IIIT, IISc, IIM, AIIMS, and other college communities. T-shirts, hoodies, tracksuits, and accessories.">
   <meta name="keywords" content="Capra Cool, clothing, mountain streetwear, summit tee, alpine hoodie, tracksuits, IIT Mandi, Wear Higher">
   <meta name="theme-color" content="#11120f">
   
@@ -21,21 +21,17 @@
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Top Editorial Telemetry Bar -->
+  <!-- Quiet service bar -->
   <div class="announce">
-    <span>CAPRA COOL · HIMALAYAN TECHNICAL ATTIRE</span>
+    <span>Made in the Himalayan foothills</span>
     <span class="dot">•</span>
-    <span>31.7086° N, 76.9419° E</span>
-    <span class="dot">•</span>
-    <span>FREE SHIPPING ABOVE ₹999</span>
-    <span class="dot">•</span>
-    <span>IIT MANDI, HIMALAYAS</span>
+    <span>Complimentary shipping above ₹999</span>
   </div>
 
   <!-- Header with Official Capra Ibex Logo -->
@@ -53,12 +49,9 @@
     </a>
 
     <nav class="main-nav" aria-label="Main Navigation">
-      <a href="#home">Home</a>
-      <a href="#shop">Shop</a>
-      <a href="#discover">Collection</a>
-      <a href="#philosophy">About</a>
-      <a href="#faq">FAQ</a>
-      <a href="policies.html">Policies</a>
+      <a href="#shop">Shop the edit</a>
+      <a href="#customize">Campus atelier</a>
+      <a href="#philosophy">Our story</a>
     </nav>
 
     <div class="head-actions">
@@ -84,7 +77,7 @@
     <div class="mobile-nav-content">
       <div class="mobile-nav-head">
         <div class="brand">
-          <img src="assets/capra_logo_dark.png" alt="CAPRA COOL — WEAR HIGHER" class="brand-logo-img" style="height:28px">
+          <img src="assets/logo_black_on_white.png" alt="CAPRA COOL — WEAR HIGHER" class="brand-logo-img" style="height:28px">
         </div>
         <button class="drawer-close" id="closeMobileNavBtn">×</button>
       </div>
@@ -93,6 +86,7 @@
         <a href="#home" onclick="closeMobileNav()">Home <span>→</span></a>
         <a href="#shop" onclick="closeMobileNav()">Shop All Products <span>→</span></a>
         <a href="#discover" onclick="closeMobileNav()">Categories <span>→</span></a>
+        <a href="#customize" onclick="closeMobileNav()">Custom Campus Merch <span>→</span></a>
         <a href="#philosophy" onclick="closeMobileNav()">Our Philosophy <span>→</span></a>
         <a href="#faq" onclick="closeMobileNav()">Help & FAQ <span>→</span></a>
         <a href="policies.html">Store Policies <span>→</span></a>
@@ -112,6 +106,11 @@
         <div class="hero-banner-card">
           <!-- Authentic Full-Width Panoramic Mountain Campaign Banner -->
           <img class="hero-banner-img" src="assets/hero.jpg" alt="Capra Cool Himalayan Campaign — Wear Higher">
+          <div class="hero-copy">
+            <p>THE HIMALAYAN EDIT · 2026</p>
+            <h1>CAPRA COOL</h1>
+            <span>Considered essentials for higher living.</span>
+          </div>
         </div>
 
         <div class="hero-sub-actions">
@@ -125,7 +124,7 @@
             <span>PROGRESS</span>
           </div>
           <div class="hero-btn-group">
-            <a href="#shop" class="btn light">Shop Collection →</a>
+            <a href="#shop" class="btn light">Explore the edit</a>
             <a href="#philosophy" class="btn outline" style="color:var(--paper);border-color:rgba(255,255,255,0.3)">Our Story</a>
           </div>
         </div>
@@ -197,13 +196,178 @@
       </div>
     </section>
 
+    <!-- CUSTOM CAMPUS MERCHANDISE BUILDER -->
+    <section class="custom-campus-section" id="customize">
+      <div class="custom-campus-inner">
+        <div class="custom-campus-visual">
+          <div class="custom-campus-heading">
+            <p class="eyebrow">INSTITUTIONAL CUSTOMS</p>
+            <h2>Your campus.<br>Your colours. Your drop.</h2>
+            <p>Custom T-shirts, hoodies, and tracksuits for IITs, NITs, IIITs, IISc, IIMs, AIIMS, and other colleges.</p>
+          </div>
+
+          <div class="custom-preview-frame" id="customPreviewFrame">
+            <img id="customPreviewImage" src="assets/collection_hoodies.jpg" alt="Custom IIT campus hoodie preview">
+            <div class="custom-preview-shade"></div>
+            <div class="custom-preview-mark">
+              <span id="customPreviewInstitute">IIT</span>
+              <strong id="customPreviewName">YOUR INSTITUTE</strong>
+              <small id="customPreviewGarment">HOODIE · LEFT CHEST + BACK</small>
+            </div>
+          </div>
+        </div>
+
+        <form class="custom-builder" id="customOrderForm">
+          <div class="custom-builder-head">
+            <span>THE CAMPUS ATELIER</span>
+            <h3>Compose your campus edition</h3>
+            <div class="custom-progress" aria-label="Customization progress">
+              <button type="button" class="custom-progress-step active" data-step-target="1"><b>01</b><span>Campus</span></button>
+              <button type="button" class="custom-progress-step" data-step-target="2"><b>02</b><span>Garment</span></button>
+              <button type="button" class="custom-progress-step" data-step-target="3"><b>03</b><span>Details</span></button>
+            </div>
+          </div>
+
+          <div class="custom-step active" data-custom-step="1">
+          <fieldset class="custom-fieldset">
+            <legend>Institution family</legend>
+            <div class="custom-segmented" aria-label="Institution family">
+              <label>
+                <input type="radio" name="institutionType" value="IIT" checked>
+                <span>IIT</span>
+              </label>
+              <label>
+                <input type="radio" name="institutionType" value="NIT">
+                <span>NIT</span>
+              </label>
+              <label>
+                <input type="radio" name="institutionType" value="IIIT">
+                <span>IIIT</span>
+              </label>
+              <label>
+                <input type="radio" name="institutionType" value="IISc">
+                <span>IISc</span>
+              </label>
+              <label>
+                <input type="radio" name="institutionType" value="IIM">
+                <span>IIM</span>
+              </label>
+              <label>
+                <input type="radio" name="institutionType" value="AIIMS">
+                <span>AIIMS</span>
+              </label>
+              <label>
+                <input type="radio" name="institutionType" value="Other College">
+                <span>Other College</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label class="custom-field">
+            <span>Institute name</span>
+            <input type="text" id="customInstituteName" name="instituteName" placeholder="e.g. IIT Bombay" maxlength="80" required>
+          </label>
+          </div>
+
+          <div class="custom-step" data-custom-step="2">
+          <fieldset class="custom-fieldset">
+            <legend>Garment</legend>
+            <div class="custom-product-options">
+              <label class="custom-product-option">
+                <input type="radio" name="garment" value="tshirt">
+                <span class="custom-product-thumb"><img src="assets/collection_tees.jpg" alt=""></span>
+                <strong>T-Shirt</strong>
+              </label>
+              <label class="custom-product-option">
+                <input type="radio" name="garment" value="hoodie" checked>
+                <span class="custom-product-thumb"><img src="assets/collection_hoodies.jpg" alt=""></span>
+                <strong>Hoodie</strong>
+              </label>
+              <label class="custom-product-option">
+                <input type="radio" name="garment" value="tracksuit">
+                <span class="custom-product-thumb"><img src="assets/collection_tracksuits.jpg" alt=""></span>
+                <strong>Tracksuit</strong>
+              </label>
+            </div>
+          </fieldset>
+          </div>
+
+          <div class="custom-step" data-custom-step="3">
+          <fieldset class="custom-fieldset">
+            <legend>Base colour</legend>
+            <div class="custom-colour-options">
+              <label title="Black">
+                <input type="radio" name="colour" value="Black" data-hex="#171717" checked>
+                <span class="custom-colour-swatch" style="background:#171717"></span>
+                <small>Black</small>
+              </label>
+              <label title="Ivory">
+                <input type="radio" name="colour" value="Ivory" data-hex="#e5dfcf">
+                <span class="custom-colour-swatch" style="background:#e5dfcf"></span>
+                <small>Ivory</small>
+              </label>
+              <label title="Maroon">
+                <input type="radio" name="colour" value="Maroon" data-hex="#711f2b">
+                <span class="custom-colour-swatch" style="background:#711f2b"></span>
+                <small>Maroon</small>
+              </label>
+              <label title="Olive">
+                <input type="radio" name="colour" value="Olive" data-hex="#4a5741">
+                <span class="custom-colour-swatch" style="background:#4a5741"></span>
+                <small>Olive</small>
+              </label>
+              <label title="Custom colour">
+                <input type="radio" name="colour" value="Custom colour" data-hex="#b26a38">
+                <span class="custom-colour-swatch custom-colour-swatch-special">+</span>
+                <small>Custom</small>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="custom-form-row">
+            <label class="custom-field">
+              <span>Print placement</span>
+              <select id="customPrintPlacement" name="printPlacement">
+                <option value="left-chest-back">Left chest + back</option>
+                <option value="center-chest">Centre chest</option>
+                <option value="sleeve-back">Sleeve + back</option>
+                <option value="full-custom">Full custom layout</option>
+              </select>
+            </label>
+            <label class="custom-field">
+              <span>Quantity</span>
+              <input type="number" id="customQuantity" name="quantity" min="1" max="5000" value="50" required>
+            </label>
+          </div>
+
+          <label class="custom-checkbox">
+            <input type="checkbox" id="customPersonalisation" name="personalisation">
+            <span>Add individual names or departments</span>
+          </label>
+          </div>
+
+          <div class="custom-order-summary" aria-live="polite">
+            <span>Selected</span>
+            <strong id="customOrderSummary">IIT · Hoodie · 50 pieces</strong>
+          </div>
+
+          <div class="custom-step-actions">
+            <button type="button" class="custom-step-back" id="customStepBack" disabled>Back</button>
+            <button type="button" class="custom-step-next" id="customStepNext">Continue</button>
+            <button type="submit" class="custom-quote-btn" id="customQuoteSubmit">Request atelier quote</button>
+          </div>
+          <p class="custom-service-note">A design concierge will review artwork, sizing, and delivery before confirming your order.</p>
+        </form>
+      </div>
+    </section>
+
     <!-- ALL PRODUCTS CATALOG (FROM BRAND BOARD) -->
     <section class="section" id="shop">
       <div class="catalog-header">
         <div>
           <p class="eyebrow">THE FIRST EDIT</p>
-          <h2>All Products</h2>
-          <p>Premium essentials for your everyday journey.</p>
+          <h2>The Shop Edit</h2>
+          <p>Limited-run essentials selected for weight, hand feel, and everyday endurance.</p>
         </div>
         <div>
           <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-right:8px">Sort by:</label>
@@ -223,14 +387,56 @@
           <button class="filter" data-filter="tee">T-Shirts</button>
           <button class="filter" data-filter="hoodie">Hoodies</button>
           <button class="filter" data-filter="track">Tracksuits</button>
+          <button class="filter" data-filter="accessory">Accessories</button>
         </div>
         <div id="catalogInfoCount" style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);font-weight:700">
-          Showing 6 items
+          Showing 25 items
         </div>
       </div>
 
+      <div class="edit-note"><span>Private edit</span> Current collection pricing is reflected below. Original MRP remains visible for reference.</div>
+
       <!-- Products Grid (Clean uncropped pedestal styling populated by script.js) -->
       <div class="products" id="productsGrid"></div>
+    </section>
+
+    <section class="craft-section" id="craft">
+      <div class="craft-image">
+        <img src="assets/crop_editorial_3x4.jpg" alt="Capra Cool garment in the Himalayan landscape" loading="lazy">
+      </div>
+      <div class="craft-copy">
+        <p class="eyebrow">MATERIAL STUDY 01</p>
+        <h2>Weight you can feel.<br><i>Details you notice later.</i></h2>
+        <p>We choose dense combed cottons, brushed fleece, and technical double-knits for structure without stiffness. Every silhouette is tested for repeat wear, clean drape, and dependable recovery.</p>
+        <dl class="material-ledger">
+          <div><dt>180 GSM</dt><dd>Breathable combed cotton for daily tees</dd></div>
+          <div><dt>380 GSM</dt><dd>Brushed fleece with a substantial hand feel</dd></div>
+          <div><dt>Reinforced</dt><dd>Neck rib, shoulder seams, and high-stress points</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="packaging-section" aria-label="Packaging and service">
+      <div class="packaging-copy">
+        <p class="eyebrow">THE ARRIVAL</p>
+        <h2>Prepared like a keepsake.</h2>
+        <p>Each order is inspected, folded in protective tissue, and finished with the Capra archive mark. Campus editions receive consolidated size packing and a named order manifest.</p>
+        <div class="service-promises">
+          <span>Quality checked by hand</span>
+          <span>Tracked dispatch from Himachal Pradesh</span>
+          <span>7-day size exchange</span>
+        </div>
+      </div>
+      <div class="packaging-visual">
+        <img src="assets/box_packaging_logo.png" alt="Capra Cool branded presentation box" loading="lazy">
+      </div>
+    </section>
+
+    <section class="trust-section" aria-label="Customer assurances">
+      <div><strong>Secure checkout</strong><span>Protected order details</span></div>
+      <div><strong>Concierge support</strong><span>Mon-Sat, 10 AM-7 PM IST</span></div>
+      <div><strong>Tracked delivery</strong><span>Dispatch updates on WhatsApp</span></div>
+      <div><strong>Easy exchange</strong><span>7 days from delivery</span></div>
     </section>
 
     <!-- OUR PHILOSOPHY SECTION (FROM BRAND BOARD) -->
@@ -353,7 +559,7 @@
   <footer>
     <div class="footer-main">
       <div class="footer-brand">
-        <img src="assets/capra_logo_footer.png" alt="CAPRA COOL — WEAR HIGHER" class="footer-logo-img">
+        <img src="assets/footer_logo.png" alt="CAPRA COOL — WEAR HIGHER" class="footer-logo-img">
         <small>Clothing for those who seek more. Designed for everyday elevation and crafted in the Himalayas.</small>
       </div>
 
@@ -361,6 +567,7 @@
         <h4>Quick Links</h4>
         <a href="#home">Home</a>
         <a href="#shop" onclick="filterProducts('all')">Shop All</a>
+        <a href="#customize">Custom Campus Merch</a>
         <a href="#philosophy">About Our Story</a>
         <a href="#discover">Categories</a>
       </div>
@@ -475,25 +682,35 @@
 
   <!-- QUICK VIEW MODAL -->
   <div class="modal" id="quickViewModal" role="dialog" aria-label="Product details">
-    <div class="modal-card wide">
+    <div class="modal-card wide product-detail-card">
       <button class="modal-close" onclick="closeModal('#quickViewModal')">×</button>
+      <div class="product-detail-breadcrumb">CAPRA COOL / <span id="quickViewCategory">COLLECTION</span></div>
       <div class="quickview-grid">
-        <div class="quickview-media">
-          <img id="quickViewImg" src="assets/summit-tee.jpg" alt="Product visual">
+        <div class="quickview-gallery">
+          <div class="quickview-media">
+            <img id="quickViewImg" src="assets/summit-tee.jpg" alt="Product visual">
+          </div>
+          <div class="quickview-thumbnails" id="quickViewThumbnails"></div>
         </div>
         <div class="quickview-info">
-          <p class="eyebrow">PRODUCT DETAILS</p>
+          <p class="eyebrow" id="quickViewEdition">THE HIMALAYAN EDIT</p>
           <h2 id="quickViewTitle" style="font:800 24px var(--display);margin:0 0 6px"></h2>
           <div id="quickViewPrice" style="font:700 18px var(--display);color:var(--olive);margin-bottom:14px"></div>
+          <div class="product-rating" id="quickViewRating"></div>
           <p id="quickViewDesc" style="color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:18px"></p>
 
           <div id="quickViewSpecs" class="quickview-specs-box"></div>
 
-          <p class="eyebrow" style="margin:16px 0 6px">SELECT SIZE (S–XXL)</p>
+          <p class="eyebrow" style="margin:16px 0 6px">SELECT SIZE</p>
           <div class="sizes-grid" id="quickViewSizes"></div>
           <div id="quickViewChart"></div>
 
           <button class="btn dark full" style="margin-top:20px" onclick="confirmQuickViewAdd()">Add to Bag</button>
+          <div class="product-detail-assurances">
+            <span>Complimentary shipping above ₹999</span>
+            <span>7-day size exchange</span>
+          </div>
+          <div class="product-detail-notes" id="quickViewNotes"></div>
         </div>
       </div>
     </div>
