@@ -1,0 +1,299 @@
+diff --git "a/work\\launch-cleanup-original-20260920\\index.html" "b/work\\launch-cleanup-20260920\\index.html"
+index 860f28b..6669578 100644
+--- "a/work\\launch-cleanup-original-20260920\\index.html"
++++ "b/work\\launch-cleanup-20260920\\index.html"
+@@ -394,7 +394,7 @@
+         </div>
+       </div>
+ 
+-      <div class="edit-note"><span>Private edit</span> Current collection pricing is reflected below. Original MRP remains visible for reference.</div>
++      <div class="edit-note"><span>Launch edit</span> Current collection pricing is reflected below. Original MRP remains visible for reference.</div>
+ 
+       <!-- Products Grid (Clean uncropped pedestal styling populated by script.js) -->
+       <div class="products" id="productsGrid"></div>
+@@ -435,7 +435,7 @@
+     <section class="trust-section" aria-label="Customer assurances">
+       <div><strong>Secure checkout</strong><span>Protected order details</span></div>
+       <div><strong>Concierge support</strong><span>Mon-Sat, 10 AM-7 PM IST</span></div>
+-      <div><strong>Tracked delivery</strong><span>Dispatch updates on WhatsApp</span></div>
++      <div><strong>Tracked delivery</strong><span>Dispatch updates by email and SMS</span></div>
+       <div><strong>Easy exchange</strong><span>7 days from delivery</span></div>
+     </section>
+ 
+@@ -533,8 +533,8 @@
+           <p>We provide a 7-day hassle-free return and exchange window from the delivery date. Items must be unworn and in original condition with tags intact. Sizing exchanges are completely free.</p>
+         </details>
+         <details>
+-          <summary>Can I order directly on WhatsApp?</summary>
+-          <p>Yes! In the shopping bag or checkout modal, click "WhatsApp Order" and your complete order summary will be pre-formatted for direct confirmation with our concierge team.</p>
++          <summary>Can I request assisted ordering?</summary>
++          <p>Yes. Use the assisted order option at checkout and your order request will be prepared for our concierge team by email. We will confirm availability, payment, and dispatch details before processing.</p>
+         </details>
+         <details>
+           <summary>Where is Capra Cool located?</summary>
+@@ -583,7 +583,7 @@
+       <div class="footer-col">
+         <h4>Connect</h4>
+         <a href="mailto:care@capracool.com">care@capracool.com</a>
+-        <a href="https://wa.me/919999999999" target="_blank" rel="noopener">WhatsApp Support</a>
++        <a href="mailto:care@capracool.com?subject=Capra%20Cool%20Order%20Support">Order Support</a>
+         <span style="font-size:11px;color:#888;display:block;margin-top:10px">Mon–Sat, 10 AM – 7 PM IST</span>
+       </div>
+     </div>
+@@ -645,7 +645,7 @@
+ 
+       <div class="drawer-actions">
+         <button class="btn dark full" id="checkoutProceedBtn">Proceed to Checkout</button>
+-        <button class="btn outline full" id="quickWhatsAppBtn">Order via WhatsApp</button>
++        <button class="btn outline full" id="quickWhatsAppBtn">Email Order Support</button>
+       </div>
+       <small style="display:block;text-align:center;font-size:10px;color:var(--muted);margin-top:10px">
+         7-day returns • 100% genuine Himalayan apparel
+@@ -737,7 +737,7 @@
+ 
+       <div style="display:flex;border-bottom:1px solid var(--line);margin-bottom:20px;gap:16px">
+         <button class="checkout-tab active" data-tab="whatsapp" onclick="switchCheckoutTab('whatsapp')" style="background:none;border:0;border-bottom:2px solid var(--ink);padding:10px 4px;font:700 11px var(--display);text-transform:uppercase;cursor:pointer">
+-          1. WhatsApp Handoff
++          1. Assisted Order
+         </button>
+         <button class="checkout-tab" data-tab="direct" onclick="switchCheckoutTab('direct')" style="background:none;border:0;border-bottom:2px solid transparent;padding:10px 4px;font:700 11px var(--display);text-transform:uppercase;cursor:pointer;color:var(--muted)">
+           2. Direct Order / COD
+@@ -749,26 +749,26 @@
+       <!-- Tab 1: WhatsApp Handoff -->
+       <div id="checkoutWhatsappTab">
+         <p style="font-size:12px;color:var(--muted);margin:0 0 14px">
+-          Enter your delivery information. We will pre-format your WhatsApp order to confirm with our Himalayan concierge team.
++          Enter your delivery information. We will pre-format your order request for our concierge team by email. We will confirm availability and dispatch before processing.
+         </p>
+         <form id="whatsappOrderForm" style="display:grid;gap:12px">
+           <div class="form-row-2">
+             <input type="text" name="name" required placeholder="Full Name" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
+-            <input type="tel" name="phone" required placeholder="WhatsApp Number" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
++            <input type="tel" name="phone" required placeholder="Phone Number" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
+           </div>
+           <textarea name="address" required placeholder="Complete Delivery Address" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm);min-height:70px"></textarea>
+           <div class="form-row-2">
+             <input type="text" name="pincode" required pattern="[0-9]{6}" maxlength="6" placeholder="6-digit PIN Code" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
+             <input type="text" name="notes" placeholder="Delivery notes (optional)" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
+           </div>
+-          <button type="submit" class="btn dark full" style="padding:15px">💬 Send Order on WhatsApp</button>
++          <button type="submit" class="btn dark full" style="padding:15px">Send Assisted Order Request</button>
+         </form>
+       </div>
+ 
+       <!-- Tab 2: Direct Order -->
+       <div id="checkoutDirectTab" style="display:none">
+         <p style="font-size:12px;color:var(--muted);margin:0 0 14px">
+-          Confirm your order directly into our dispatch queue with Cash on Delivery or UPI demo.
++          Confirm your order directly into our dispatch queue with Cash on Delivery. Online UPI/card payments will appear only after the payment gateway is live.
+         </p>
+         <form id="directOrderForm" style="display:grid;gap:12px">
+           <div class="form-row-2">
+@@ -784,8 +784,7 @@
+           </div>
+           <select name="payment_method" required style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
+             <option value="cod">Cash on Delivery (COD)</option>
+-            <option value="upi">Instant UPI / QR</option>
+-            <option value="card">Debit / Credit Card</option>
++            
+           </select>
+           <button type="submit" class="btn dark full" style="padding:15px">✓ Confirm Order</button>
+         </form>
+@@ -821,7 +820,7 @@
+         </div>
+       </div>
+       <div style="display:flex;flex-direction:column;gap:10px">
+-        <button class="btn dark full" id="receiptWhatsAppShareBtn">💬 Share Order to WhatsApp</button>
++        <button class="btn dark full" id="receiptWhatsAppShareBtn">Email Order Support</button>
+         <button class="btn outline full" onclick="closeModal('#orderSuccessModal')">Continue Shopping</button>
+       </div>
+     </div>
+diff --git "a/work\\launch-cleanup-original-20260920\\script.js" "b/work\\launch-cleanup-20260920\\script.js"
+index 2dc0460..8aa1546 100644
+--- "a/work\\launch-cleanup-original-20260920\\script.js"
++++ "b/work\\launch-cleanup-20260920\\script.js"
+@@ -593,8 +593,8 @@ let activeSort = "featured";
+ const CONFIG = {
+   FREE_SHIPPING_THRESHOLD: 999, // As shown on brand board: Free Shipping (₹999+)
+   SHIPPING_FEE: 99,
+-  WHATSAPP_NUMBER: "919876543210",
+-  STORE_EMAIL: "support@capracool.com",
++  WHATSAPP_NUMBER: "",
++  STORE_EMAIL: "care@capracool.com",
+   SUPABASE_URL: (typeof import.meta !== "undefined" && import.meta.env && (import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL)) || "https://qhaheskahldwcvggrvbu.supabase.co",
+   SUPABASE_KEY: (typeof import.meta !== "undefined" && import.meta.env && (import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) || "sb_publishable_kxaAQiApVfqqNI4mbR8tTw_AanAVrci"
+ };
+@@ -614,7 +614,7 @@ const salePriceMarkup = (product, showTaxNote = false) => {
+         <strong class="sale-price-current">${formatMoney(currentPrice)}</strong>
+         <del class="sale-price-mrp">${formatMoney(compareAtPrice)}</del>
+       </span>
+-      ${showTaxNote ? `<span class="sale-discount">Private edit · ${discountPercent}% below MRP</span>` : ''}
++      ${showTaxNote ? `<span class="sale-discount">Launch edit · ${discountPercent}% below MRP</span>` : ''}
+       ${showTaxNote ? '<small class="sale-tax-note">Inclusive of all taxes</small>' : ''}
+     </span>
+   `;
+@@ -1368,8 +1368,9 @@ function handleCustomQuote(e) {
+ 
+ Please share the available customization options and quote.`;
+ 
+-  window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
+-  showToast("Opening your custom quote on WhatsApp");
++  const subject = encodeURIComponent("Capra Cool custom campus quote request");
++  window.location.href = `mailto:${CONFIG.STORE_EMAIL}?subject=${subject}&body=${encodeURIComponent(message)}`;
++  showToast("Opening your custom quote by email");
+ }
+ 
+ let customStep = 1;
+@@ -1499,11 +1500,11 @@ function handleWhatsAppOrder(e) {
+   ).join("\n");
+ 
+   const message = 
+-`🏔️ *CAPRA COOL — NEW ORDER REQUEST*
++`🏔️ *CAPRA COOL — ASSISTED ORDER REQUEST*
+ 
+ *CUSTOMER DETAILS:*
+ • Name: ${name}
+-• WhatsApp / Phone: ${phone}
++• Phone: ${phone}
+ • Delivery Address: ${address}
+ • PIN Code: ${pincode}
+ ${notes ? `• Special Notes: ${notes}\n` : ''}
+@@ -1515,10 +1516,11 @@ ${itemsList}
+ • Shipping: ${isFreeShip ? 'FREE' : formatMoney(shippingFee)}
+ • *TOTAL AMOUNT: ${formatMoney(grandTotal)}*
+ 
+-Please confirm order receipt and share delivery tracking once dispatched. Thank you!`;
++Please confirm availability, payment instructions, and delivery tracking once dispatched. Thank you!`;
+ 
+-  const encodedUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+   const orderId = `CC-${Date.now().toString().slice(-6)}`;
++  const subject = encodeURIComponent(`Capra Cool order request ${orderId}`);
++  const encodedUrl = `mailto:${CONFIG.STORE_EMAIL}?subject=${subject}&body=${encodeURIComponent(message)}`;
+   
+   // Sync to Supabase
+   saveOrderToSupabase({
+@@ -1529,17 +1531,17 @@ Please confirm order receipt and share delivery tracking once dispatched. Thank
+     delivery_address: address,
+     pincode: pincode,
+     notes: notes,
+-    payment_method: "whatsapp",
+-    order_channel: "whatsapp_concierge",
++    payment_method: "assisted_email",
++    order_channel: "email_concierge",
+     items: [...cart],
+     subtotal: subtotal,
+     shipping_fee: shippingFee,
+     grand_total: grandTotal,
+-    order_status: "pending_whatsapp_confirmation"
++    order_status: "pending_email_confirmation"
+   });
+ 
+-  showOrderSuccess(orderId, name, grandTotal, "WhatsApp Order");
+-  window.open(encodedUrl, "_blank");
++  showOrderSuccess(orderId, name, grandTotal, "Assisted Email Order");
++  window.location.href = encodedUrl;
+ }
+ 
+ function handleDirectOrder(e) {
+@@ -1612,13 +1614,13 @@ function showOrderSuccess(orderId, customerName, total, paymentMethod) {
+     $("#successCustomerName").textContent = customerName;
+     $("#successOrderId").textContent = orderId;
+     $("#successOrderTotal").textContent = formatMoney(total);
+-    $("#successPaymentMethod").textContent = paymentMethod === "cod" ? "Cash on Delivery" : (paymentMethod === "upi" ? "UPI / QR Payment" : paymentMethod);
++    $("#successPaymentMethod").textContent = paymentMethod === "cod" ? "Cash on Delivery" : (paymentMethod === "assisted_email" ? "Assisted Email Order" : paymentMethod);
+     
+     const waShareBtn = $("#receiptWhatsAppShareBtn");
+     if (waShareBtn) {
+       waShareBtn.onclick = () => {
+-        const msg = `Hi Capra Cool, I placed order #${orderId} (${formatMoney(total)}). Please share dispatch tracking!`;
+-        window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
++        const msg = `Hi Capra Cool, I placed order #${orderId} (${formatMoney(total)}). Please share dispatch tracking.`;
++        window.location.href = `mailto:${CONFIG.STORE_EMAIL}?subject=${encodeURIComponent(`Capra Cool order ${orderId}`)}&body=${encodeURIComponent(msg)}`;
+       };
+     }
+ 
+diff --git "a/work\\launch-cleanup-original-20260920\\policies.html" "b/work\\launch-cleanup-20260920\\policies.html"
+index 74802e3..1db089f 100644
+--- "a/work\\launch-cleanup-original-20260920\\policies.html"
++++ "b/work\\launch-cleanup-20260920\\policies.html"
+@@ -4,7 +4,7 @@
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Store Policies — CAPRA COOL | Shipping, Returns & Terms</title>
+-  <meta name="description" content="Official store policies for CAPRA COOL. Read about our 7-day returns, Pan-India express delivery, free shipping above ₹1,999, and data privacy.">
++  <meta name="description" content="Official store policies for CAPRA COOL. Read about our 7-day returns, Pan-India express delivery, free shipping above ₹999, and data privacy.">
+   <meta name="theme-color" content="#11120f">
+   
+   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+@@ -17,7 +17,7 @@
+ 
+   <!-- Announcement Bar -->
+   <div class="announce">
+-    <span>FREE SHIPPING ABOVE ₹1,999</span>
++    <span>FREE SHIPPING ABOVE ₹999</span>
+     <span class="dot">•</span>
+     <span>EASY 7-DAY RETURNS</span>
+     <span class="dot">•</span>
+@@ -27,7 +27,7 @@
+   <!-- Header -->
+   <header>
+     <a class="brand" href="index.html" aria-label="Back to Capra Cool Home">
+-      <img src="assets/capra_logo_dark.png" alt="CAPRA COOL — WEAR HIGHER" class="brand-logo-img">
++      <img src="assets/logo_black_on_white.png" alt="CAPRA COOL — WEAR HIGHER" class="brand-logo-img">
+     </a>
+ 
+     <div class="head-actions">
+@@ -57,8 +57,8 @@
+         All orders placed on Capra Cool are dispatched from our central fulfillment facility within 24 to 48 hours of order confirmation (excluding Sundays and national holidays).
+       </p>
+       <ul>
+-        <li><strong>Free Shipping:</strong> All prepaid and COD orders totaling ₹1,999 or more qualify for 100% FREE express shipping.</li>
+-        <li><strong>Standard Shipping Fee:</strong> For orders below ₹1,999, a flat shipping fee of ₹99 is charged across India.</li>
++        <li><strong>Free Shipping:</strong> All prepaid and COD orders totaling ₹999 or more qualify for 100% FREE express shipping.</li>
++        <li><strong>Standard Shipping Fee:</strong> For orders below ₹999, a flat shipping fee of ₹99 is charged across India.</li>
+         <li><strong>Estimated Delivery Times:</strong>
+           <ul>
+             <li>Metro Cities (Delhi NCR, Mumbai, Bengaluru, Hyderabad, Chennai, Kolkata): <strong>3–5 business days</strong>.</li>
+@@ -86,7 +86,7 @@
+         </li>
+         <li><strong>Return Process:</strong>
+           <ul>
+-            <li>To initiate a return, contact our concierge at <a href="mailto:care@capracool.com" style="text-decoration:underline">care@capracool.com</a> or via WhatsApp at <a href="https://wa.me/919999999999" target="_blank" style="text-decoration:underline">+91 99999 99999</a> with your Order ID and photo of the item.</li>
++            <li>To initiate a return, contact our concierge at <a href="mailto:care@capracool.com" style="text-decoration:underline">care@capracool.com</a> with your Order ID and photos of the item.</li>
+             <li>We will arrange a reverse pickup from your original delivery address within 48–72 hours via our logistics partners (Bluedart / Delhivery / Xpressbees).</li>
+           </ul>
+         </li>
+@@ -115,7 +115,7 @@
+       </p>
+       <ul>
+         <li><strong>Information We Collect:</strong> Name, delivery address, contact telephone/WhatsApp number, email address, and IP address for fraud prevention.</li>
+-        <li><strong>Payment Security:</strong> We do not store credit/debit card numbers, UPI PINs, or net banking passwords. All electronic payments are processed through PCI-DSS Level 1 certified payment gateways.</li>
++        <li><strong>Payment Security:</strong> We do not collect or store credit/debit card numbers, UPI PINs, or net banking passwords. Online payment options will be shown only when a verified payment gateway is active.</li>
+         <li><strong>No Third-Party Selling:</strong> We will never sell, rent, or trade your personal information to third-party advertising brokers. Data is shared strictly with delivery couriers and SMS/WhatsApp API gateways to communicate dispatch status.</li>
+         <li><strong>Data Deletion Requests:</strong> You may request the permanent deletion of your customer profile and address data at any time by emailing <a href="mailto:care@capracool.com" style="text-decoration:underline">care@capracool.com</a>.</li>
+       </ul>
+@@ -133,6 +133,7 @@
+         <li><strong>Pricing & Taxes:</strong> All prices displayed on our website are inclusive of applicable Goods and Services Tax (GST) in India.</li>
+         <li><strong>Order Acceptance:</strong> We reserve the right to decline or cancel an order in instances of suspected payment fraud, incorrect pricing errors, or sudden stock stockouts. In any such case, a full refund is immediately credited.</li>
+         <li><strong>Intellectual Property:</strong> "CAPRA COOL", the chevron mountain emblem ⌃, "WEAR HIGHER", campaign photography, lookbooks, and site design are protected intellectual property.</li>
++        <li><strong>Campus Merchandise:</strong> Campus, institute, IIT, NIT, IIIT, IISc, IIM, AIIMS, and similar references are used only for custom merchandise requests and product descriptions. Capra Cool is not officially affiliated with any institution unless explicitly stated in writing.</li>
+       </ul>
+     </article>
+ 
+@@ -145,7 +146,6 @@
+       </p>
+       <div style="background:var(--paper-soft);padding:24px;border-radius:var(--radius-sm);margin-top:20px">
+         <p style="margin:0 0 8px"><strong>Official Email:</strong> <a href="mailto:care@capracool.com" style="text-decoration:underline">care@capracool.com</a></p>
+-        <p style="margin:0 0 8px"><strong>WhatsApp Concierge:</strong> <a href="https://wa.me/919999999999" target="_blank" style="text-decoration:underline">+91 99999 99999</a></p>
+         <p style="margin:0 0 8px"><strong>Support Hours:</strong> Monday – Saturday, 10:00 AM – 7:00 PM IST</p>
+         <p style="margin:0"><strong>Grievance Resolution:</strong> All customer inquiries and complaints are resolved within 24–48 business hours.</p>
+       </div>
+@@ -182,7 +182,7 @@
+       <div class="footer-col">
+         <h4>Contact</h4>
+         <a href="mailto:care@capracool.com">care@capracool.com</a>
+-        <a href="https://wa.me/919999999999" target="_blank">WhatsApp Concierge</a>
++        <a href="mailto:care@capracool.com?subject=Capra%20Cool%20Order%20Support">Order Support</a>
+         <span style="font-size:11px;color:#777;display:block;margin-top:10px">Hours: Mon–Sat, 10 AM – 7 PM IST</span>
+       </div>
+     </div>

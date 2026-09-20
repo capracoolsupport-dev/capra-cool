@@ -394,7 +394,7 @@
         </div>
       </div>
 
-      <div class="edit-note"><span>Private edit</span> Current collection pricing is reflected below. Original MRP remains visible for reference.</div>
+      <div class="edit-note"><span>Launch edit</span> Current collection pricing is reflected below. Original MRP remains visible for reference.</div>
 
       <!-- Products Grid (Clean uncropped pedestal styling populated by script.js) -->
       <div class="products" id="productsGrid"></div>
@@ -435,7 +435,7 @@
     <section class="trust-section" aria-label="Customer assurances">
       <div><strong>Secure checkout</strong><span>Protected order details</span></div>
       <div><strong>Concierge support</strong><span>Mon-Sat, 10 AM-7 PM IST</span></div>
-      <div><strong>Tracked delivery</strong><span>Dispatch updates on WhatsApp</span></div>
+      <div><strong>Tracked delivery</strong><span>Dispatch updates by email and SMS</span></div>
       <div><strong>Easy exchange</strong><span>7 days from delivery</span></div>
     </section>
 
@@ -533,8 +533,8 @@
           <p>We provide a 7-day hassle-free return and exchange window from the delivery date. Items must be unworn and in original condition with tags intact. Sizing exchanges are completely free.</p>
         </details>
         <details>
-          <summary>Can I order directly on WhatsApp?</summary>
-          <p>Yes! In the shopping bag or checkout modal, click "WhatsApp Order" and your complete order summary will be pre-formatted for direct confirmation with our concierge team.</p>
+          <summary>Can I request assisted ordering?</summary>
+          <p>Yes. Use the assisted order option at checkout and your order request will be prepared for our concierge team by email. We will confirm availability, payment, and dispatch details before processing.</p>
         </details>
         <details>
           <summary>Where is Capra Cool located?</summary>
@@ -583,7 +583,7 @@
       <div class="footer-col">
         <h4>Connect</h4>
         <a href="mailto:care@capracool.com">care@capracool.com</a>
-        <a href="https://wa.me/919999999999" target="_blank" rel="noopener">WhatsApp Support</a>
+        <a href="mailto:care@capracool.com?subject=Capra%20Cool%20Order%20Support">Order Support</a>
         <span style="font-size:11px;color:#888;display:block;margin-top:10px">Mon–Sat, 10 AM – 7 PM IST</span>
       </div>
     </div>
@@ -645,7 +645,7 @@
 
       <div class="drawer-actions">
         <button class="btn dark full" id="checkoutProceedBtn">Proceed to Checkout</button>
-        <button class="btn outline full" id="quickWhatsAppBtn">Order via WhatsApp</button>
+        <button class="btn outline full" id="quickWhatsAppBtn">Email Order Support</button>
       </div>
       <small style="display:block;text-align:center;font-size:10px;color:var(--muted);margin-top:10px">
         7-day returns • 100% genuine Himalayan apparel
@@ -737,7 +737,7 @@
 
       <div style="display:flex;border-bottom:1px solid var(--line);margin-bottom:20px;gap:16px">
         <button class="checkout-tab active" data-tab="whatsapp" onclick="switchCheckoutTab('whatsapp')" style="background:none;border:0;border-bottom:2px solid var(--ink);padding:10px 4px;font:700 11px var(--display);text-transform:uppercase;cursor:pointer">
-          1. WhatsApp Handoff
+          1. Assisted Order
         </button>
         <button class="checkout-tab" data-tab="direct" onclick="switchCheckoutTab('direct')" style="background:none;border:0;border-bottom:2px solid transparent;padding:10px 4px;font:700 11px var(--display);text-transform:uppercase;cursor:pointer;color:var(--muted)">
           2. Direct Order / COD
@@ -749,26 +749,26 @@
       <!-- Tab 1: WhatsApp Handoff -->
       <div id="checkoutWhatsappTab">
         <p style="font-size:12px;color:var(--muted);margin:0 0 14px">
-          Enter your delivery information. We will pre-format your WhatsApp order to confirm with our Himalayan concierge team.
+          Enter your delivery information. We will pre-format your order request for our concierge team by email. We will confirm availability and dispatch before processing.
         </p>
         <form id="whatsappOrderForm" style="display:grid;gap:12px">
           <div class="form-row-2">
             <input type="text" name="name" required placeholder="Full Name" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
-            <input type="tel" name="phone" required placeholder="WhatsApp Number" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
+            <input type="tel" name="phone" required placeholder="Phone Number" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
           </div>
           <textarea name="address" required placeholder="Complete Delivery Address" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm);min-height:70px"></textarea>
           <div class="form-row-2">
             <input type="text" name="pincode" required pattern="[0-9]{6}" maxlength="6" placeholder="6-digit PIN Code" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
             <input type="text" name="notes" placeholder="Delivery notes (optional)" style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
           </div>
-          <button type="submit" class="btn dark full" style="padding:15px">💬 Send Order on WhatsApp</button>
+          <button type="submit" class="btn dark full" style="padding:15px">Send Assisted Order Request</button>
         </form>
       </div>
 
       <!-- Tab 2: Direct Order -->
       <div id="checkoutDirectTab" style="display:none">
         <p style="font-size:12px;color:var(--muted);margin:0 0 14px">
-          Confirm your order directly into our dispatch queue with Cash on Delivery or UPI demo.
+          Confirm your order directly into our dispatch queue with Cash on Delivery. Online UPI/card payments will appear only after the payment gateway is live.
         </p>
         <form id="directOrderForm" style="display:grid;gap:12px">
           <div class="form-row-2">
@@ -784,8 +784,7 @@
           </div>
           <select name="payment_method" required style="padding:12px;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm)">
             <option value="cod">Cash on Delivery (COD)</option>
-            <option value="upi">Instant UPI / QR</option>
-            <option value="card">Debit / Credit Card</option>
+            
           </select>
           <button type="submit" class="btn dark full" style="padding:15px">✓ Confirm Order</button>
         </form>
@@ -821,7 +820,7 @@
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <button class="btn dark full" id="receiptWhatsAppShareBtn">💬 Share Order to WhatsApp</button>
+        <button class="btn dark full" id="receiptWhatsAppShareBtn">Email Order Support</button>
         <button class="btn outline full" onclick="closeModal('#orderSuccessModal')">Continue Shopping</button>
       </div>
     </div>

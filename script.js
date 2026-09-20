@@ -593,8 +593,8 @@ let activeSort = "featured";
 const CONFIG = {
   FREE_SHIPPING_THRESHOLD: 999, // As shown on brand board: Free Shipping (₹999+)
   SHIPPING_FEE: 99,
-  WHATSAPP_NUMBER: "919876543210",
-  STORE_EMAIL: "support@capracool.com",
+  WHATSAPP_NUMBER: "",
+  STORE_EMAIL: "care@capracool.com",
   SUPABASE_URL: (typeof import.meta !== "undefined" && import.meta.env && (import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL)) || "https://qhaheskahldwcvggrvbu.supabase.co",
   SUPABASE_KEY: (typeof import.meta !== "undefined" && import.meta.env && (import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY)) || "sb_publishable_kxaAQiApVfqqNI4mbR8tTw_AanAVrci"
 };
@@ -614,7 +614,7 @@ const salePriceMarkup = (product, showTaxNote = false) => {
         <strong class="sale-price-current">${formatMoney(currentPrice)}</strong>
         <del class="sale-price-mrp">${formatMoney(compareAtPrice)}</del>
       </span>
-      ${showTaxNote ? `<span class="sale-discount">Private edit · ${discountPercent}% below MRP</span>` : ''}
+      ${showTaxNote ? `<span class="sale-discount">Launch edit · ${discountPercent}% below MRP</span>` : ''}
       ${showTaxNote ? '<small class="sale-tax-note">Inclusive of all taxes</small>' : ''}
     </span>
   `;
@@ -1368,8 +1368,9 @@ function handleCustomQuote(e) {
 
 Please share the available customization options and quote.`;
 
-  window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
-  showToast("Opening your custom quote on WhatsApp");
+  const subject = encodeURIComponent("Capra Cool custom campus quote request");
+  window.location.href = `mailto:${CONFIG.STORE_EMAIL}?subject=${subject}&body=${encodeURIComponent(message)}`;
+  showToast("Opening your custom quote by email");
 }
 
 let customStep = 1;
@@ -1499,11 +1500,11 @@ function handleWhatsAppOrder(e) {
   ).join("\n");
 
   const message = 
-`🏔️ *CAPRA COOL — NEW ORDER REQUEST*
+`🏔️ *CAPRA COOL — ASSISTED ORDER REQUEST*
 
 *CUSTOMER DETAILS:*
 • Name: ${name}
-• WhatsApp / Phone: ${phone}
+• Phone: ${phone}
 • Delivery Address: ${address}
 • PIN Code: ${pincode}
 ${notes ? `• Special Notes: ${notes}\n` : ''}
@@ -1515,10 +1516,11 @@ ${itemsList}
 • Shipping: ${isFreeShip ? 'FREE' : formatMoney(shippingFee)}
 • *TOTAL AMOUNT: ${formatMoney(grandTotal)}*
 
-Please confirm order receipt and share delivery tracking once dispatched. Thank you!`;
+Please confirm availability, payment instructions, and delivery tracking once dispatched. Thank you!`;
 
-  const encodedUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
   const orderId = `CC-${Date.now().toString().slice(-6)}`;
+  const subject = encodeURIComponent(`Capra Cool order request ${orderId}`);
+  const encodedUrl = `mailto:${CONFIG.STORE_EMAIL}?subject=${subject}&body=${encodeURIComponent(message)}`;
   
   // Sync to Supabase
   saveOrderToSupabase({
@@ -1529,17 +1531,17 @@ Please confirm order receipt and share delivery tracking once dispatched. Thank 
     delivery_address: address,
     pincode: pincode,
     notes: notes,
-    payment_method: "whatsapp",
-    order_channel: "whatsapp_concierge",
+    payment_method: "assisted_email",
+    order_channel: "email_concierge",
     items: [...cart],
     subtotal: subtotal,
     shipping_fee: shippingFee,
     grand_total: grandTotal,
-    order_status: "pending_whatsapp_confirmation"
+    order_status: "pending_email_confirmation"
   });
 
-  showOrderSuccess(orderId, name, grandTotal, "WhatsApp Order");
-  window.open(encodedUrl, "_blank");
+  showOrderSuccess(orderId, name, grandTotal, "Assisted Email Order");
+  window.location.href = encodedUrl;
 }
 
 function handleDirectOrder(e) {
@@ -1612,13 +1614,13 @@ function showOrderSuccess(orderId, customerName, total, paymentMethod) {
     $("#successCustomerName").textContent = customerName;
     $("#successOrderId").textContent = orderId;
     $("#successOrderTotal").textContent = formatMoney(total);
-    $("#successPaymentMethod").textContent = paymentMethod === "cod" ? "Cash on Delivery" : (paymentMethod === "upi" ? "UPI / QR Payment" : paymentMethod);
+    $("#successPaymentMethod").textContent = paymentMethod === "cod" ? "Cash on Delivery" : (paymentMethod === "assisted_email" ? "Assisted Email Order" : paymentMethod);
     
     const waShareBtn = $("#receiptWhatsAppShareBtn");
     if (waShareBtn) {
       waShareBtn.onclick = () => {
-        const msg = `Hi Capra Cool, I placed order #${orderId} (${formatMoney(total)}). Please share dispatch tracking!`;
-        window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+        const msg = `Hi Capra Cool, I placed order #${orderId} (${formatMoney(total)}). Please share dispatch tracking.`;
+        window.location.href = `mailto:${CONFIG.STORE_EMAIL}?subject=${encodeURIComponent(`Capra Cool order ${orderId}`)}&body=${encodeURIComponent(msg)}`;
       };
     }
 
