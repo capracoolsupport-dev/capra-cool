@@ -53,6 +53,13 @@ const PRODUCTS = [
     care: 'Wash cold inside-out. Do not bleach. Cool iron.', sizes: ['S','M','L','XL','XXL']
   },
   {
+    id: 'capra-cool-tee', name: 'Capra Cool Tee', category: 'tee', price: 899, rating: 4.9,
+    image: 'assets/capra-cool-studio-front.jpg', badge: 'New drop', color: 'Jet Black / Navy / White / Olive', gsm: '220 GSM',
+    fabric: 'Cool-touch cotton blend', fit: 'Relaxed athletic fit', sku: 'CC-TEE-003', imageFit: 'contain',
+    description: 'A breathable everyday T-shirt built for warm days, campus runs, and repeat wear. Soft cotton-blend jersey, clean CAPRA COOL chest mark, and a steady collar that keeps its shape.',
+    care: 'Wash cold inside-out. Line dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
+  },
+  {
     id: 'horizon-hoodie', name: 'Horizon Hoodie', category: 'hoodie', price: 1499, rating: 4.8,
     image: 'assets/product_horizon_hoodie.jpg', badge: 'Mountain art', color: 'Desert Cream', gsm: '380 GSM',
     fabric: 'Heavy brushed fleece', fit: 'Drop-shoulder structure', sku: 'CC-HD-002',
@@ -493,3 +500,4 @@ function init() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
 else init();
+
