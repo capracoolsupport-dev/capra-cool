@@ -1,0 +1,315 @@
+diff --git a/.env.example b/.env.example
+index 78b56ff..c3efafe 100644
+--- a/.env.example
++++ b/.env.example
+@@ -1,4 +1,11 @@
+-VITE_SUPABASE_URL=https://qhaheskahldwcvggrvbu.supabase.co
+-VITE_SUPABASE_ANON_KEY=your_supabase_publishable_key
+-# Optional. Digits only, including country code. If omitted, email support is used.
++# Server-only. Add these to Vercel Environment Variables for production.
++SUPABASE_URL=https://qhaheskahldwcvggrvbu.supabase.co
++SUPABASE_SERVICE_ROLE_KEY=
++SUPABASE_ANON_KEY=
++ADMIN_DASHBOARD_TOKEN=
++
++# Optional server-only AI helper. Leave unset if the fit concierge is retired.
++OPENAI_API_KEY=
++
++# Browser-safe. Digits only, including country code. If omitted, email support is used.
+ VITE_WHATSAPP_NUMBER=
+diff --git a/index.html b/index.html
+index e36b4ce..96f42b7 100644
+--- a/index.html
++++ b/index.html
+@@ -6,13 +6,36 @@
+   <meta name="theme-color" content="#11120f">
+   <meta name="description" content="CAPRA COOL — Himalayan streetwear and custom campus merchandise. Heavyweight tees, fleece hoodies, tracksuits, and made-to-order institutional drops.">
+   <meta name="keywords" content="Capra Cool, Himalayan streetwear, custom campus merchandise, college hoodies, heavyweight t-shirts, tracksuits">
++  <link rel="canonical" href="https://capra-cool.vercel.app/">
+   <meta property="og:type" content="website">
++  <meta property="og:url" content="https://capra-cool.vercel.app/">
+   <meta property="og:title" content="CAPRA COOL — Wear Higher">
+   <meta property="og:description" content="Heavyweight Himalayan essentials and custom campus editions, designed in Himachal Pradesh.">
+-  <meta property="og:image" content="assets/crop_hero_model_3x4.jpg">
++  <meta property="og:image" content="https://capra-cool.vercel.app/assets/crop_hero_model_3x4.jpg">
+   <meta name="twitter:card" content="summary_large_image">
+   <title>CAPRA COOL — Himalayan Streetwear & Campus Editions</title>
+   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+   <link rel="stylesheet" href="styles.css">
++  <script type="application/ld+json">
++    {
++      "@context": "https://schema.org",
++      "@type": "ClothingStore",
++      "name": "CAPRA COOL",
++      "url": "https://capra-cool.vercel.app/",
++      "email": "care@capracool.com",
++      "address": {
++        "@type": "PostalAddress",
++        "addressLocality": "Mandi",
++        "addressRegion": "Himachal Pradesh",
++        "addressCountry": "IN"
++      },
++      "areaServed": "IN",
++      "currenciesAccepted": "INR",
++      "paymentAccepted": "Cash on Delivery",
++      "priceRange": "₹₹",
++      "sameAs": []
++    }
++  </script>
+   <script type="module" src="script.js"></script>
+ </head>
+ <body>
+@@ -230,6 +253,11 @@
+           <div class="form-section">
+             <span class="form-step">03 / Identity</span>
+             <label class="field"><span>College / institute name</span><input id="instituteName" name="instituteName" type="text" placeholder="e.g. IIT Bombay" maxlength="60" required></label>
++            <div class="form-grid three">
++              <label class="field"><span>Contact name</span><input name="contactName" type="text" maxlength="80" required></label>
++              <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
++              <label class="field"><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel"></label>
++            </div>
+             <div class="form-grid two">
+               <label class="field"><span>Front logo placement</span>
+                 <select name="frontPlacement" id="frontPlacement">
+@@ -385,7 +413,7 @@
+       <div class="checkout-preview" id="checkoutPreview"></div>
+       <form id="checkoutForm">
+-        <div class="form-grid two"><label class="field"><span>Full name</span><input name="name" required autocomplete="name"></label><label class="field"><span>Phone</span><input name="phone" required inputmode="tel" autocomplete="tel"></label></div>
++        <div class="form-grid two"><label class="field"><span>Full name</span><input name="name" required autocomplete="name"></label><label class="field"><span>Phone</span><input name="phone" required inputmode="tel" autocomplete="tel" minlength="10"></label></div>
+         <label class="field"><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
+         <label class="field"><span>Delivery address</span><textarea name="address" rows="3" required autocomplete="street-address"></textarea></label>
+         <div class="form-grid three"><label class="field"><span>City</span><input name="city" required autocomplete="address-level2"></label><label class="field"><span>State</span><input name="state" required autocomplete="address-level1"></label><label class="field"><span>PIN code</span><input name="pincode" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="postal-code"></label></div>
+@@ -393,6 +421,7 @@
+         <label class="field"><span>Payment</span><select name="payment_method"><option value="cod">Cash on Delivery</option></select></label>
+         <label class="field"><span>Order notes</span><textarea name="notes" rows="2" placeholder="Optional"></textarea></label>
++        <label class="consent-row"><input name="consent" type="checkbox" required><span>I agree to be contacted for order confirmation and dispatch updates.</span></label>
+         <div class="secure-note"><span>🔒 HTTPS protected form</span><span>Order reference generated on submit</span></div>
+         <button class="button button-dark full" type="submit">Place order</button>
+       </form>
+diff --git a/script.js b/script.js
+index eb87bc2..9c5e25a 100644
+--- a/script.js
++++ b/script.js
+@@ -6,9 +6,7 @@ const CONFIG = {
+   freeShipping: 999,
+   shippingFee: 99,
+   supportEmail: 'care@capracool.com',
+-  whatsapp: String(import.meta.env?.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, ''),
+-  supabaseUrl: import.meta.env?.VITE_SUPABASE_URL || 'https://qhaheskahldwcvggrvbu.supabase.co',
+-  supabaseKey: import.meta.env?.VITE_SUPABASE_ANON_KEY || import.meta.env?.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_kxaAQiApVfqqNI4mbR8tTw_AanAVrci'
++  whatsapp: String(import.meta.env?.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')
+ };
+ 
+ const SIZE_CHARTS = {
+@@ -273,6 +271,9 @@ function atelierMessage() {
+   const data = new FormData($('#atelierForm'));
+   const colour = $('#atelierForm input[name="garmentColor"]:checked')?.value || 'Black';
+-  return `CAPRA COOL — CUSTOM CAMPUS QUOTE\n\nInstitute: ${data.get('instituteName')}\nGarment: ${data.get('garment')}\nGarment colour: ${colour}\nFront placement: ${data.get('frontPlacement')}\nBack placement: ${data.get('backPlacement')}\nPrint colour: ${data.get('printColor')}\nQuantity: ${data.get('quantity')}\nNotes: ${data.get('notes') || '—'}\n\nPlease share artwork guidance, production timeline, and a quote.`;
++  return `CAPRA COOL — CUSTOM CAMPUS QUOTE\n\nInstitute: ${data.get('instituteName')}\nContact: ${data.get('contactName')}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone') || '—'}\nGarment: ${data.get('garment')}\nGarment colour: ${colour}\nFront placement: ${data.get('frontPlacement')}\nBack placement: ${data.get('backPlacement')}\nPrint colour: ${data.get('printColor')}\nQuantity: ${data.get('quantity')}\nNotes: ${data.get('notes') || '—'}\n\nPlease share artwork guidance, production timeline, and a quote.`;
+ }
+ 
+-function submitAtelier(event) {
+-  event.preventDefault();
+-  if (!event.currentTarget.reportValidity()) return;
+-  const subject = encodeURIComponent('CAPRA COOL custom campus quote request');
+-  const body = encodeURIComponent(atelierMessage());
+-  window.location.href = `mailto:${CONFIG.supportEmail}?subject=${subject}&body=${body}`;
+-  showToast('Opening your custom quote request in email.');
++async function submitAtelier(event) {
++  event.preventDefault();
++  if (!event.currentTarget.reportValidity()) return;
++  const form = event.currentTarget;
++  const button = $('button[type="submit"]', form);
++  const data = new FormData(form);
++  const colour = form.querySelector('input[name="garmentColor"]:checked')?.value || 'Black';
++  button.disabled = true; button.textContent = 'Sending…';
++  try {
++    const result = await apiPost('/api/campus-quote', {
++      instituteName: data.get('instituteName'),
++      contactName: data.get('contactName'),
++      email: data.get('email'),
++      phone: data.get('phone'),
++      garment: data.get('garment'),
++      garmentColor: colour,
++      frontPlacement: data.get('frontPlacement'),
++      backPlacement: data.get('backPlacement'),
++      printColor: data.get('printColor'),
++      quantity: data.get('quantity'),
++      notes: data.get('notes')
++    });
++    showToast(`Quote request received: ${result.quote_id}.`);
++  } catch (error) {
++    console.error('Quote request failed:', error);
++    emailFallback('CAPRA COOL custom campus quote request', atelierMessage());
++    showToast('Quote service is unavailable, so we opened an email request instead.');
++  } finally {
++    button.disabled = false; button.textContent = 'Request custom quote';
++  }
+ }
+ 
+-async function postSupabase(table, payload) {
+-  if (!CONFIG.supabaseUrl || !CONFIG.supabaseKey) throw new Error('Store data service is not configured.');
+-  const response = await fetch(`${CONFIG.supabaseUrl}/rest/v1/${table}`, {
++async function apiPost(path, payload) {
++  const response = await fetch(path, {
+     method:'POST',
+-    headers:{ 'Content-Type':'application/json', apikey:CONFIG.supabaseKey, Authorization:`Bearer ${CONFIG.supabaseKey}`, Prefer:'return=minimal' },
++    headers:{ 'Content-Type':'application/json' },
+     body:JSON.stringify(payload)
+   });
+-  if (!response.ok) throw new Error(`Store service returned ${response.status}.`);
++  const data = await response.json().catch(() => ({}));
++  if (!response.ok) {
++    const error = new Error(data.error || `Request failed with ${response.status}.`);
++    error.status = response.status;
++    error.data = data;
++    throw error;
++  }
++  return data;
++}
++
++function emailFallback(subject, body) {
++  window.location.href = `mailto:${CONFIG.supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+ }
+ 
+ function openCheckout() {
+@@ -320,33 +346,22 @@ async function submitCheckout(event) {
+   const button = $('button[type="submit"]', form);
+   button.disabled = true; button.textContent = 'Submitting…';
+   const data = new FormData(form);
+-  const subtotal = cartTotal();
+-  const shipping = subtotal >= CONFIG.freeShipping ? 0 : CONFIG.shippingFee;
+-  const orderId = `CC-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
+-  const payload = {
+-    id: orderId,
+-    order_number: orderId,
+-    customer_name: String(data.get('name') || '').trim(),
+-    customer_phone: String(data.get('phone') || '').trim(),
+-    customer_email: String(data.get('email') || '').trim(),
+-    delivery_address: String(data.get('address') || '').trim(),
+-    city: String(data.get('city') || '').trim(),
+-    state: String(data.get('state') || '').trim(),
+-    pincode: String(data.get('pincode') || '').trim(),
+-    notes: String(data.get('notes') || '').trim(),
+-    payment_method: String(data.get('payment_method') || 'cod'),
+-    order_channel: 'web',
+-    items: cart.map(item => { const p = productById(item.id); return { id:item.id, name:p.name, size:item.size, qty:item.qty, unit_price:p.price }; }),
+-    subtotal,
+-    shipping_fee: shipping,
+-    grand_total: subtotal + shipping,
+-    order_status: 'pending'
+-  };
+   try {
+-    await postSupabase('customer_orders', payload);
++    const result = await apiPost('/api/orders', {
++      customer: {
++        name: data.get('name'),
++        phone: data.get('phone'),
++        email: data.get('email'),
++        address: data.get('address'),
++        city: data.get('city'),
++        state: data.get('state'),
++        pincode: data.get('pincode'),
++        notes: data.get('notes')
++      },
++      items: cart.map(item => ({ id:item.id, size:item.size, qty:item.qty }))
++    });
+     cart = []; persistCart(); form.reset();
+-    $('#successOrderId').textContent = orderId;
++    $('#successOrderId').textContent = result.order_id;
+     form.hidden = true; $('#checkoutSuccess').hidden = false;
+   } catch (error) {
+     console.error('Order submission failed:', error);
+-    showToast('We could not submit the order. Please email care@capracool.com and we’ll help immediately.');
++    const summary = cart.map(item => {
++      const product = productById(item.id);
++      return `${product.name} · ${item.size} × ${item.qty}`;
++    }).join('\n');
++    emailFallback('CAPRA COOL order support', `Please help place this order:\n\n${summary}\n\nName: ${data.get('name')}\nPhone: ${data.get('phone')}\nEmail: ${data.get('email')}\nAddress: ${data.get('address')}, ${data.get('city')}, ${data.get('state')} ${data.get('pincode')}\nNotes: ${data.get('notes') || '—'}`);
++    showToast('Order service is unavailable, so we opened an email order request.');
+   } finally {
+     button.disabled = false; button.textContent = 'Place order';
+   }
+@@ -360,10 +375,10 @@ async function submitNewsletter(event) {
+   const button = $('button', form); button.disabled = true;
+   try {
+-    await postSupabase('newsletter_signups', { email });
++    await apiPost('/api/newsletter', { email });
+     form.reset(); showToast('You’re on the CAPRA COOL field-notes list.');
+   } catch (error) {
+-    if (String(error).includes('409')) showToast('That email is already on the list.');
+-    else { console.error('Newsletter signup failed:', error); showToast('Signup did not go through. Please try again.'); }
+-  } finally { button.disabled = false; }
++    console.error('Newsletter signup failed:', error);
++    showToast(error.message || 'Signup did not go through. Please try again.');
++  } finally { button.disabled = false; button.textContent = 'Join the list'; }
+ }
+diff --git a/vercel.json b/vercel.json
+index 57496a3..e7b151e 100644
+--- a/vercel.json
++++ b/vercel.json
+@@ -1,5 +1,17 @@
+ {
+   "$schema": "https://openapi.vercel.sh/vercel.json",
+   "cleanUrls": true,
+-  "trailingSlash": false
++  "trailingSlash": false,
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        { "key": "X-Content-Type-Options", "value": "nosniff" },
++        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
++        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
++      ]
++    }
++  ]
+ }
+diff --git a/vite.config.js b/vite.config.js
+index 5db601d..18475d4 100644
+--- a/vite.config.js
++++ b/vite.config.js
+@@ -9,7 +9,8 @@ export default defineConfig({
+     rollupOptions: {
+       input: {
+         main: resolve(root, 'index.html'),
+-        policies: resolve(root, 'policies.html')
++        policies: resolve(root, 'policies.html'),
++        admin: resolve(root, 'admin.html')
+       }
+     }
+   }
+diff --git a/supabase/security_hardening.sql b/supabase/security_hardening.sql
+index bcb7e28..e550ee4 100644
+--- a/supabase/security_hardening.sql
++++ b/supabase/security_hardening.sql
+@@ -6,8 +6,8 @@
+ drop policy if exists "Allow public read order by id" on public.customer_orders;
+ 
+- -- Keep anonymous insert capability for storefront checkout, but do not grant select/update/delete.
++-- Orders should be written by the server route with a trusted service role, not directly by browsers.
+ drop policy if exists "Allow public to insert orders" on public.customer_orders;
+-create policy "Allow public storefront order insert"
+-  on public.customer_orders
+-  for insert
+-  to anon, authenticated
+-  with check (
+-    length(trim(customer_name)) between 2 and 120
+-    and length(trim(customer_phone)) between 7 and 20
+-    and pincode ~ '^[0-9]{6}$'
+-    and jsonb_array_length(items) between 1 and 30
+-    and subtotal >= 0
+-    and shipping_fee >= 0
+-    and grand_total >= 0
+-  );
++drop policy if exists "Allow public storefront order insert" on public.customer_orders;
++-- Do not recreate an anon/authenticated insert policy for customer_orders.
+ 
+ -- Newsletter: allow inserts only. No public select policy should exist.
+ drop policy if exists "Allow public to subscribe to newsletter" on public.newsletter_signups;
+@@ -24,4 +14,4 @@ create policy "Allow public newsletter signup"
+   with check (email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$');
+ 
+- -- Recommended: keep order_status server/admin managed. The storefront submits 'pending'.
++-- Recommended: keep order_status server/admin managed. The storefront submits only item ids, sizes, and quantities to /api/orders.
+ comment on table public.customer_orders is 'CAPRA COOL orders. Personal data: never expose public SELECT access.';
