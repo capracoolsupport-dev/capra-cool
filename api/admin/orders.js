@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (!expected || supplied !== expected) return send(res, 401, { error: 'Unauthorized.' });
 
   try {
-    const rows = await getSupabaseRows('customer_orders', 'order_number,customer_name,customer_phone,customer_email,city,state,grand_total,order_status,created_at', 50);
+    const rows = await getSupabaseRows('customer_orders', 'order_number,customer_name,customer_phone,customer_email,city,state,grand_total,order_status,created_at,items', 50);
     send(res, 200, { orders: rows });
   } catch (error) {
     console.error('admin_orders_failed', error);

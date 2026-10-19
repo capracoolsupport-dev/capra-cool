@@ -14,6 +14,7 @@ export default async function handler(req, res) {
     if (!cleanText(body.customer?.name, 120)) return send(res, 400, { error: 'Full name is required.' });
     if (!customer_phone || customer_phone.replace(/\D/g, '').length < 10) return send(res, 400, { error: 'A valid phone number is required.' });
     if (!isEmail(customer_email)) return send(res, 400, { error: 'A valid email address is required.' });
+    if (!cleanText(body.customer?.address, 500) || !cleanText(body.customer?.city, 80) || !cleanText(body.customer?.state, 80)) return send(res, 400, { error: 'A complete delivery address is required.' });
     if (!/^\d{6}$/.test(pincode)) return send(res, 400, { error: 'Enter a valid 6-digit PIN code.' });
 
     const orderId = createOrderId();

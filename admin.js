@@ -1,4 +1,4 @@
-const $ = selector => document.querySelector(selector);
+const $ = (selector, root = document) => root.querySelector(selector);
 
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
@@ -16,7 +16,7 @@ function renderOrders(orders) {
   }
   table.innerHTML = orders.map(order => `
     <tr>
-      <td><strong>${escapeHtml(order.order_number)}</strong></td>
+      <td><strong>${escapeHtml(order.order_number)}</strong>${Array.isArray(order.items) && order.items.length ? `<details class="admin-order-items"><summary>View items</summary>${order.items.map(item=>`<p>${escapeHtml(item.name)} · ${escapeHtml(item.size)} × ${Number(item.qty) || 1}${item.print_text ? `<br><strong>Print: ${escapeHtml(item.print_text)}</strong>` : ''}</p>`).join('')}</details>` : ''}</td>
       <td>${escapeHtml(order.customer_name)}</td>
       <td><a href="mailto:${escapeHtml(order.customer_email)}">${escapeHtml(order.customer_email)}</a><br><small>${escapeHtml(order.customer_phone)}</small></td>
       <td>${escapeHtml(order.city)}, ${escapeHtml(order.state)}</td>

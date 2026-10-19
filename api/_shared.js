@@ -1,3 +1,4 @@
+import {CAMPUS_DESIGNS, CAMPUS_SIZES, campusUnitCents} from '../campus-catalog.js';
 const PRODUCTS = {
   'summit-tee': { name: 'Summit Tee', price: 799, category: 'T-Shirt' },
   'alpine-hoodie': { name: 'Alpine Hoodie', price: 1499, category: 'Hoodie' },
@@ -44,11 +45,25 @@ export function isEmail(value) {
 }
 
 export function orderTotals(items = []) {
+  if (!Array.isArray(items)) {
+    const error = new Error('Items must be an array.'); error.status = 400; throw error;
+  }
   const normalized = [];
   for (const item of items) {
+    if (!item || typeof item !== 'object') continue;
+    const campus = CAMPUS_DESIGNS.find(design => design.id === item.id);
     const product = PRODUCTS[item.id];
-    const qty = Math.min(10, Math.max(1, Number(item.qty) || 1));
+    const qty = Math.min(10, Math.max(1, Math.floor(Number(item.qty) || 1)));
     const size = cleanText(item.size, 8).toUpperCase();
+    if (campus) {
+      const personalisation = item.personalisation === true;
+      const print = personalisation ? cleanText(item.name, 40) : '';
+      if (!CAMPUS_SIZES.includes(size) || (personalisation && !print)) {
+        const error = new Error('Choose a valid size and enter your print text.'); error.status = 400; throw error;
+      }
+      normalized.push({id:campus.id,name:`IIT Mandi ${campus.name}`,category:campus.category,colour:campus.colour,size,qty,personalisation,print_text:print,unit_price:campusUnitCents(campus,personalisation)/100});
+      continue;
+    }
     if (!product || !VALID_SIZES.has(size)) continue;
     normalized.push({
       id: item.id,
@@ -59,9 +74,9 @@ export function orderTotals(items = []) {
       unit_price: product.price
     });
   }
-  const subtotal = normalized.reduce((sum, item) => sum + item.unit_price * item.qty, 0);
+  const subtotal = normalized.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.qty, 0) / 100;
   const shipping_fee = subtotal === 0 || subtotal >= 999 ? 0 : 99;
-  return { items: normalized, subtotal, shipping_fee, grand_total: subtotal + shipping_fee };
+  return { items: normalized, subtotal, shipping_fee, grand_total: Math.round((subtotal + shipping_fee) * 100) / 100 };
 }
 
 export function createOrderId(prefix = 'CC') {

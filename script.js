@@ -1,6 +1,13 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const money = value => `₹${Number(value).toLocaleString('en-IN')}`;
+// Vite fingerprints imported images in production. Keep catalog source names
+// separate from their emitted URLs so optimized names stay stable.
+const ASSET_URLS = import.meta.glob([
+  '/assets/product_*.jpg', '/assets/capra-cool-studio-front.jpg',
+  '/assets/handmade-*.jpg', '/assets/sunflower-keychain.jpg'
+], { eager: true, query: '?url', import: 'default' });
+const sourcePath = src => ASSET_URLS[`/${src}`] || src;
 
 const CONFIG = {
   freeShipping: 999,
@@ -25,52 +32,52 @@ const SIZE_CHARTS = {
 
 const PRODUCTS = [
   {
-    id: 'summit-tee', name: 'Summit Tee', category: 'tee', price: 799, rating: 4.8,
-    image: 'assets/product_summit_tee.jpg', badge: 'Bestseller', color: 'Ivory', gsm: '180 GSM',
-    fabric: 'Premium combed cotton', fit: 'Regular everyday fit', sku: 'CC-TEE-001',
-    description: 'A clean everyday tee in breathable 180 GSM combed cotton, finished with the CAPRA COOL mountain-ridge language and a dependable neck rib.',
+    id: 'summit-tee', name: 'Summit Tee', category: 'tee', price: 799,
+    image: 'assets/product_summit_tee.jpg', color: 'Ivory', gsm: '180 GSM',
+    fabric: 'Combed cotton', fit: 'Regular fit', sku: 'CC-TEE-001',
+    description: 'An everyday cotton tee with a small mountain chest print. Ivory, 180 GSM.',
     care: 'Cold machine wash with similar colours. Line dry in shade.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'alpine-hoodie', name: 'Alpine Hoodie', category: 'hoodie', price: 1499, rating: 4.9,
-    image: 'assets/product_alpine_hoodie.jpg', badge: 'Signature', color: 'Olive Drab', gsm: '380 GSM',
+    id: 'alpine-hoodie', name: 'Alpine Hoodie', category: 'hoodie', price: 1499,
+    image: 'assets/product_alpine_hoodie.jpg', color: 'Black', gsm: '380 GSM',
     fabric: 'Brushed cotton fleece', fit: 'Structured athletic fit', sku: 'CC-HD-001',
-    description: 'Dense brushed fleece for cold mornings and late-night campus movement, with a structured hood and restrained alpine insignia.',
+    description: 'Black brushed-fleece hoodie with the CAPRA COOL goat graphic on the back. 380 GSM.',
     care: 'Gentle cold wash. Hang dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'trail-tracksuit', name: 'Trail Tracksuit', category: 'track', price: 1999, rating: 4.7,
-    image: 'assets/product_trail_tracksuit.jpg', badge: '2-piece set', color: 'Deep Olive', gsm: '340 GSM',
+    id: 'trail-tracksuit', name: 'Trail Tracksuit', category: 'track', price: 1999,
+    image: 'assets/product_trail_tracksuit.jpg', color: 'Deep Olive', gsm: '340 GSM',
     fabric: 'Technical double-knit', fit: 'Tapered outerwear set', sku: 'CC-TRK-001',
-    description: 'A coordinated zip jacket and tapered track pant built for easy layering, travel, and daily movement without losing shape.',
+    description: 'An olive zip jacket and tapered track pant, sold as a two-piece set. 340 GSM double-knit.',
     care: 'Fasten zips, cold wash, air dry.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'classic-tee', name: 'Capra Classic Tee', category: 'tee', price: 799, rating: 4.6,
-    image: 'assets/sharp_product_classic_tee.jpg', badge: 'Core icon', color: 'Jet Black', gsm: '180 GSM',
+    id: 'classic-tee', name: 'Capra Classic Tee', category: 'tee', price: 799,
+    image: 'assets/product_classic_tee.jpg', color: 'Jet Black', gsm: '180 GSM',
     fabric: 'Heavy combed cotton', fit: 'Relaxed boxy cut', sku: 'CC-TEE-002', imageFit: 'contain',
-    description: 'The wordmark essential: long-staple cotton, a relaxed streetwear shape, and a collar engineered to hold its line through repeat wear.',
+    description: 'Black cotton tee with a relaxed cut and CAPRA COOL chest mark. 180 GSM.',
     care: 'Wash cold inside-out. Do not bleach. Cool iron.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'capra-cool-tee', name: 'Capra Cool Tee', category: 'tee', price: 899, rating: 4.9,
-    image: 'assets/capra-cool-studio-front.jpg', badge: 'New drop', color: 'Jet Black / Navy / White / Olive', gsm: '220 GSM',
+    id: 'capra-cool-tee', name: 'Capra Cool Tee', category: 'tee', price: 899,
+    image: 'assets/capra-cool-studio-front.jpg', color: 'Jet Black', gsm: '220 GSM',
     fabric: 'Cool-touch cotton blend', fit: 'Relaxed athletic fit', sku: 'CC-TEE-003', imageFit: 'contain',
-    description: 'A breathable everyday T-shirt built for warm days, campus runs, and repeat wear. Soft cotton-blend jersey, clean CAPRA COOL chest mark, and a steady collar that keeps its shape.',
+    description: 'A cotton-blend tee with a relaxed athletic fit and small chest wordmark. Jet Black, 220 GSM.',
     care: 'Wash cold inside-out. Line dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'horizon-hoodie', name: 'Horizon Hoodie', category: 'hoodie', price: 1499, rating: 4.8,
-    image: 'assets/product_horizon_hoodie.jpg', badge: 'Mountain art', color: 'Desert Cream', gsm: '380 GSM',
+    id: 'horizon-hoodie', name: 'Horizon Hoodie', category: 'hoodie', price: 1499,
+    image: 'assets/product_horizon_hoodie.jpg', color: 'Olive', gsm: '380 GSM',
     fabric: 'Heavy brushed fleece', fit: 'Drop-shoulder structure', sku: 'CC-HD-002',
-    description: 'A heavyweight fleece hoodie with a scenic Himalayan back graphic and a relaxed shoulder line designed for winter layering.',
+    description: 'Olive fleece hoodie with sleeve artwork and a relaxed shoulder. 380 GSM.',
     care: 'Cold gentle wash. Line dry. Do not tumble dry.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'peak-tracksuit', name: 'Peak Tracksuit', category: 'track', price: 1999, rating: 4.7,
-    image: 'assets/product_peak_tracksuit_clean.jpg', badge: 'Utility', color: 'Basalt Black', gsm: '340 GSM',
+    id: 'peak-tracksuit', name: 'Peak Tracksuit', category: 'track', price: 1999,
+    image: 'assets/product_peak_tracksuit_clean.jpg', color: 'Basalt Black', gsm: '340 GSM',
     fabric: 'Technical double-knit jersey', fit: 'Tapered performance cut', sku: 'CC-TRK-002', imageFit: 'contain',
-    description: 'A technical black two-piece with clean piping, useful pockets, and a tapered profile that moves easily between training, travel, and campus.',
+    description: 'Black zip jacket and matching track pants. A two-piece set in 340 GSM double-knit.',
     care: 'Wash with like colours. Do not iron over logo. Air dry.', sizes: ['S','M','L','XL','XXL']
   }
 ];
@@ -111,7 +118,7 @@ function pictureMarkup(src, alt, options = {}) {
   const loading = options.loading || 'lazy';
   const decoding = options.decoding || 'async';
   const extra = options.extra || '';
-  return `<picture><source srcset="${optimizedPath(src,'avif')}" type="image/avif"><source srcset="${optimizedPath(src,'webp')}" type="image/webp"><img${cls} src="${src}" alt="${escapeHtml(alt)}" loading="${loading}" decoding="${decoding}" ${extra}></picture>`;
+  return `<picture><source srcset="${optimizedPath(src,'avif')}" type="image/avif"><source srcset="${optimizedPath(src,'webp')}" type="image/webp"><img${cls} src="${sourcePath(src)}" alt="${escapeHtml(alt)}" loading="${loading}" decoding="${decoding}" ${extra}></picture>`;
 }
 
 function escapeHtml(value = '') {
@@ -124,7 +131,6 @@ function sortedProducts() {
   let list = currentFilter === 'all' ? [...PRODUCTS] : PRODUCTS.filter(product => product.category === currentFilter);
   if (currentSort === 'price-asc') list.sort((a,b) => a.price - b.price);
   if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
-  if (currentSort === 'rating') list.sort((a,b) => b.rating - a.rating);
   return list;
 }
 
@@ -136,14 +142,12 @@ function renderProducts() {
     <article class="product-card" data-product-id="${product.id}" data-image-fit="${product.imageFit || 'cover'}" data-reveal>
       <div class="product-image-wrap">
         ${pictureMarkup(product.image, `${product.name} — ${product.color}`, { extra:'width="768" height="1024"' })}
-        <span class="product-badge">${escapeHtml(product.badge)}</span>
-        <button class="quick-add" type="button" data-open-product="${product.id}" aria-label="View ${escapeHtml(product.name)}">+</button>
+        <button class="product-image-button" type="button" data-open-product="${product.id}" aria-label="View ${escapeHtml(product.name)}"><span aria-hidden="true">+</span></button>
       </div>
       <div class="product-info">
         <div class="product-line"><h3 class="product-title">${escapeHtml(product.name)}</h3><span class="product-price">${money(product.price)}</span></div>
-        <p class="product-sub">${escapeHtml(product.color)} · ${escapeHtml(product.fit)}</p>
-        <div class="product-spec-row"><span>${escapeHtml(product.gsm)}</span><span>${escapeHtml(product.fabric)}</span></div>
-        <button class="product-detail-link" type="button" data-open-product="${product.id}">View details & size guide</button>
+        <p class="product-sub">${escapeHtml(product.color)} · ${escapeHtml(product.gsm)}</p>
+        <button class="product-detail-link" type="button" data-open-product="${product.id}">Choose size ↗</button>
       </div>
     </article>
   `).join('');
@@ -158,7 +162,7 @@ function renderAccessories() {
   grid.innerHTML = ACCESSORIES.map(item => `
     <article class="accessory-card" data-lowres="${item.lowres ? 'true':'false'}" data-reveal>
       <div class="accessory-image">${pictureMarkup(item.image, item.name)}</div>
-      <div class="accessory-copy"><strong><span>${escapeHtml(item.name)}</span><span>${money(item.price)}</span></strong><p>${escapeHtml(item.note)}</p></div>
+      <div class="accessory-copy"><strong><span>${escapeHtml(item.name)}</span></strong><p>${escapeHtml(item.note)}</p><a class="accessory-enquiry" href="mailto:${CONFIG.supportEmail}?subject=${encodeURIComponent(`Availability: ${item.name}`)}">Ask about availability ↗</a></div>
     </article>
   `).join('');
   prepareRevealElements(grid);
@@ -174,22 +178,31 @@ function openProduct(id) {
   activeProduct = product;
   activeSize = null;
   const modalImage = $('#productModalImage');
-  modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = product.image; };
+  modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = sourcePath(product.image); };
   modalImage.src = optimizedPath(product.image, 'webp');
   modalImage.alt = `${product.name} — ${product.color}`;
   $('#productModalCategory').textContent = `${CATEGORY_LABELS[product.category]} · ${product.gsm}`;
   $('#productModalTitle').textContent = product.name;
   $('#productModalPrice').textContent = money(product.price);
-  $('#productModalRating').textContent = `★ ${product.rating.toFixed(1)} · ${product.sku}`;
   $('#productModalDescription').textContent = product.description;
   $('#productModalSpecs').innerHTML = [
     ['Fabric', product.fabric], ['Fit', product.fit], ['Colour', product.color], ['Care', product.care]
   ].map(([label,value]) => `<div><small>${label}</small><strong>${escapeHtml(value)}</strong></div>`).join('');
-  $('#productModalSizes').innerHTML = product.sizes.map(size => `<button class="size-chip" type="button" data-size="${size}">${size}</button>`).join('');
+  $('#productModalSizes').innerHTML = product.sizes.map(size => `<button class="size-chip" type="button" data-size="${size}" aria-pressed="false">${size}</button>`).join('');
+  $('#productAddToBag').textContent = 'Choose a size';
+  $('#productModal .size-guide').open = false;
+  $('#productModal .product-details').open = false;
+  $('#sizeError')?.remove();
+  $('#productModal .modal-card').scrollTop = 0;
   $('#productSizeChart').innerHTML = sizeChartTable(product.category);
   $$('.size-chip', $('#productModalSizes')).forEach(button => button.addEventListener('click', () => {
     activeSize = button.dataset.size;
-    $$('.size-chip', $('#productModalSizes')).forEach(chip => chip.classList.toggle('selected', chip === button));
+    $$('.size-chip', $('#productModalSizes')).forEach(chip => {
+      chip.classList.toggle('selected', chip === button);
+      chip.setAttribute('aria-pressed', String(chip === button));
+    });
+    $('#sizeError')?.remove();
+    $('#productAddToBag').textContent = `Add to bag — ${money(product.price)}`;
   }));
   openModal($('#productModal'));
 }
@@ -197,12 +210,16 @@ function openProduct(id) {
 function sizeChartTable(category) {
   const chart = SIZE_CHARTS[category] || SIZE_CHARTS.tee;
   const heads = category === 'track' ? ['Size','Chest / Waist','Top / Pant length','Shoulder'] : ['Size','Chest','Length','Shoulder'];
-  return `<table class="size-table"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${Object.entries(chart).map(([size,vals]) => `<tr><td>${size}</td>${vals.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  return `<p class="measurement-note">Measurements in inches. Compare with a garment you own.</p><table class="size-table"><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${Object.entries(chart).map(([size,vals]) => `<tr><th scope="row">${size}</th>${vals.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
 
 function addActiveProductToCart() {
   if (!activeProduct) return;
-  if (!activeSize) { showToast('Choose a size before adding to your bag.'); return; }
+  if (!activeSize) {
+    if (!$('#sizeError')) $('#productModalSizes').insertAdjacentHTML('beforebegin', '<p class="size-error" id="sizeError" role="alert">Choose your size to continue.</p>');
+    $('#productModalSizes button')?.focus();
+    return;
+  }
   const existing = cart.find(item => item.id === activeProduct.id && item.size === activeSize);
   if (existing) existing.qty += 1;
   else cart.push({ id:activeProduct.id, size:activeSize, qty:1 });
@@ -236,7 +253,7 @@ function renderCart() {
     items.innerHTML = cart.map((item,index) => {
       const product = productById(item.id);
       return `<article class="cart-item">
-        <img src="${optimizedPath(product.image,'webp')}" data-fallback-src="${product.image}" alt="${escapeHtml(product.name)}">
+        <img src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt="${escapeHtml(product.name)}">
         <div class="cart-item-copy"><strong>${escapeHtml(product.name)}</strong><small>${item.size} · ${escapeHtml(product.color)}</small><div class="qty-control"><button type="button" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${item.qty}</span><button type="button" data-qty="1" data-index="${index}" aria-label="Increase quantity">+</button></div></div>
         <div class="cart-item-side"><strong>${money(product.price * item.qty)}</strong><button class="remove-item" type="button" data-remove="${index}">Remove</button></div>
       </article>`;
@@ -264,27 +281,69 @@ function renderCart() {
   $('#checkoutOpen').disabled = cart.length === 0;
 }
 
-function openCart() { $('#cartDrawer').classList.add('open'); $('#cartDrawer').setAttribute('aria-hidden','false'); openShade(); }
-function closeCart() { $('#cartDrawer').classList.remove('open'); $('#cartDrawer').setAttribute('aria-hidden','true'); closeShadeIfClear(); }
+const overlayOpeners = new WeakMap();
+const overlaySelector = '.modal.open, #cartDrawer.open, #mobileMenu.open, #searchOverlay.open';
+function focusableElements(root) {
+  return $$('button:not([disabled]), a[href], input:not([type="hidden"]), select, textarea, summary, [tabindex="0"]', root)
+    .filter(element => element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden');
+}
+function syncOverlayState() {
+  const top = $(overlaySelector);
+  for (const child of document.body.children) {
+    child.inert = Boolean(top && child !== top && child.id !== 'toastRegion' && child.id !== 'pageShade');
+  }
+  document.body.classList.toggle('no-scroll', Boolean(top));
+}
+function activateOverlay(target, preferredFocus) {
+  const opener = document.activeElement;
+  closeAll();
+  overlayOpeners.set(target, opener);
+  target.classList.add('open');
+  target.setAttribute('aria-hidden', 'false');
+  syncOverlayState();
+  const placeFocus = () => {
+    if (!target.classList.contains('open') || target.contains(document.activeElement)) return;
+    (preferredFocus || focusableElements(target)[0])?.focus({preventScroll:true});
+  };
+  // Visibility transitions can make a focus call in the first frame a no-op.
+  // Retry when the panel finishes appearing, without interrupting user focus.
+  target.addEventListener('transitionend', placeFocus, { once: true });
+  requestAnimationFrame(placeFocus);
+}
+function deactivateOverlay(target) {
+  if (!target?.classList.contains('open')) return;
+  target.classList.remove('open');
+  target.setAttribute('aria-hidden', 'true');
+  syncOverlayState();
+  const opener = overlayOpeners.get(target);
+  if (opener?.isConnected && !opener.closest('[aria-hidden="true"]')) opener.focus({preventScroll:true});
+}
+function openCart() { activateOverlay($('#cartDrawer'), $('#cartClose')); openShade(); }
+function closeCart() { deactivateOverlay($('#cartDrawer')); closeShadeIfClear(); }
 function openShade() { $('#pageShade').classList.add('open'); $('#pageShade').setAttribute('aria-hidden','false'); document.body.classList.add('no-scroll'); }
 function closeShadeIfClear() {
   const somethingOpen = $('.modal.open') || $('#cartDrawer').classList.contains('open') || $('#mobileMenu').classList.contains('open');
   if (!somethingOpen) { $('#pageShade').classList.remove('open'); $('#pageShade').setAttribute('aria-hidden','true'); document.body.classList.remove('no-scroll'); }
 }
 
-function openModal(modal) { if (!modal) return; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); openShade(); }
-function closeModal(modal) { if (!modal) return; modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); closeShadeIfClear(); }
+function openModal(modal) { if (!modal) return; activateOverlay(modal, modal.querySelector('.modal-close')); openShade(); }
+function closeModal(modal) { deactivateOverlay(modal); closeShadeIfClear(); }
 function closeAll() { $$('.modal.open').forEach(closeModal); closeCart(); closeMenu(); closeSearch(); }
 
-function openMenu() { $('#mobileMenu').classList.add('open'); $('#mobileMenu').setAttribute('aria-hidden','false'); $('#menuOpen').setAttribute('aria-expanded','true'); document.body.classList.add('no-scroll'); }
-function closeMenu() { $('#mobileMenu').classList.remove('open'); $('#mobileMenu').setAttribute('aria-hidden','true'); $('#menuOpen').setAttribute('aria-expanded','false'); if (!$('#cartDrawer').classList.contains('open') && !$('.modal.open')) document.body.classList.remove('no-scroll'); }
+function openMenu() { activateOverlay($('#mobileMenu'), $('#menuClose')); $('#menuOpen').setAttribute('aria-expanded','true'); }
+function closeMenu() { deactivateOverlay($('#mobileMenu')); $('#menuOpen')?.setAttribute('aria-expanded','false'); }
 
-function openSearch() { $('#searchOverlay').classList.add('open'); $('#searchOverlay').setAttribute('aria-hidden','false'); document.body.classList.add('no-scroll'); setTimeout(() => $('#searchInput')?.focus(), 80); runSearch(''); }
-function closeSearch() { $('#searchOverlay').classList.remove('open'); $('#searchOverlay').setAttribute('aria-hidden','true'); if (!$('#cartDrawer').classList.contains('open') && !$('.modal.open')) document.body.classList.remove('no-scroll'); }
+function openSearch() { activateOverlay($('#searchOverlay'), $('#searchInput')); $('#searchInput').value = ''; runSearch(''); }
+function closeSearch() { deactivateOverlay($('#searchOverlay')); }
 function runSearch(query) {
   const q = String(query || '').trim().toLowerCase();
+  if (document.body.dataset.store === 'handmade') {
+    const matches = ACCESSORIES.filter(item => (item.name+' '+item.note).toLowerCase().includes(q));
+    $('#searchResults').innerHTML = matches.map(item => `<a class="search-result" href="mailto:${CONFIG.supportEmail}?subject=${encodeURIComponent('Availability: '+item.name)}"><img src="${optimizedPath(item.image,'webp')}" alt=""><span><strong>${escapeHtml(item.name)}</strong><small>Ask about availability</small></span><span>↗</span></a>`).join('') || '<p>No pieces matched. Try muffler, cap or keychain.</p>';
+    return;
+  }
   const matches = (q ? PRODUCTS.filter(p => [p.name,p.category,p.color,p.fabric,p.fit,p.gsm].join(' ').toLowerCase().includes(q)) : PRODUCTS).slice(0,6);
-  $('#searchResults').innerHTML = matches.map(product => `<button class="search-result" type="button" data-search-product="${product.id}"><img src="${optimizedPath(product.image,'webp')}" data-fallback-src="${product.image}" alt=""><span><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.gsm)} · ${escapeHtml(product.fit)}</small></span><span>${money(product.price)}</span></button>`).join('') || '<p>No pieces matched that search.</p>';
+  $('#searchResults').innerHTML = matches.map(product => `<button class="search-result" type="button" data-search-product="${product.id}"><img src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt=""><span><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.gsm)} · ${escapeHtml(product.fit)}</small></span><span>${money(product.price)}</span></button>`).join('') || '<p>No pieces matched that search. Try “tee”, “hoodie” or “tracksuit”.</p>';
   $$('img[data-fallback-src]', $('#searchResults')).forEach(img => img.addEventListener('error', () => { img.src = img.dataset.fallbackSrc; }, {once:true}));
   $$('[data-search-product]').forEach(button => button.addEventListener('click', () => { closeSearch(); openProduct(button.dataset.searchProduct); }));
 }
@@ -356,7 +415,7 @@ function renderCheckoutPreview() {
   const subtotal = cartTotal();
   const shipping = subtotal >= CONFIG.freeShipping ? 0 : CONFIG.shippingFee;
   $('#checkoutPreview').innerHTML = cart.map(item => {
-    const p = productById(item.id); return `<div class="checkout-preview-row"><span>${escapeHtml(p.name)} · ${item.size} × ${item.qty}</span><strong>${money(p.price * item.qty)}</strong></div>`;
+    const p = productById(item.id); return `<div class="checkout-preview-row"><span>${escapeHtml(p.name)} · ${escapeHtml(p.color)} · ${item.size} × ${item.qty}</span><strong>${money(p.price * item.qty)}</strong></div>`;
   }).join('') + `<div class="checkout-preview-row"><span>Shipping</span><strong>${shipping ? money(shipping) : 'Complimentary'}</strong></div><div class="checkout-preview-row"><span>Total</span><strong>${money(subtotal + shipping)}</strong></div>`;
 }
 
@@ -466,12 +525,18 @@ function bindEvents() {
   $$('.modal').forEach(modal => modal.addEventListener('click', event => { if (event.target === modal) closeModal(modal); }));
   $$('.filter-button').forEach(button => button.addEventListener('click', () => {
     currentFilter = button.dataset.filter;
-    $$('.filter-button').forEach(item => item.classList.toggle('active', item === button)); renderProducts();
+    $$('.filter-button').forEach(item => {
+      item.classList.toggle('active', item === button);
+      item.setAttribute('aria-pressed', String(item === button));
+    }); renderProducts();
   }));
   $('#sortSelect')?.addEventListener('change', event => { currentSort = event.target.value; renderProducts(); });
   $$('[data-category-jump]').forEach(card => card.addEventListener('click', () => {
     currentFilter = card.dataset.categoryJump;
-    $$('.filter-button').forEach(button => button.classList.toggle('active', button.dataset.filter === currentFilter));
+    $$('.filter-button').forEach(button => {
+      button.classList.toggle('active', button.dataset.filter === currentFilter);
+      button.setAttribute('aria-pressed', String(button.dataset.filter === currentFilter));
+    });
     renderProducts(); $('#shop')?.scrollIntoView({behavior:'smooth'});
   }));
   $('#atelierForm')?.addEventListener('input', updateAtelier);
@@ -482,6 +547,16 @@ function bindEvents() {
   $('#newsletterForm')?.addEventListener('submit', submitNewsletter);
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeAll();
+    if (event.key === 'Tab') {
+      const overlay = $(overlaySelector);
+      if (overlay) {
+        const controls = focusableElements(overlay);
+        const first = controls[0];
+        const last = controls.at(-1);
+        if (event.shiftKey && (document.activeElement === first || !overlay.contains(document.activeElement))) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && (document.activeElement === last || !overlay.contains(document.activeElement))) { event.preventDefault(); first?.focus(); }
+      }
+    }
     if (event.key === '/' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); openSearch(); }
   });
   window.addEventListener('scroll', () => $('#siteHeader')?.classList.toggle('scrolled', window.scrollY > 20), {passive:true});

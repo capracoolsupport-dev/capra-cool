@@ -9,7 +9,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(root, 'index.html'),
-        policies: resolve(root, 'policies.html')
+        campus: resolve(root, 'campus.html'),
+        handmade: resolve(root, 'handmade.html'),
+        policies: resolve(root, 'policies.html'),
+        admin: resolve(root, 'admin.html')
       }
     }
   }

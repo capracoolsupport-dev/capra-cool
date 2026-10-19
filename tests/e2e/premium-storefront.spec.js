@@ -36,37 +36,35 @@ test('product details, size selection and cart work', async ({ page }) => {
   await expect(page.locator('#cartDrawer')).toHaveClass(/open/);
 });
 
-test('campus atelier preview updates immediately', async ({ page }) => {
-  await page.locator('#instituteName').fill('IIT Bombay');
-  await page.locator('label:has(input[name="garment"][value="tshirt"])').click();
-  await page.locator('label:has(input[name="garmentColor"][value="Maroon"])').click();
-  await page.locator('#frontPlacement').selectOption('center');
-  await page.locator('#backPlacement').selectOption('oversized');
-  await expect(page.locator('#previewFrontInstitute')).toHaveText('IIT BOMBAY');
-  await expect(page.locator('#previewBackInstitute')).toHaveText('IIT BOMBAY');
-  await expect(page.locator('#mockupStudio')).toHaveAttribute('data-garment', 'tshirt');
-  await expect(page.locator('#mockupStudio')).toHaveAttribute('data-placement', 'center');
-  await expect(page.locator('#mockupStudio')).toHaveAttribute('data-back-placement', 'oversized');
+test('campus shopping has a separate destination from the brand', async ({ page }) => {
+  await expect(page.locator('#atelier')).toHaveCount(0);
+  await page.locator('.hero-secondary').click();
+  await expect(page).toHaveURL(/campus(?:\.html)?$/);
+  await expect(page.locator('.campus-products .campus-product')).toHaveCount(11);
 });
 
 test('search returns matching clothing', async ({ page }) => {
-  const mobileMenu = page.locator('#menuOpen');
   const searchButton = page.locator('#searchOpen');
-  if (await searchButton.isVisible()) {
-    await searchButton.click();
-  } else {
-    await mobileMenu.click();
-    await page.locator('#menuClose').click();
-    await page.evaluate(() => document.querySelector('#searchOverlay').classList.add('open'));
-  }
+  await expect(searchButton).toBeVisible();
+  await searchButton.click();
   await page.locator('#searchInput').fill('hoodie');
   await expect(page.locator('[data-search-product]')).toHaveCount(2);
 });
 
-test('mobile menu opens on compact viewports', async ({ page }, testInfo) => {
-  if (!testInfo.project.name.includes('mobile')) test.skip();
-  await page.locator('#menuOpen').click();
-  await expect(page.locator('#mobileMenu')).toHaveClass(/open/);
-  await page.locator('#menuClose').click();
-  await expect(page.locator('#mobileMenu')).not.toHaveClass(/open/);
+test('all three stores share a stable header and handmade search works', async ({ page }, testInfo) => {
+  let baseline;
+  for (const [section,url] of [['Brand','index.html'],['Campus','campus.html'],['Handmade','handmade.html']]) {
+    await page.goto('/'+url);
+    await expect(page.locator('.store-switch a')).toHaveCount(3);
+    await expect(page.locator('.store-switch [aria-current="page"]')).toHaveText(section);
+    for(const link of await page.locator('.store-switch a').all()) await expect(link).toBeInViewport();
+    const box=await page.locator('.store-header').boundingBox();
+    if(baseline) expect(box).toEqual(baseline); else baseline=box;
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
+    await page.screenshot({path:'test-results/'+section.toLowerCase()+'-consistent-'+testInfo.project.name+'.png'});
+  }
+  await page.locator('#searchOpen').click();
+  await page.locator('#searchInput').fill('muffler');
+  await expect(page.locator('#searchResults .search-result')).toHaveCount(1);
+  await expect(page.locator('#searchResults')).toContainText('Handmade Muffler');
 });
