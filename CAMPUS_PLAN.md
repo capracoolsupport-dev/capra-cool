@@ -12,6 +12,7 @@ Campus, Brand and Handmade remain separate pages with a shared header using the 
 4. Everyday Set ₹1,700 (₹100 saving) and Washed Set ₹2,200 (₹200 saving). Savings match complete pairs across sizes/artworks; print fees remain separate. Removing a piece removes the corresponding saving.
 5. New gold brand catalog mockups and hero, preserving the supplied gold logo as the website identity. Original product/reference images retained.
 6. Complete IIT Mandi jacket and trousers tracksuit at ₹2,999, with the selected front and back photographs. Fixed white mountain back artwork; optional ₹51 jacket printing. Other generated views remain archived locally.
+7. Minimal Tracksuit Set at ₹2,999, with the selected full-logo chest front, simple trouser mountain and text-only IIT MANDI back. Both tracksuits have separate product links and order identifiers.
 
 ## Pricing
 

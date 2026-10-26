@@ -1,8 +1,8 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png'], { eager:true, query:'?url', import:'default' });
-const sourceUrl = (id,artwork='mountain',view=0) => sourceImages[id==='iit-mandi-tracksuit'?`/assets/tracksuit/iit-mandi-tracksuit-${Number(view)===1?'back':'front'}.png`:`/assets/campus-approved/${id}-${artwork}.png`];
-const imageUrl = (id,artwork='mountain',view=0) => id==='iit-mandi-tracksuit'?`optimized/tracksuit/iit-mandi-tracksuit-${Number(view)===1?'back':'front'}.webp`:`optimized/campus-approved/${id}-${artwork}.webp`;
+const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
+const imageUrl = (id,artwork='mountain',view=0) => CAMPUS_DESIGNS.find(design=>design.id===id)?.gallery?.[Number(view)===1?1:0] || `optimized/campus-approved/${id}-${artwork}.webp`;
+const sourceUrl = (id,artwork='mountain',view=0) => sourceImages['/'+imageUrl(id,artwork,view).replace(/^optimized\//,'assets/').replace(/\.webp$/,'.png')];
 const supportEmail = 'care@capracool.com';
 const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit'};
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, PERSONALISATION_CENTS, campusUnitCents, CAMPUS_COMBOS, campusComboSavings, CAMPUS_ARTWORKS} from './campus-catalog.js';
@@ -96,14 +96,14 @@ function openDesign(id, updateHash = true) {
   activeDesign = design;
   activeArtwork = 'mountain';
   $('#designArtworks').innerHTML=availableArtworks(design).map(art=>`<button type="button" data-artwork-choice="${art.id}" aria-pressed="${art.id===activeArtwork}">${artworkLabel(design,art.id)}</button>`).join('');
-  $('#designArtworkNote').textContent=design.gallery?'White mountain back artwork with the original institute emblems. Front and back views of the complete set.':CAMPUS_ARTWORKS[0].description;
+  $('#designArtworkNote').textContent=design.galleryNote || (design.gallery?'White mountain back artwork with the original institute emblems. Front and back views of the complete set.':CAMPUS_ARTWORKS[0].description);
   $('.personalisation-toggle').lastChild.textContent=design.category==='track'?'Add jacket name / department print (+₹51)':'Add name / department print (+₹51)';
   $('#designTitle').textContent = design.name;
   $('#designCategory').textContent = `IIT MANDI / ${categories[design.category].toUpperCase()}`;
   $('#designColour').textContent = design.colour;
   $('#designDescription').textContent = design.description;
   const image = $('#designImage');
-  image.onerror = () => { image.onerror = null; image.src = sourceUrl(design.id,activeArtwork); };
+  image.onerror = () => { image.onerror = null; image.src = sourceUrl(design.id,activeArtwork,$('#designPhoto').dataset.view); };
   image.src = imageUrl(design.id,activeArtwork);
   image.alt = `${design.name} — ${design.colour}, IIT Mandi`;
   activeSize = '';
@@ -345,6 +345,6 @@ $('#designArtworks').addEventListener('click',event=>{
  activeArtwork=button.dataset.artworkChoice;
  $$('#designArtworks button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
  $('#designImage').src=imageUrl(activeDesign.id,activeArtwork,$('#designPhoto').dataset.view);
- $('#designArtworkNote').textContent=activeDesign.gallery?'Front and back views of the complete jacket and trousers set.':CAMPUS_ARTWORKS.find(art=>art.id===activeArtwork).description;
+ $('#designArtworkNote').textContent=activeDesign.galleryNote || (activeDesign.gallery?'Front and back views of the complete jacket and trousers set.':CAMPUS_ARTWORKS.find(art=>art.id===activeArtwork).description);
  updateDesignEnquiry();
 });

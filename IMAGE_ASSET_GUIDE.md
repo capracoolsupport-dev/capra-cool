@@ -9,6 +9,8 @@ The supplied gold CAPRA COOL logo is the shared website identity across Brand, C
 
 The complete IIT Mandi jacket and trousers set costs ₹2,999. Its mountain artwork is fixed. Optional jacket name/department printing costs ₹51. No unconfirmed comparison price or discount is shown for this set.
 
+The second option, Minimal Tracksuit Set, also costs ₹2,999. Its selected assets are `assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png` (complete institute chest logo and small trouser mountain) and `iit-mandi-tracksuit-minimal-back.png` (IIT MANDI lettering alone). The earlier front draft is archived locally and ignored by Git. Prompt history is recorded in `TRACKSUIT_MINIMAL_PROMPTS.json`.
+
 Other campus garments offer sizes S–XXXL, either approved artwork and optional ₹51 printing. Everyday Set costs ₹1,700 (save ₹100); Washed Set costs ₹2,200 (save ₹200). Print fees are excluded from combo savings.
 
 Built-in imagegen produced the raster edits. Prompt records are in `APPROVED_IMAGE_PROMPTS.json` and `TRACKSUIT_IMAGE_PROMPTS.json`. Source images are untouched. `scripts/optimize-images.mjs` creates WebP and AVIF copies for the website.

@@ -87,4 +87,7 @@ if(await exists(approvedDirectory)){
 }
 
 const tracksuitOutput=join(outputDir,'tracksuit');await mkdir(tracksuitOutput,{recursive:true});
-for(const view of ['front','back']){const image=sharp(join(root,'assets','tracksuit',`iit-mandi-tracksuit-${view}.png`)).resize({width:1400,withoutEnlargement:true});await Promise.all([image.clone().webp({quality:88}).toFile(join(tracksuitOutput,`iit-mandi-tracksuit-${view}.webp`)),image.clone().avif({quality:64}).toFile(join(tracksuitOutput,`iit-mandi-tracksuit-${view}.avif`))]);}
+for(const stem of ['iit-mandi-tracksuit-front','iit-mandi-tracksuit-back','iit-mandi-tracksuit-minimal-front-v2','iit-mandi-tracksuit-minimal-back']){
+ const image=sharp(join(root,'assets','tracksuit',`${stem}.png`)).resize({width:1400,withoutEnlargement:true});
+ await Promise.all([image.clone().webp({quality:88}).toFile(join(tracksuitOutput,`${stem}.webp`)),image.clone().avif({quality:64}).toFile(join(tracksuitOutput,`${stem}.avif`))]);
+}

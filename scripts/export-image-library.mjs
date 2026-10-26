@@ -34,5 +34,6 @@ await webReady('public/optimized');
 await copy('IMAGE_ASSET_GUIDE.md','IMAGE_ASSET_GUIDE.md');
 await copy('APPROVED_IMAGE_PROMPTS.json','APPROVED_IMAGE_PROMPTS.json');
 await copy('TRACKSUIT_IMAGE_PROMPTS.json','TRACKSUIT_IMAGE_PROMPTS.json');
+await copy('TRACKSUIT_MINIMAL_PROMPTS.json','TRACKSUIT_MINIMAL_PROMPTS.json');
 await fs.writeFile(path.join(destination,'image-manifest.json'),JSON.stringify(entries,null,2));
 console.log(`Exported ${entries.length} files to ${destination}; existing files preserved.`);

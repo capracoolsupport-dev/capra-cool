@@ -13,8 +13,8 @@ test('rounded launch prices exceed supplied bases and show exactly 20% off',()=>
   for(const [id,price] of Object.entries(expected))assert.equal(CAMPUS_DESIGNS.find(d=>d.id===id).priceCents,price);
 });
 
-test('tracksuit is the complete set at the confirmed price with jacket-only personalisation',()=>{
- const design=CAMPUS_DESIGNS.find(design=>design.id==='iit-mandi-tracksuit');
+for(const [id,artworkName] of [['iit-mandi-tracksuit','Mountain Print'],['iit-mandi-tracksuit-minimal','Minimal Print']])test(`${id}: complete-set price and jacket-only personalisation`,()=>{
+ const design=CAMPUS_DESIGNS.find(design=>design.id===id);
  assert.equal(design.priceCents,299900);
  assert.equal(design.listPriceCents,299900);
  assert.equal(design.gallery.length,2);
@@ -23,7 +23,7 @@ test('tracksuit is the complete set at the confirmed price with jacket-only pers
  const printed=orderTotals([{...items[0],personalisation:true,name:'CSE 2027'}]);
  assert.equal(printed.grand_total,3050);
  assert.equal(printed.items[0].print_placement,'Jacket');
- assert.equal(printed.items[0].artwork_name,'Mountain Print');
+ assert.equal(printed.items[0].artwork_name,artworkName);
  assert.throws(()=>orderTotals([{...items[0],artwork:'ridge'}]),/valid size/);
 });
 test('server ignores submitted prices and retains print instructions',()=>{
