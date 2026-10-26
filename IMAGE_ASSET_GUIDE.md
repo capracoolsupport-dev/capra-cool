@@ -1,36 +1,18 @@
-# CAPRA COOL image library
+# Approved image assets
 
-The user-requested export is at `C:\Users\hp\OneDrive\Desktop\App Image\Website Assets`. Existing files in App Image are preserved.
+The supplied gold CAPRA COOL logo is the shared website identity across Brand, Campus and Handmade. Brand apparel uses the gold logo. Campus apparel keeps the approved IIT Mandi institute chest emblem and campus back prints.
 
-- Campus: eleven named IIT Mandi product mockups. Earlier institute artwork is under Campus/Archive.
-- Handmade: the original knit and keepsake images.
-- Brand: existing CAPRA COOL catalog and lifestyle sources, retained separately.
-- Logos: the new monochrome campus mountain mark and separate monochrome ibex mark, SVG originals, transparent PNG exports and wordmark lockups. Original multicolour artwork is retained under Logos/Originals.
-- Editorial: two new generated collection styling concepts. These do not replace the original product mockups or document actual manufacturing.
-- Web-ready: optimized WebP and AVIF variants.
-- Archive: existing experimental/cropped source material, kept apart from active catalog imagery.
+- `assets/campus-approved`: seven garment/colour variants with Cream Mountain or Green Ridge artwork; original references are preserved.
+- `assets/design-gold`: gold-logo Brand apparel and hero imagery.
+- `assets/identity/capra-gold-original.png`: supplied logo, unchanged; CSS frames its transparent padding.
+- `assets/tracksuit/iit-mandi-tracksuit-front.png` and `iit-mandi-tracksuit-back.png`: selected standalone tracksuit photographs. Only these two views appear on the website. Other generated angles and the collage remain local archive sources, ignored by Git.
 
-`image-manifest.json` maps every exported filename back to its project source. Hyphens replace underscores in exported filenames. Existing destination files are never overwritten by the export script.
+The complete IIT Mandi jacket and trousers set costs ₹2,999. Its mountain artwork is fixed. Optional jacket name/department printing costs ₹51. No unconfirmed comparison price or discount is shown for this set.
 
-Campus and Handmade remain separate destinations. The Campus header uses the original mountain identity; the Brand and Handmade headers use the simplified ibex. Header layout and navigation stay consistent. Marks are single-colour with transparent backgrounds; original garment artwork is preserved.
+Other campus garments offer sizes S–XXXL, either approved artwork and optional ₹51 printing. Everyday Set costs ₹1,700 (save ₹100); Washed Set costs ₹2,200 (save ₹200). Print fees are excluded from combo savings.
 
-## New assets and generation
+Built-in imagegen produced the raster edits. Prompt records are in `APPROVED_IMAGE_PROMPTS.json` and `TRACKSUIT_IMAGE_PROMPTS.json`. Source images are untouched. `scripts/optimize-images.mjs` creates WebP and AVIF copies for the website.
 
-Built-in imagegen was used for the two raster editorials. Logo SVGs were edited directly and PNG exports rendered with Sharp. Project files:
+The image-library export is organised under `App Image/Website Assets/2026-10-27 Approved` with Campus/Approved, Campus/Tracksuit, Brand/Gold, Logos, Web-ready and Archive folders. Run `scripts/export-image-library.mjs` with that destination to create the manifest and copies; existing files are preserved.
 
-- `assets/editorial/campus-collection-editorial.png`
-- `assets/editorial/handmade-knits-editorial.png`
-- `assets/identity/campus-mountain-monochrome.svg`
-- `assets/identity/capra-ibex-monochrome.svg`
-
-### Campus editorial prompt
-
-Create one photorealistic editorial merchandise photograph for a minimal college campus clothing website, landscape 1536x1024. Reference images are garment design references; preserve black hoodie and maroon cream polo colours, silhouette and back artwork. Show only the BACK of one black hoodie and BACK of one maroon polo, neatly hanging side by side on simple wooden hangers from a matte dark metal rail. Their cream back graphics read exactly 'IIT MANDI', with the existing mountain design underneath; retain tiny tagline only if accurately possible. Do not show or invent chest emblems. Calm light warm-grey studio wall, soft natural window light, honest cotton and fleece texture, restrained collegiate look, balanced large garment silhouettes, no people, no props other than rail, no graphic overlays, no extra logos, no discount or title text, no institutional building or claims of endorsement. This is a collection editorial, not a change to the product design. Keep all garment hems visible, clean high-quality photography.
-
-References: `assets/campus/mandi-mountain-hoodie.png`, `assets/campus/mandi-maroon-polo.png`.
-
-### Handmade editorial prompt
-
-Create one photorealistic editorial still-life for a restrained handmade knits and keepsakes ecommerce section. Landscape 1536x1024. Reference 1 is the exact burgundy crocheted fringed muffler design. Reference 2 is the exact yellow sunflower crochet keychain with green centre, green leaf and gold ring. Preserve their colours, crochet texture and recognizable shapes, no invented accessories for sale. Place the folded burgundy muffler on a light natural oak table, fringe draping gently over the front edge. Place the sunflower keychain clearly beside it. Soft warm natural side light, off-white plaster wall, quietly tactile, realistic yarn fibres, no person, no hands, no text, no logos, no packaging, no tools, no artificial bokeh, no collage. Leave a little empty breathing room around the objects; they should occupy the central two thirds and remain fully visible. This is a styled collection concept, not evidence of actual manufacturing.
-
-References: `assets/handmade-muffler.jpg`, `assets/sunflower-keychain.jpg`.
+Browser checkout tests intercept writes and do not create real orders. Live database persistence requires separate authenticated order verification.

@@ -1,41 +1,23 @@
-# Capra Cool GitHub update
+# CAPRA COOL storefront
 
-Upload these files into the capracoolsupport-dev/capra-cool repository, preserving the same paths:
+The Vite site has separate Brand (index.html), IIT Mandi Campus (campus.html), Handmade (handmade.html), Policies and staff Admin pages. All customer store headers use the supplied gold CAPRA COOL identity.
 
-- index.html
-- script.js
-- styles.css
-- ssets/capra-cool-studio-front.jpg
-- ssets/capra-cool-lifestyle.jpg
-- ssets/capra-cool-fabric-detail.jpg
-- ssets/capra-cool-color-lineup.jpg
+## Development
 
-What this update adds:
+- npm run dev starts the local site and creates optimized images.
+- npm run build optimizes images and builds all five HTML entries.
+- npm run test:e2e runs Chrome browser checks against the production preview on port 4173.
+- node --test tests/campus-pricing.test.mjs checks trusted prices, artwork validation and combo arithmetic.
+- On Windows PowerShell, use npm.cmd if npm scripts are restricted.
 
-- Adds the Capra Cool Tee as a new shop product.
-- Updates the shop count from 6 pieces to 7 pieces.
-- Adds a new homepage product-story section with four generated visuals.
-- Adds CSS for the new product-story image grid.
+## Campus catalog
 
-After pushing to GitHub, Vercel should deploy automatically from the connected repository.
+Seven garment/colour variants each offer Cream Mountain and Green Ridge artwork, based on the approved original designs. The eighth product is the complete IIT Mandi tracksuit at ₹2,999, with selected front/back photographs and fixed mountain artwork. Sizes S–XXXL and optional ₹51 printing are available; tracksuit printing applies to the jacket. campus-catalog.js is shared by the UI and order API. Combo savings apply to complete pairs at the server as well as in the bag. Each ordered item stores the artwork, size and print instructions.
 
-## Storefront development
+Campus checkout posts to /api/orders. Configure the Supabase server variables and staff token in .env.example on the deployment. Vite alone does not execute Vercel functions. Browser tests intercept order writes and do not create real orders; live deployment credentials and database persistence are not verified.
 
-The current refinement plan and product review are in `STOREFRONT_PLAN.md`. The shared visual refinement is in `storefront.css`, applied to the storefront, policies and admin pages.
+## Images
 
-- Run `npm run dev` for the local preview.
-- Run `npm run build` to optimize images and build the brand, campus, policies and admin HTML entry points.
-- Run `npm run test:e2e` after building. Tests run against the production preview on port 4173 using installed Chrome, including mobile and tablet emulation. On PowerShell systems that restrict npm scripts, use `npm.cmd`.
-- Checkout tests intercept data writes; they do not submit real orders.
-- Add new catalog images to `scripts/optimize-images.mjs` and the source URL map in `script.js` so both optimized files and fingerprinted fallbacks are available in deployment.
+Active campus mockups are in assets/campus-approved, selected tracksuit photographs in assets/tracksuit, brand mockups in assets/design-gold, and the supplied gold logo in assets/identity/capra-gold-original.png. The CSS logo frame preserves original pixels while hiding transparent padding. The source image folder on the Desktop is preserved. IMAGE_ASSET_GUIDE.md documents the organised export; APPROVED_IMAGE_PROMPTS.json and TRACKSUIT_IMAGE_PROMPTS.json record the built-in imagegen prompts.
 
-## IIT Mandi campus store
-
-`campus.html` is the separate campus destination; `index.html` retains the brand store. The scope and product decisions are in `CAMPUS_PLAN.md`. Eleven supplied mockups live in `assets/campus`; the image optimizer generates WebP and AVIF versions during development and builds.
-
-`campus-catalog.js` shares trusted prices and sizes between the browser and order API. Launch prices are rounded whole-rupee amounts above the supplied base prices; list prices are launch prices divided by 0.8, showing exactly 20% off. Personalisation adds ₹51. All calculations use integer paise. Run `node --test tests/campus-pricing.test.mjs` for pricing and server validation checks.
-
-Campus checkout posts to `/api/orders`. Configure the server Supabase variables and staff token described in `.env.example` on the deployment. Browser checkout tests use intercepted responses; live database writes and deployment credentials have not been verified. Vite alone does not serve Vercel API functions.
-
-
-Campus, Brand and Handmade share `store-header.css` and identical header markup. Handmade lives at `handmade.html`; its four existing items use availability enquiries until prices are confirmed.
+CAMPUS_PLAN.md records the current product decisions and verification. store-header.css styles the shared store navigation; campus.css and storefront.css style the campus and brand shopping pages.

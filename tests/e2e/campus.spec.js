@@ -5,10 +5,10 @@ test.beforeEach(async({page})=>{
   await page.goto('/campus.html');
 });
 
-test('campus identity, first-screen action and all eleven production images',async({page},testInfo)=>{
+test('campus identity, first-screen action and approved artwork production images',async({page},testInfo)=>{
   await expect(page.getByRole('heading',{name:'IIT Mandi. On repeat.'})).toBeVisible();
   await expect(page.locator('.hero-copy .button')).toBeInViewport();
-  await expect(page.locator('.campus-product')).toHaveCount(11);
+  await expect(page.locator('.campus-product')).toHaveCount(8);
   await expect.poll(()=>page.locator('.hero-rack img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBeTruthy();
   await page.screenshot({path:`test-results/campus-${testInfo.project.name}.png`});
   for(const image of await page.locator('.campus-product img, .campus-editorial img').all()){
@@ -22,7 +22,7 @@ test('campus identity, first-screen action and all eleven production images',asy
 });
 
 test('category navigation, washed edit and sorting operate on the catalog',async({page})=>{
-  for(const [category,count] of [['polo',5],['hoodie',4],['zip',1],['tee',1]]){
+  for(const [category,count] of [['polo',3],['hoodie',2],['zip',1],['tee',1],['track',1]]){
     await page.locator(`.filter-tabs [data-category="${category}"]`).click();
     await expect(page.locator('.campus-product')).toHaveCount(count);
   }
@@ -32,16 +32,16 @@ test('category navigation, washed edit and sorting operate on the catalog',async
   await page.locator('#clearCampusSearch').click();
   await page.locator('.filter-tabs [data-category="all"]').click();
   await page.locator('#campusSort').selectOption('name');
-  await expect(page.locator('.campus-product h3').first()).toHaveText('Contrast Polo');
-  await expect(page.locator('.campus-product')).toHaveCount(11);
+  await expect(page.locator('.campus-product h3').first()).toHaveText('Campus Tracksuit Set');
+  await expect(page.locator('.campus-product')).toHaveCount(8);
 });
 
-test('gallery provides front, side, back and direct product links',async({page})=>{
-  await page.goto('/campus.html#design/mandi-ridge-hoodie');
+test('revised gallery provides front, back and direct product links',async({page})=>{
+  await page.goto('/campus.html#design/mandi-mountain-hoodie');
   await expect(page.locator('#campusProductDialog')).toBeVisible();
-  await expect(page.locator('#designTitle')).toHaveText('Ridge Hoodie');
-  await page.locator('#galleryControls [data-view="2"]').click();
-  await expect(page.locator('#designPhoto')).toHaveAttribute('data-view','2');
+  await expect(page.locator('#designTitle')).toHaveText('Mountain Hoodie');
+  await page.locator('#galleryControls [data-view="1"]').click();
+  await expect(page.locator('#designPhoto')).toHaveAttribute('data-view','1');
   await page.locator('#galleryControls [data-view="all"]').click();
   await expect(page.locator('#designPhoto')).toHaveClass(/show-overview/);
   await page.keyboard.press('Escape');
@@ -83,7 +83,7 @@ test('search keyboard flow finds only campus designs',async({page})=>{
   await expect(page.locator('#campusSearchDialog')).not.toBeVisible();
   await expect(page.locator('.campus-product')).toHaveCount(2);
   await page.locator('#clearCampusSearch').click();
-  await expect(page.locator('.campus-product')).toHaveCount(11);
+  await expect(page.locator('.campus-product')).toHaveCount(8);
   await page.locator('#campusSearchOpen').click();
   await page.keyboard.press('Escape');
   await expect(page.locator('#campusSearchOpen')).toBeFocused();
@@ -139,4 +139,44 @@ test('staff order details show escaped personalisation instructions',async({page
   await page.locator('.admin-order-items summary').click();
   await expect(page.locator('.admin-order-items')).toContainText('<b>CSE 2027</b>');
   await expect(page.locator('.admin-order-items b')).toHaveCount(0);
+});
+
+test('both approved artworks are available for every garment and colour',async({page},testInfo)=>{
+ const ids=['mandi-mountain-polo','mandi-maroon-polo','mandi-contrast-polo','mandi-mountain-hoodie','mandi-mountain-zip','mandi-washed-tee','mandi-washed-hoodie'];
+ for(const id of ids){
+  await page.locator(`[data-open-design="${id}"]`).first().click();
+  await expect(page.locator('#designArtworks button')).toHaveCount(2);
+  for(const artwork of ['ridge','mountain']){
+   await page.locator(`[data-artwork-choice="${artwork}"]`).click();
+   await expect(page.locator('#designImage')).toHaveAttribute('src',new RegExp(`${id}-${artwork}\\.webp$`));
+   await expect.poll(()=>page.locator('#designImage').evaluate(image=>image.complete&&image.naturalWidth>0)).toBeTruthy();
+   if(id==='mandi-maroon-polo' && artwork==='ridge')await page.screenshot({path:`test-results/approved-artwork-${testInfo.project.name}.png`});
+  }
+  await page.keyboard.press('Escape');
+ }
+});
+
+test('combo sizes, artwork, print fees and savings survive checkout and removal',async({page},testInfo)=>{
+ await page.locator('[data-open-combo="everyday-set"]').click();
+ const form=page.locator('#campusComboForm');
+ await form.locator('[name="size-mandi-mountain-polo"]').selectOption('S');
+ await form.locator('[name="size-mandi-mountain-hoodie"]').selectOption('XXXL');
+ await form.locator('[name="artwork-mandi-mountain-hoodie"]').selectOption('ridge');
+ await form.locator('[name="print-mandi-mountain-hoodie"]').check();
+ await form.locator('[name="name-mandi-mountain-hoodie"]').fill('CSE 2027');
+ await expect(page.locator('#comboPrice')).toContainText('₹1,751');
+ await form.getByRole('button',{name:'Add both to bag'}).click();
+ await expect(page.locator('#campusBagCount')).toHaveText('2');
+ await expect(page.locator('#campusBagTotals .combo-saving')).toContainText('−₹100');
+ await expect(page.locator('#enquiryBagItems')).toContainText('Green Ridge');
+ await page.reload();await page.locator('#campusBagOpen').click();
+ await page.locator('#campusCheckoutOpen').click();
+ await expect(page.locator('#campusCheckoutSummary')).toContainText('Green Ridge');
+ await expect(page.locator('#campusCheckoutSummary')).toContainText('₹1,751');
+ await page.keyboard.press('Escape');await page.locator('#campusBagOpen').click();
+ await page.locator('.enquiry-item').filter({hasText:'Mountain Hoodie'}).locator('[data-remove]').click();
+ await expect(page.locator('#campusBagTotals .combo-saving')).toHaveCount(0);
+ await expect(page.locator('#campusBagTotals')).toContainText('₹699');
+ await page.keyboard.press('Escape');
+ await page.locator('#combos').screenshot({path:`test-results/approved-combos-${testInfo.project.name}.png`});
 });

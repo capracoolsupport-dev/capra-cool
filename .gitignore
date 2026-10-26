@@ -8,6 +8,8 @@ public/optimized/
 playwright-report/
 test-results/
 artifacts/review/
+artifacts/design-review/
+assets/design-v2/
 Shopify_optimized/
 *.log
 *.zip
@@ -17,3 +19,8 @@ mobile_*.png
 capra_*.png
 test_*.cjs
 push_to_github.cjs
+
+assets/tracksuit/iit-mandi-tracksuit-side.png
+assets/tracksuit/iit-mandi-tracksuit-detail.png
+assets/tracksuit/iit-mandi-tracksuit-reference.png
+assets/identity/capra-mountain-master*

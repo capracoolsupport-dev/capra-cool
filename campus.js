@@ -1,11 +1,11 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const sourceImages = import.meta.glob('/assets/campus/*.png', { eager:true, query:'?url', import:'default' });
-const sourceUrl = id => sourceImages[`/assets/campus/${id}.png`];
-const imageUrl = id => `optimized/campus/${id}.webp`;
+const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png'], { eager:true, query:'?url', import:'default' });
+const sourceUrl = (id,artwork='mountain',view=0) => sourceImages[id==='iit-mandi-tracksuit'?`/assets/tracksuit/iit-mandi-tracksuit-${Number(view)===1?'back':'front'}.png`:`/assets/campus-approved/${id}-${artwork}.png`];
+const imageUrl = (id,artwork='mountain',view=0) => id==='iit-mandi-tracksuit'?`optimized/tracksuit/iit-mandi-tracksuit-${Number(view)===1?'back':'front'}.webp`:`optimized/campus-approved/${id}-${artwork}.webp`;
 const supportEmail = 'care@capracool.com';
-const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt'};
-import {CAMPUS_DESIGNS, CAMPUS_SIZES, PERSONALISATION_CENTS, campusUnitCents} from './campus-catalog.js';
+const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit'};
+import {CAMPUS_DESIGNS, CAMPUS_SIZES, PERSONALISATION_CENTS, campusUnitCents, CAMPUS_COMBOS, campusComboSavings, CAMPUS_ARTWORKS} from './campus-catalog.js';
 const money = cents => `₹${(cents / 100).toLocaleString('en-IN',{minimumFractionDigits:cents % 100 ? 2 : 0, maximumFractionDigits:2})}`;
 
 let category = 'all';
@@ -14,9 +14,12 @@ let washedOnly = false;
 let sort = 'featured';
 let activeDesign = null;
 let activeSize = '';
+let activeArtwork = 'mountain';
 let previousHash = '#collection';
 const dialogOpeners = new WeakMap();
 const designById = id => CAMPUS_DESIGNS.find(design => design.id === id);
+const availableArtworks = design => CAMPUS_ARTWORKS.filter(art=>!design.artworks||design.artworks.includes(art.id));
+const artworkLabel = (design,id) => design.artworkName || CAMPUS_ARTWORKS.find(art=>art.id===id)?.name || 'Cream Mountain';
 const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const mailLink = (subject, body) => `mailto:${supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
@@ -25,18 +28,18 @@ function loadBag() {
     const saved = JSON.parse(localStorage.getItem('capraCampusEnquiry') || '[]');
     return Array.isArray(saved) ? saved.filter(item => item && designById(item.id) && CAMPUS_SIZES.includes(item.size)).map(item => ({
       id:item.id, qty:Math.min(10,Math.max(1,Math.floor(Number(item.qty) || 1))),
-      size:item.size, personalisation:Boolean(item.personalisation && String(item.name || '').trim()), name:String(item.name || '').slice(0,40)
+      size:item.size, artwork:CAMPUS_ARTWORKS.some(art=>art.id===item.artwork)?item.artwork:'mountain', personalisation:Boolean(item.personalisation && String(item.name || '').trim()), name:String(item.name || '').slice(0,40)
     })) : [];
   } catch { return []; }
 }
 let bag = loadBag();
 
-function artMarkup(design, {view = 0, overview = false, loading = 'lazy'} = {}) {
-  return `<div class="campus-photo${overview ? ' show-overview' : ''}" data-view="${view}" data-panels="${design.panels || 2}"><img src="${imageUrl(design.id)}" data-design-image="${design.id}" alt="${escapeHtml(`${design.name}, IIT Mandi — ${design.colour}`)}" loading="${loading}" decoding="async"></div>`;
+function artMarkup(design, {view = 0, overview = false, loading = 'lazy', artwork = 'mountain'} = {}) {
+  return `<div class="campus-photo${design.gallery?' standalone-photo':''}${overview ? ' show-overview' : ''}" data-view="${view}" data-panels="${design.panels || 2}"><img src="${imageUrl(design.id,artwork,view)}" data-design-image="${design.id}" data-artwork="${artwork}" alt="${escapeHtml(`${design.name}, IIT Mandi — ${design.colour}`)}" loading="${loading}" decoding="async"></div>`;
 }
 function bindImageFallbacks(root) {
   $$('img[data-design-image]',root).forEach(image => {
-    image.addEventListener('error', () => { image.src = sourceUrl(image.dataset.designImage); }, {once:true});
+    image.addEventListener('error', () => { image.src = sourceUrl(image.dataset.designImage,image.dataset.artwork,image.closest('.campus-photo').dataset.view); }, {once:true});
   });
 }
 function matchingDesigns(search = query, selectedCategory = category) {
@@ -55,7 +58,7 @@ function renderProducts() {
     <div class="product-meta"><span>IIT MANDI / ${categories[design.category].toUpperCase()}</span>${design.collection === 'Washed' ? '<span>WASHED EDIT</span>' : ''}</div>
     <h3><a href="#design/${design.id}" data-open-design="${design.id}">${escapeHtml(design.name)}</a></h3><div class="product-bottom"><p>${escapeHtml(design.colour)}${design.gsm ? ` · ${design.gsm} GSM` : ''}</p><button type="button" data-open-design="${design.id}">Choose size ↗</button></div><div class="card-prices"><strong>${money(design.priceCents)}</strong><s aria-label="List price ${money(design.listPriceCents)}">${money(design.listPriceCents)}</s><span class="launch-label">LAUNCH −20%</span></div>
   </article>`).join('') || '<div class="empty-results"><h3>No designs found.</h3><p>Try a different category or search.</p><button class="text-button" type="button" data-reset-filters>Show all designs ↗</button></div>';
-  $('#campusResultCount').textContent = `${designs.length} ${designs.length === 1 ? 'design' : 'designs'}${washedOnly ? ' · Washed edit' : ''}`;
+  $('#campusResultCount').textContent = `${designs.length} ${designs.length === 1 ? 'style' : 'styles'}${washedOnly ? ' · Washed edit' : ''}`;
   $$('.filter-tabs button').forEach(button => {
     const selected = button.dataset.category === category;
     button.classList.toggle('active',selected);
@@ -80,6 +83,8 @@ function openDialog(dialog, focusTarget) {
 }
 function setGalleryView(view) {
   const photo = $('#designPhoto');
+  photo.classList.toggle('standalone-photo',Boolean(activeDesign.gallery));
+  if(activeDesign.gallery)$('#designImage').src=imageUrl(activeDesign.id,activeArtwork,view);
   photo.dataset.view = view === 'all' ? '0' : view;
   photo.dataset.panels = activeDesign.panels || 2;
   photo.classList.toggle('show-overview',view === 'all');
@@ -89,13 +94,17 @@ function openDesign(id, updateHash = true) {
   const design = designById(id);
   if (!design) return;
   activeDesign = design;
+  activeArtwork = 'mountain';
+  $('#designArtworks').innerHTML=availableArtworks(design).map(art=>`<button type="button" data-artwork-choice="${art.id}" aria-pressed="${art.id===activeArtwork}">${artworkLabel(design,art.id)}</button>`).join('');
+  $('#designArtworkNote').textContent=design.gallery?'White mountain back artwork with the original institute emblems. Front and back views of the complete set.':CAMPUS_ARTWORKS[0].description;
+  $('.personalisation-toggle').lastChild.textContent=design.category==='track'?'Add jacket name / department print (+₹51)':'Add name / department print (+₹51)';
   $('#designTitle').textContent = design.name;
   $('#designCategory').textContent = `IIT MANDI / ${categories[design.category].toUpperCase()}`;
   $('#designColour').textContent = design.colour;
   $('#designDescription').textContent = design.description;
   const image = $('#designImage');
-  image.onerror = () => { image.onerror = null; image.src = sourceUrl(design.id); };
-  image.src = imageUrl(design.id);
+  image.onerror = () => { image.onerror = null; image.src = sourceUrl(design.id,activeArtwork); };
+  image.src = imageUrl(design.id,activeArtwork);
   image.alt = `${design.name} — ${design.colour}, IIT Mandi`;
   activeSize = '';
   $('#designSizes').innerHTML = CAMPUS_SIZES.map(size=>`<button type="button" data-size="${size}" aria-pressed="false">${size}</button>`).join('');
@@ -104,7 +113,7 @@ function openDesign(id, updateHash = true) {
   $('#personalisationField').hidden = !design.personalised;
   $('#designOptionError').hidden = true;
   $('#saveDesign').innerHTML = 'Choose a size <span aria-hidden="true">+</span>';
-  const views = design.panels === 3 ? [['0','Front'],['1','Side'],['2','Back'],['all','All views']] : [['0','Front'],['1','Back'],['all','Both views']];
+  const views = design.gallery ? [['0','Front'],['1','Back']] : design.panels === 3 ? [['0','Front'],['1','Side'],['2','Back'],['all','All views']] : [['0','Front'],['1','Back'],['all','Both views']];
   $('#galleryControls').innerHTML = views.map(([view,name])=>`<button type="button" data-view="${view}" aria-pressed="false">${name}</button>`).join('');
   setGalleryView(design.overview ? 'all' : '0');
   updateDesignEnquiry();
@@ -114,15 +123,15 @@ function openDesign(id, updateHash = true) {
   $('#campusProductDialog').scrollTop = 0;
 }
 function preference() {
-  return {size:activeSize,personalisation:$('#designPersonalisation').checked,name:$('#designPersonalisation').checked ? $('#designName').value.trim() : ''};
+  return {size:activeSize,artwork:activeArtwork,personalisation:$('#designPersonalisation').checked,name:$('#designPersonalisation').checked ? $('#designName').value.trim() : ''};
 }
 function designMessage(design, item = {}) {
-  return `${design.name} (${design.colour})\nDesign: ${design.id}\nQuantity: ${item.qty || 1}\nSize preference: ${item.size || 'Please help me choose'}${item.name ? `\nName for print: ${item.name}` : ''}`;
+  return `${design.name} (${design.colour})\nDesign: ${design.id}\nArtwork: ${artworkLabel(design,item.artwork||'mountain')}\nQuantity: ${item.qty || 1}\nSize preference: ${item.size || 'Please help me choose'}${item.name ? `\nName for print: ${item.name}` : ''}`;
 }
 function updateDesignEnquiry() {
   if (!activeDesign) return;
   const selected = preference();
-  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong><s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s><small>20% launch discount on garment · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
+  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.gallery?'Jacket + trousers':'20% launch discount on garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
   if (activeSize) $('#saveDesign').innerHTML = `Add to bag — ${money(campusUnitCents(activeDesign,selected.personalisation))} <span aria-hidden="true">+</span>`;
   $('#enquireDesign').href = mailLink(`IIT Mandi enquiry — ${activeDesign.name}`,`Hello CAPRA COOL,\n\nPlease confirm price, available sizes and delivery for:\n\n${designMessage(activeDesign,preference())}\n\nThank you.`);
 }
@@ -132,9 +141,10 @@ function saveDesign(id, item = {}) {
   const size = String(item.size || '').slice(0,20);
   const name = String(item.name || '').slice(0,40);
   const personalisation = Boolean(item.personalisation);
-  const existing = bag.find(entry => entry.id === id && entry.size === size && entry.name === name && entry.personalisation === personalisation);
+  const artwork=CAMPUS_ARTWORKS.some(art=>art.id===item.artwork)?item.artwork:'mountain';
+  const existing = bag.find(entry => entry.id === id && entry.artwork === artwork && entry.size === size && entry.name === name && entry.personalisation === personalisation);
   if (existing) existing.qty = Math.min(10, existing.qty + 1);
-  else bag.push({id,size,name,personalisation,qty:1});
+  else bag.push({id,size,artwork,name,personalisation,qty:1});
   persistBag();
   showToast(`${design.name} added to your bag.`);
 }
@@ -145,20 +155,21 @@ function persistBag() {
 }
 function bagTotals() {
   const subtotal = bag.reduce((total,item)=>total+campusUnitCents(designById(item.id),item.personalisation)*item.qty,0);
-  const shipping = subtotal && subtotal < 99900 ? 9900 : 0;
-  return {subtotal,shipping,total:subtotal+shipping};
+  const {discountCents:discount}=campusComboSavings(bag);
+  const shipping = subtotal && subtotal-discount < 99900 ? 9900 : 0;
+  return {subtotal,discount,shipping,total:subtotal-discount+shipping};
 }
 function renderBag() {
   $('#campusBagCount').textContent = bag.reduce((total,item)=>total+item.qty,0);
   $('#enquiryBagItems').innerHTML = bag.length ? bag.map((item,index)=> {
     const design = designById(item.id);
-    return `<article class="enquiry-item">${artMarkup(design,{overview:true})}<div><strong>${escapeHtml(design.name)}</strong><p>${escapeHtml(design.colour)} · ${money(campusUnitCents(design,item.personalisation) * item.qty)}</p><small>Size: ${escapeHtml(item.size)}${item.name ? `<br>Name / department: ${escapeHtml(item.name)} (+₹51 each)` : ''}</small><div class="quantity-controls"><button type="button" data-quantity="-1" data-index="${index}" aria-label="Decrease ${escapeHtml(design.name)} quantity">−</button><span>${item.qty}</span><button type="button" data-quantity="1" data-index="${index}" aria-label="Increase ${escapeHtml(design.name)} quantity">+</button></div></div><button type="button" class="remove-design" data-remove="${index}" aria-label="Remove ${escapeHtml(design.name)}">×</button></article>`;
+    return `<article class="enquiry-item">${artMarkup(design,{overview:true,artwork:item.artwork})}<div><strong>${escapeHtml(design.name)}</strong><p>${escapeHtml(design.colour)} · ${money(campusUnitCents(design,item.personalisation) * item.qty)}</p><small>${escapeHtml(artworkLabel(designById(item.id),item.artwork))}<br>Size: ${escapeHtml(item.size)}${item.name ? `<br>Name / department: ${escapeHtml(item.name)} (+₹51 each)` : ''}</small><div class="quantity-controls"><button type="button" data-quantity="-1" data-index="${index}" aria-label="Decrease ${escapeHtml(design.name)} quantity">−</button><span>${item.qty}</span><button type="button" data-quantity="1" data-index="${index}" aria-label="Increase ${escapeHtml(design.name)} quantity">+</button></div></div><button type="button" class="remove-design" data-remove="${index}" aria-label="Remove ${escapeHtml(design.name)}">×</button></article>`;
   }).join('') : '<div class="empty-bag"><span aria-hidden="true">↗</span><h3>Find a design you like.</h3><p>Your campus pieces will appear here.</p><button class="text-button" type="button" data-close-dialog>Explore the collection ↗</button></div>';
   const email = $('#emailCampusBag');
   email.hidden = !bag.length;
   email.href = mailLink('IIT Mandi collection enquiry',`Hello CAPRA COOL,\n\nPlease confirm prices, sizes, availability and delivery for these designs:\n\n${bag.map(item=>designMessage(designById(item.id),item)).join('\n\n')}\n\nThank you.`);
   const totals = bagTotals();
-  $('#campusBagTotals').innerHTML = `<div><span>Subtotal</span><strong>${money(totals.subtotal)}</strong></div><div><span>Shipping</span><span>${totals.shipping ? money(totals.shipping) : bag.length ? 'Free' : '—'}</span></div><div><span>Total</span><strong>${money(totals.total)}</strong></div><small>Free shipping from ₹999. Personalisation charged per garment.</small>`;
+  $('#campusBagTotals').innerHTML = `<div><span>Subtotal</span><strong>${money(totals.subtotal)}</strong></div>${totals.discount?`<div class="combo-saving"><span>Combo saving</span><strong>−${money(totals.discount)}</strong></div>`:''}<div><span>Shipping</span><span>${totals.shipping ? money(totals.shipping) : bag.length ? 'Free' : '—'}</span></div><div><span>Total</span><strong>${money(totals.total)}</strong></div><small>Free shipping from ₹999 after savings. Personalisation charged per garment.</small>`;
   $('#campusCheckoutOpen').disabled = !bag.length;
   bindImageFallbacks($('#enquiryBagItems'));
 }
@@ -258,7 +269,7 @@ document.addEventListener('keydown',event=>{
 $('#campusCheckoutOpen').addEventListener('click',()=>{
   if(!bag.length)return;
   const totals=bagTotals();
-  $('#campusCheckoutSummary').innerHTML=bag.map(item=>`<div><span>${escapeHtml(designById(item.id).name)} · ${escapeHtml(item.size)} × ${item.qty}${item.name ? `<br><small>Print: ${escapeHtml(item.name)}</small>` : ''}</span><strong>${money(campusUnitCents(designById(item.id),item.personalisation)*item.qty)}</strong></div>`).join('')+`<div><span>Shipping</span><strong>${totals.shipping ? money(totals.shipping) : 'Free'}</strong></div><div><span>Total · Cash on Delivery</span><strong>${money(totals.total)}</strong></div>`;
+  $('#campusCheckoutSummary').innerHTML=bag.map(item=>`<div><span>${escapeHtml(designById(item.id).name)} · ${escapeHtml(item.size)} × ${item.qty}<small> · ${escapeHtml(artworkLabel(designById(item.id),item.artwork))}</small>${item.name ? `<br><small>Print: ${escapeHtml(item.name)}</small>` : ''}</span><strong>${money(campusUnitCents(designById(item.id),item.personalisation)*item.qty)}</strong></div>`).join('')+`${totals.discount?`<div class="combo-saving"><span>Combo saving</span><strong>−${money(totals.discount)}</strong></div>`:''}<div><span>Shipping</span><strong>${totals.shipping ? money(totals.shipping) : 'Free'}</strong></div><div><span>Total · Cash on Delivery</span><strong>${money(totals.total)}</strong></div>`;
   $('#campusCheckoutForm').hidden=false;
   $('#campusOrderSuccess').hidden=true;
   $('#campusCheckoutError').hidden=true;
@@ -288,3 +299,52 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#design/'
 renderProducts();
 renderBag();
 if(location.hash.startsWith('#design/'))openDesign(location.hash.slice(8),false);
+
+let activeCombo;
+function renderCombos(){
+ $('#campusCombos').innerHTML=CAMPUS_COMBOS.map(combo=>{
+   const designs=combo.items.map(designById);
+   const separate=designs.reduce((total,design)=>total+design.priceCents,0);
+   return `<article class="combo-card"><div class="combo-art">${designs.map(design=>artMarkup(design,{view:1})).join('')}</div><div class="combo-copy"><p class="eyebrow">SAVE ${money(combo.savingCents)}</p><h3>${combo.name}</h3><p>${combo.description}</p><div class="combo-card-bottom"><div><strong>${money(separate-combo.savingCents)}</strong><s>${money(separate)} separately</s></div><button class="text-button" type="button" data-open-combo="${combo.id}">Choose your sizes ↗</button></div></div></article>`;
+ }).join('');
+ bindImageFallbacks($('#campusCombos'));
+}
+function updateComboPrice(){
+ if(!activeCombo)return;
+ const printCount=$$('#campusComboForm [data-combo-print]:checked').length;
+ const separate=activeCombo.items.reduce((total,id)=>total+designById(id).priceCents,0);
+ $('#comboPrice').textContent=money(separate-activeCombo.savingCents+printCount*PERSONALISATION_CENTS)+' · Save '+money(activeCombo.savingCents)+(printCount?' · Name printing included':' · Free shipping');
+}
+document.addEventListener('click',event=>{
+ const button=event.target.closest('[data-open-combo]');if(!button)return;
+ activeCombo=CAMPUS_COMBOS.find(combo=>combo.id===button.dataset.openCombo);
+ $('#comboTitle').textContent=activeCombo.name;
+ $('#comboDescription').textContent=activeCombo.description;
+ $('#comboOptions').innerHTML=activeCombo.items.map(id=>{const design=designById(id);return `<fieldset class="combo-option"><legend>${escapeHtml(design.name)}</legend><div class="combo-item-layout">${artMarkup(design)}<div><label>Size for ${escapeHtml(design.name)}<select name="size-${id}" required><option value="">Choose size</option>${CAMPUS_SIZES.map(size=>'<option>'+size+'</option>').join('')}</select></label><label>Artwork<select name="artwork-${id}" data-combo-artwork="${id}">${CAMPUS_ARTWORKS.map(art=>'<option value="'+art.id+'">'+art.name+'</option>').join('')}</select></label><label class="combo-print-toggle"><input type="checkbox" name="print-${id}" data-combo-print="${id}">Add name print (+₹51)</label><label class="combo-print-field" hidden>Name / department for ${escapeHtml(design.name)}<input name="name-${id}" maxlength="40" placeholder="Exact text to print"></label></div></div></fieldset>`;}).join('');
+ bindImageFallbacks($('#comboOptions'));updateComboPrice();openDialog($('#campusComboDialog'));
+});
+$('#campusComboForm').addEventListener('change',event=>{
+ if(event.target.matches('[data-combo-artwork]')){const image=event.target.closest('.combo-option').querySelector('img');image.src=imageUrl(event.target.dataset.comboArtwork,event.target.value);image.dataset.artwork=event.target.value;}
+ if(event.target.matches('[data-combo-print]')){
+  const label=event.target.closest('.combo-option').querySelector('.combo-print-field');label.hidden=!event.target.checked;label.querySelector('input').required=event.target.checked;
+ }
+ updateComboPrice();
+});
+$('#campusComboForm').addEventListener('submit',event=>{
+ event.preventDefault();const form=event.currentTarget;if(!form.reportValidity()||!activeCombo)return;
+ const data=new FormData(form);
+ const selections=activeCombo.items.map(id=>({id,size:data.get('size-'+id),artwork:data.get('artwork-'+id),personalisation:data.get('print-'+id)==='on',name:String(data.get('name-'+id)||'').trim()}));
+ if(selections.some(item=>item.personalisation&&!item.name))return;
+ for(const item of selections)saveDesign(item.id,{...item,name:item.personalisation?item.name:''});
+ openDialog($('#campusBagDialog'));showToast(activeCombo.name+' added. Combo saving applied.');
+});
+renderCombos();
+
+$('#designArtworks').addEventListener('click',event=>{
+ const button=event.target.closest('[data-artwork-choice]');if(!button||!activeDesign)return;
+ activeArtwork=button.dataset.artworkChoice;
+ $$('#designArtworks button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+ $('#designImage').src=imageUrl(activeDesign.id,activeArtwork,$('#designPhoto').dataset.view);
+ $('#designArtworkNote').textContent=activeDesign.gallery?'Front and back views of the complete jacket and trousers set.':CAMPUS_ARTWORKS.find(art=>art.id===activeArtwork).description;
+ updateDesignEnquiry();
+});

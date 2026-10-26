@@ -63,3 +63,28 @@ if (await exists(campusDirectory)) {
     console.log(`[images] optimized campus/${filename}`);
   }
 }
+
+const designDirectory=join(root,'assets','design-gold');
+if(await exists(designDirectory)){
+ const target=join(outputDir,'design-gold');await mkdir(target,{recursive:true});
+ for(const filename of await readdir(designDirectory)){
+  if(!filename.endsWith('.png'))continue;
+  const stem=basename(filename,'.png');const source=sharp(join(designDirectory,filename)).resize({width:1600,withoutEnlargement:true});
+  await Promise.all([source.clone().webp({quality:88,effort:5}).toFile(join(target,stem+'.webp')),source.clone().avif({quality:66,effort:5}).toFile(join(target,stem+'.avif'))]);
+  console.log('[images] optimized design-gold/'+filename);
+ }
+}
+
+const approvedDirectory=join(root,'assets','campus-approved');
+if(await exists(approvedDirectory)){
+ const target=join(outputDir,'campus-approved');await mkdir(target,{recursive:true});
+ for(const filename of await readdir(approvedDirectory)){
+  if(!filename.endsWith('.png'))continue;
+  const stem=basename(filename,'.png');const source=sharp(join(approvedDirectory,filename)).resize({width:1600,withoutEnlargement:true});
+  await Promise.all([source.clone().webp({quality:88,effort:5}).toFile(join(target,stem+'.webp')),source.clone().avif({quality:66,effort:5}).toFile(join(target,stem+'.avif'))]);
+  console.log('[images] optimized campus-approved/'+filename);
+ }
+}
+
+const tracksuitOutput=join(outputDir,'tracksuit');await mkdir(tracksuitOutput,{recursive:true});
+for(const view of ['front','back']){const image=sharp(join(root,'assets','tracksuit',`iit-mandi-tracksuit-${view}.png`)).resize({width:1400,withoutEnlargement:true});await Promise.all([image.clone().webp({quality:88}).toFile(join(tracksuitOutput,`iit-mandi-tracksuit-${view}.webp`)),image.clone().avif({quality:64}).toFile(join(tracksuitOutput,`iit-mandi-tracksuit-${view}.avif`))]);}

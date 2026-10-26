@@ -1,9 +1,10 @@
-import {CAMPUS_DESIGNS, CAMPUS_SIZES, campusUnitCents} from '../campus-catalog.js';
+import {CAMPUS_DESIGNS, CAMPUS_SIZES, campusUnitCents, campusComboSavings, CAMPUS_ARTWORKS} from '../campus-catalog.js';
 const PRODUCTS = {
   'summit-tee': { name: 'Summit Tee', price: 799, category: 'T-Shirt' },
   'alpine-hoodie': { name: 'Alpine Hoodie', price: 1499, category: 'Hoodie' },
   'trail-tracksuit': { name: 'Trail Tracksuit', price: 1999, category: 'Tracksuit' },
   'classic-tee': { name: 'Capra Classic Tee', price: 799, category: 'T-Shirt' },
+  'capra-cool-tee': { name: 'Capra Cool Tee', price: 899, category: 'T-Shirt' },
   'horizon-hoodie': { name: 'Horizon Hoodie', price: 1499, category: 'Hoodie' },
   'peak-tracksuit': { name: 'Peak Tracksuit', price: 1999, category: 'Tracksuit' }
 };
@@ -56,12 +57,13 @@ export function orderTotals(items = []) {
     const qty = Math.min(10, Math.max(1, Math.floor(Number(item.qty) || 1)));
     const size = cleanText(item.size, 8).toUpperCase();
     if (campus) {
+      const artwork=CAMPUS_ARTWORKS.find(art=>art.id===(item.artwork||'mountain'));
       const personalisation = item.personalisation === true;
       const print = personalisation ? cleanText(item.name, 40) : '';
-      if (!CAMPUS_SIZES.includes(size) || (personalisation && !print)) {
+      if (!artwork || (campus.artworks && !campus.artworks.includes(artwork.id)) || !CAMPUS_SIZES.includes(size) || (personalisation && !print)) {
         const error = new Error('Choose a valid size and enter your print text.'); error.status = 400; throw error;
       }
-      normalized.push({id:campus.id,name:`IIT Mandi ${campus.name}`,category:campus.category,colour:campus.colour,size,qty,personalisation,print_text:print,unit_price:campusUnitCents(campus,personalisation)/100});
+      normalized.push({id:campus.id,name:`IIT Mandi ${campus.name}`,category:campus.category,colour:campus.colour,size,artwork:artwork.id,artwork_name:campus.artworkName||artwork.name,qty,personalisation,print_text:print,...(campus.category==='track'&&personalisation?{print_placement:'Jacket'}:{}),unit_price:campusUnitCents(campus,personalisation)/100});
       continue;
     }
     if (!product || !VALID_SIZES.has(size)) continue;
@@ -74,9 +76,21 @@ export function orderTotals(items = []) {
       unit_price: product.price
     });
   }
-  const subtotal = normalized.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.qty, 0) / 100;
+  const {discountCents,offers}=campusComboSavings(normalized);
+  for(const offer of offers){
+    let remaining=offer.quantity;
+    for(const item of normalized.filter(item=>item.id===offer.items.at(-1))){
+      const discountedQuantity=Math.min(remaining,item.qty);
+      item.combo_discount=discountedQuantity*offer.savingCents/100;
+      item.line_total=Math.round(item.unit_price*100*item.qty-discountedQuantity*offer.savingCents)/100;
+      item.combo_name=offer.name;
+      remaining-=discountedQuantity;
+    }
+  }
+  const merchandise_subtotal = normalized.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.qty, 0) / 100;
+  const subtotal = Math.round(merchandise_subtotal*100-discountCents)/100;
   const shipping_fee = subtotal === 0 || subtotal >= 999 ? 0 : 99;
-  return { items: normalized, subtotal, shipping_fee, grand_total: Math.round((subtotal + shipping_fee) * 100) / 100 };
+  return { items: normalized, merchandise_subtotal, discount_total:discountCents/100, subtotal, shipping_fee, grand_total: Math.round((subtotal + shipping_fee) * 100) / 100 };
 }
 
 export function createOrderId(prefix = 'CC') {
