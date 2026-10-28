@@ -33,3 +33,13 @@ test('cream hoodie keeps the hoodie price and blocks purchases in every size',()
  assert.deepEqual(design.artworks,['ridge']);
  for(const size of CAMPUS_SIZES)assert.throws(()=>orderTotals([{id:design.id,artwork:'ridge',size,qty:1}]),error=>error.status===409&&/Cream \/ Ivory/.test(error.message));
 });
+
+test('both varsity colours and the grey polo keep approved prices and are blocked in every size',()=>{
+ for(const [id,price] of [['mandi-varsity-black',299900],['mandi-varsity-brown',299900],['mandi-grey-polo',60000]]){
+  const design=CAMPUS_DESIGNS.find(design=>design.id===id);
+  assert.equal(design.priceCents,price);
+  assert.equal(design.gallery.length,3);
+  if(id.includes('varsity'))assert.equal(design.listPriceCents,price);
+  for(const size of CAMPUS_SIZES)assert.throws(()=>orderTotals([{id,artwork:'mountain',size,qty:1,inStock:true,unit_price:1}]),error=>error.status===409&&error.code==='OUT_OF_STOCK');
+ }
+});

@@ -1,5 +1,7 @@
 # Approved image assets
 
+New black/white and brown/cream varsity jackets and heather grey polo: nine standalone front/back/detail photographs are in `assets/campus-new`. Each uses the complete IIT Mandi chest emblem and approved arched IIT MANDI mountain back design. Varsity jackets retain the number 3 patch and cost ₹2,999 each, without an invented comparison price; the grey polo costs ₹600. All three products are out of stock in every size. Built-in imagegen prompts and all saved image paths are in `VARSITY_POLO_IMAGE_PROMPTS.json`.
+
 Cream / Ivory Ridge Hoodie: `assets/campus-cream/iit-mandi-cream-hoodie-front.png`, `iit-mandi-cream-hoodie-back.png` and `iit-mandi-cream-hoodie-detail.png`. The three standalone photographs use the complete institute chest emblem and the approved Green Ridge layout with dark lettering on cream. The hoodie is listed at ₹1,200 and out of stock in all sizes. Built-in imagegen prompts and the rear-view revision are recorded in `CREAM_HOODIE_PROMPTS.json`.
 
 The supplied gold CAPRA COOL logo is the shared website identity across Brand, Campus and Handmade. Brand apparel uses the gold logo. Campus apparel keeps the approved IIT Mandi institute chest emblem and campus back prints.

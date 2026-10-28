@@ -14,6 +14,7 @@ Campus, Brand and Handmade remain separate pages with a shared header using the 
 6. Complete IIT Mandi jacket and trousers tracksuit at ₹2,999, with the selected front and back photographs. Fixed white mountain back artwork; optional ₹51 jacket printing. Other generated views remain archived locally.
 7. Minimal Tracksuit Set at ₹2,999, with the selected full-logo chest front, simple trouser mountain and text-only IIT MANDI back. Both tracksuits have separate product links and order identifiers.
 8. Cream / Ivory Ridge Hoodie at ₹1,200, out of stock in all sizes. Three standalone front/back/detail photos preserve the full institute chest logo and Green Ridge back artwork with dark lettering for the light colour.
+9. Black/white and brown/cream varsity jackets at ₹2,999 each, plus a ₹600 heather grey polo. Each has three front/back/detail images, the complete institute chest logo and approved mountain back design. All three are out of stock in all sizes, enforced by the catalog, bag and API.
 
 ## Pricing
 

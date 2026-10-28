@@ -8,7 +8,7 @@ test.beforeEach(async({page})=>{
 test('campus identity, first-screen action and approved artwork production images',async({page},testInfo)=>{
   await expect(page.getByRole('heading',{name:'IIT Mandi. On repeat.'})).toBeVisible();
   await expect(page.locator('.hero-copy .button')).toBeInViewport();
-  await expect(page.locator('.campus-product')).toHaveCount(10);
+  await expect(page.locator('.campus-product')).toHaveCount(13);
   await expect.poll(()=>page.locator('.hero-rack img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBeTruthy();
   await page.screenshot({path:`test-results/campus-${testInfo.project.name}.png`});
   for(const image of await page.locator('.campus-product img, .campus-editorial img').all()){
@@ -22,7 +22,7 @@ test('campus identity, first-screen action and approved artwork production image
 });
 
 test('category navigation, washed edit and sorting operate on the catalog',async({page})=>{
-  for(const [category,count] of [['polo',3],['hoodie',3],['zip',1],['tee',1],['track',2]]){
+  for(const [category,count] of [['polo',4],['hoodie',3],['zip',1],['tee',1],['track',2],['varsity',2]]){
     await page.locator(`.filter-tabs [data-category="${category}"]`).click();
     await expect(page.locator('.campus-product')).toHaveCount(count);
   }
@@ -33,7 +33,7 @@ test('category navigation, washed edit and sorting operate on the catalog',async
   await page.locator('.filter-tabs [data-category="all"]').click();
   await page.locator('#campusSort').selectOption('name');
   await expect(page.locator('.campus-product h3').first()).toHaveText('Campus Tracksuit Set');
-  await expect(page.locator('.campus-product')).toHaveCount(10);
+  await expect(page.locator('.campus-product')).toHaveCount(13);
 });
 
 test('revised gallery provides front, back and direct product links',async({page})=>{
@@ -83,7 +83,7 @@ test('search keyboard flow finds only campus designs',async({page})=>{
   await expect(page.locator('#campusSearchDialog')).not.toBeVisible();
   await expect(page.locator('.campus-product')).toHaveCount(2);
   await page.locator('#clearCampusSearch').click();
-  await expect(page.locator('.campus-product')).toHaveCount(10);
+  await expect(page.locator('.campus-product')).toHaveCount(13);
   await page.locator('#campusSearchOpen').click();
   await page.keyboard.press('Escape');
   await expect(page.locator('#campusSearchOpen')).toBeFocused();

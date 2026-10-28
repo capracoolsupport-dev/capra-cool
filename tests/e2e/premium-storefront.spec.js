@@ -40,7 +40,7 @@ test('campus shopping has a separate destination from the brand', async ({ page 
   await expect(page.locator('#atelier')).toHaveCount(0);
   await page.locator('.hero-secondary').click();
   await expect(page).toHaveURL(/campus(?:\.html)?$/);
-  await expect(page.locator('.campus-products .campus-product')).toHaveCount(10);
+  await expect(page.locator('.campus-products .campus-product')).toHaveCount(13);
 });
 
 test('search returns matching clothing', async ({ page }) => {

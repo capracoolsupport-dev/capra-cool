@@ -18,7 +18,7 @@ Campus checkout posts to /api/orders. Configure the Supabase server variables an
 
 ## Campus stock
 
-The black/white Contrast Polo (`mandi-contrast-polo`) and cream Ridge Hoodie (`mandi-cream-hoodie`) are marked `inStock: false` in `campus-catalog.js` for all sizes. Set a product's flag to `true` and publish to restore purchasing. Sold-out products remain visible; saved bags require removing unavailable items, and the order API rejects them before writing an order. This is a catalog setting; the admin order desk does not yet provide a stock toggle.
+The black/white Contrast Polo (`mandi-contrast-polo`), cream Ridge Hoodie (`mandi-cream-hoodie`), black/white and brown/cream varsity jackets (`mandi-varsity-black`, `mandi-varsity-brown`) and grey polo (`mandi-grey-polo`) are marked `inStock: false` in `campus-catalog.js` for all sizes. Set a product's flag to `true` and publish to restore purchasing. Sold-out products remain visible; saved bags require removing unavailable items, and the order API rejects them before writing an order. This is a catalog setting; the admin order desk does not yet provide a stock toggle.
 
 ## Images
 

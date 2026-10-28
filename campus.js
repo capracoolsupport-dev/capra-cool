@@ -1,10 +1,10 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/campus-cream/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
+const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/campus-cream/*.png','/assets/campus-new/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
 const imageUrl = (id,artwork='mountain',view=0) => CAMPUS_DESIGNS.find(design=>design.id===id)?.gallery?.[Number(view)||0] || `optimized/campus-approved/${id}-${artwork}.webp`;
 const sourceUrl = (id,artwork='mountain',view=0) => sourceImages['/'+imageUrl(id,artwork,view).replace(/^optimized\//,'assets/').replace(/\.webp$/,'.png')];
 const supportEmail = 'care@capracool.com';
-const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit'};
+const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit',varsity:'Varsity jacket'};
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, PERSONALISATION_CENTS, campusUnitCents, CAMPUS_COMBOS, campusComboSavings, CAMPUS_ARTWORKS} from './campus-catalog.js';
 const money = cents => `₹${(cents / 100).toLocaleString('en-IN',{minimumFractionDigits:cents % 100 ? 2 : 0, maximumFractionDigits:2})}`;
 
@@ -57,7 +57,7 @@ function renderProducts() {
   $('#campusProducts').innerHTML = designs.map(design => `<article class="campus-product" data-design-id="${design.id}">
     <div class="product-art"><a class="product-image-link" href="#design/${design.id}" data-open-design="${design.id}" aria-label="View ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}">${artMarkup(design,{overview:design.overview})}<span class="image-view-label">${design.overview ? 'ALL VIEWS' : 'FRONT / BACK'}</span></a>${design.inStock === false ? '<span class="stock-badge">Out of stock</span>' : ''}<button class="card-save" type="button" data-quick-save="${design.id}" ${design.inStock === false ? 'disabled' : ''} aria-label="Save ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}" aria-pressed="${bag.some(item=>item.id === design.id)}">${bag.some(item=>item.id === design.id) ? '♥' : '♡'}</button></div>
     <div class="product-meta"><span>IIT MANDI / ${categories[design.category].toUpperCase()}</span>${design.collection === 'Washed' ? '<span>WASHED EDIT</span>' : ''}</div>
-    <h3><a href="#design/${design.id}" data-open-design="${design.id}">${escapeHtml(design.name)}</a></h3><div class="product-bottom"><p>${escapeHtml(design.colour)}${design.gsm ? ` · ${design.gsm} GSM` : ''}</p><button type="button" data-open-design="${design.id}">${design.inStock === false ? 'View details ↗' : 'Choose size ↗'}</button></div><div class="card-prices"><strong>${money(design.priceCents)}</strong><s aria-label="List price ${money(design.listPriceCents)}">${money(design.listPriceCents)}</s><span class="launch-label">LAUNCH −20%</span></div>
+    <h3><a href="#design/${design.id}" data-open-design="${design.id}">${escapeHtml(design.name)}</a></h3><div class="product-bottom"><p>${escapeHtml(design.colour)}${design.gsm ? ` · ${design.gsm} GSM` : ''}</p><button type="button" data-open-design="${design.id}">${design.inStock === false ? 'View details ↗' : 'Choose size ↗'}</button></div><div class="card-prices"><strong>${money(design.priceCents)}</strong>${design.listPriceCents>design.priceCents?`<s aria-label="List price ${money(design.listPriceCents)}">${money(design.listPriceCents)}</s><span class="launch-label">LAUNCH −20%</span>`:""}</div>
   </article>`).join('') || '<div class="empty-results"><h3>No designs found.</h3><p>Try a different category or search.</p><button class="text-button" type="button" data-reset-filters>Show all designs ↗</button></div>';
   $('#campusResultCount').textContent = `${designs.length} ${designs.length === 1 ? 'style' : 'styles'}${washedOnly ? ' · Washed edit' : ''}`;
   $$('.filter-tabs button').forEach(button => {
@@ -133,7 +133,7 @@ function designMessage(design, item = {}) {
 function updateDesignEnquiry() {
   if (!activeDesign) return;
   const selected = preference();
-  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.category==='track'?'Jacket + trousers':'20% launch discount on garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
+  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.category==='track'?'Jacket + trousers':activeDesign.listPriceCents>activeDesign.priceCents?'20% launch discount on garment':'Price per garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
   if (activeSize) $('#saveDesign').innerHTML = `Add to bag — ${money(campusUnitCents(activeDesign,selected.personalisation))} <span aria-hidden="true">+</span>`;
   $('#saveDesign').disabled = activeDesign.inStock === false;
   if (activeDesign.inStock === false) {
