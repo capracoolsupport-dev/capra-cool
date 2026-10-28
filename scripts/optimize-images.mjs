@@ -87,6 +87,12 @@ if(await exists(approvedDirectory)){
 }
 
 const tracksuitOutput=join(outputDir,'tracksuit');await mkdir(tracksuitOutput,{recursive:true});
+const acidOutput=join(outputDir,'campus-acid-black');await mkdir(acidOutput,{recursive:true});
+for(const view of ['front','back','detail']){
+ const stem=`mandi-acid-black-hoodie-${view}`;
+ const image=sharp(join(root,'assets','campus-acid-black',`${stem}.png`)).resize({width:1400,withoutEnlargement:true});
+ await Promise.all([image.clone().webp({quality:88}).toFile(join(acidOutput,`${stem}.webp`)),image.clone().avif({quality:64}).toFile(join(acidOutput,`${stem}.avif`))]);
+}
 const campusNewOutput=join(outputDir,'campus-new');await mkdir(campusNewOutput,{recursive:true});
 for(const id of ['mandi-varsity-black','mandi-varsity-brown','mandi-grey-polo'])for(const view of ['front','back','detail']){
  const stem=`${id}-${view}`;

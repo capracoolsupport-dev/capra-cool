@@ -8,7 +8,7 @@ for(const variant of [
  await page.goto('/campus.html#design/'+variant.id);
  await expect(page.locator('#designTitle')).toHaveText(variant.name);
  await expect(page.locator('#designPrice')).toContainText('₹2,999');
- await expect(page.locator('#designPrice s')).toHaveCount(0);
+ await expect(page.locator('#designPrice s')).toHaveText('₹3,749');
  await expect(page.locator('#designArtworks button')).toHaveCount(1);
  await expect(page.locator('#galleryControls button')).toHaveCount(2);
  for(const [view,name] of [['1','back'],['0',variant.front]]){

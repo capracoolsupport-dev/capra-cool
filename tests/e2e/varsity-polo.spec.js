@@ -10,8 +10,8 @@ for(const variant of [
  await expect(card).toContainText(variant.colour);
  await expect(card.locator('.stock-badge')).toHaveText('Out of stock');
  if(variant.id.includes('varsity')){
-  await expect(card.locator('.card-prices s')).toHaveCount(0);
-  await expect(card.locator('.launch-label')).toHaveCount(0);
+  await expect(card.locator('.card-prices s')).toHaveText('₹3,749');
+  await expect(card.locator('.launch-label')).toContainText('20%');
  }
  await card.getByRole('button',{name:'View details'}).click();
  await expect(page.locator('#designTitle')).toHaveText(variant.name);

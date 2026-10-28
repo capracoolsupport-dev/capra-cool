@@ -17,7 +17,7 @@ async function walk(directory){
   if(entry.isDirectory()){await walk(source);continue;}
   if(!/\.(png|jpe?g|svg|webp|avif)$/i.test(entry.name))continue;
   const name=clean(entry.name);
-  const group=source.includes(`${path.sep}campus-new${path.sep}`)?(name.includes('varsity')?'Campus/Varsity':'Campus/Grey-Polo'):source.includes(`${path.sep}campus-cream${path.sep}`)?'Campus/Cream-Hoodie':source.includes(`${path.sep}tracksuit${path.sep}`)?(/-(front|back)\.png$/.test(name)?'Campus/Tracksuit':'Archive/Tracksuit'):source.includes(`${path.sep}campus-approved${path.sep}`)?'Campus/Approved':source.includes(`${path.sep}design-gold${path.sep}`)?(name.startsWith('mandi-')?'Archive/Discarded-gold-campus':'Brand/Gold'):source.includes(`${path.sep}design-v2${path.sep}`)?'Archive/Monochrome-proposals':source.includes(`${path.sep}identity${path.sep}`)?'Logos':source.includes(`${path.sep}campus${path.sep}`)?'Campus':source.includes(`${path.sep}editorial${path.sep}`)?'Editorial':/^handmade|keychain|charms|spiderman/.test(name)?'Handmade':/^iit-/.test(name)?'Campus/Archive':/logo|crest|mark|hangtag/.test(name)?'Logos/Originals':/^(test-|corner-|model-|pdp-|heart-|catalog-grid|discover-section)/.test(name)?'Archive':'Brand';
+  const group=source.includes(`${path.sep}campus-acid-black${path.sep}`)?'Campus/Acid-Wash-Black':source.includes(`${path.sep}campus-new${path.sep}`)?(name.includes('varsity')?'Campus/Varsity':'Campus/Grey-Polo'):source.includes(`${path.sep}campus-cream${path.sep}`)?'Campus/Cream-Hoodie':source.includes(`${path.sep}tracksuit${path.sep}`)?(/-(front|back)\.png$/.test(name)?'Campus/Tracksuit':'Archive/Tracksuit'):source.includes(`${path.sep}campus-approved${path.sep}`)?'Campus/Approved':source.includes(`${path.sep}design-gold${path.sep}`)?(name.startsWith('mandi-')?'Archive/Discarded-gold-campus':'Brand/Gold'):source.includes(`${path.sep}design-v2${path.sep}`)?'Archive/Monochrome-proposals':source.includes(`${path.sep}identity${path.sep}`)?'Logos':source.includes(`${path.sep}campus${path.sep}`)?'Campus':source.includes(`${path.sep}editorial${path.sep}`)?'Editorial':/^handmade|keychain|charms|spiderman/.test(name)?'Handmade':/^iit-/.test(name)?'Campus/Archive':/logo|crest|mark|hangtag/.test(name)?'Logos/Originals':/^(test-|corner-|model-|pdp-|heart-|catalog-grid|discover-section)/.test(name)?'Archive':'Brand';
   await copy(source,path.join(group,name));
  }
 }
@@ -37,5 +37,6 @@ await copy('TRACKSUIT_IMAGE_PROMPTS.json','TRACKSUIT_IMAGE_PROMPTS.json');
 await copy('TRACKSUIT_MINIMAL_PROMPTS.json','TRACKSUIT_MINIMAL_PROMPTS.json');
 await copy('CREAM_HOODIE_PROMPTS.json','CREAM_HOODIE_PROMPTS.json');
 await copy('VARSITY_POLO_IMAGE_PROMPTS.json','VARSITY_POLO_IMAGE_PROMPTS.json');
+await copy('ACID_BLACK_HOODIE_PROMPTS.json','ACID_BLACK_HOODIE_PROMPTS.json');
 await fs.writeFile(path.join(destination,'image-manifest.json'),JSON.stringify(entries,null,2));
 console.log(`Exported ${entries.length} files to ${destination}; existing files preserved.`);

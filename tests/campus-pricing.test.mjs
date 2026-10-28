@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {CAMPUS_DESIGNS, campusUnitCents} from '../campus-catalog.js';
+import {CAMPUS_DESIGNS, CAMPUS_CATEGORY_ORDER, campusUnitCents} from '../campus-catalog.js';
 import {orderTotals} from '../api/_shared.js';
 
-test('rounded launch prices exceed supplied bases and show exactly 20% off',()=>{
+test('all campus styles show a rounded 20% saving with whole-rupee prices',()=>{
   const polo=CAMPUS_DESIGNS.find(d=>d.id==='mandi-mountain-polo');
   assert.equal(polo.listPriceCents,75000);
   assert.equal(polo.priceCents,60000);
   assert.equal(campusUnitCents(polo,true),65100);
-  for(const design of CAMPUS_DESIGNS.filter(design=>!design.gallery)){ assert.ok(design.priceCents > design.base * 100); assert.equal(design.priceCents % 100,0); assert.equal(design.listPriceCents * 0.8,design.priceCents); }
+  for(const design of CAMPUS_DESIGNS){ assert.equal(design.priceCents % 100,0); assert.equal(design.listPriceCents % 100,0); assert.equal(Math.round((1-design.priceCents/design.listPriceCents)*100),20); }
   const expected={'mandi-mountain-hoodie':120000,'mandi-mountain-zip':140000,'mandi-washed-tee':80000,'mandi-washed-hoodie':160000};
   for(const [id,price] of Object.entries(expected))assert.equal(CAMPUS_DESIGNS.find(d=>d.id===id).priceCents,price);
 });
@@ -16,7 +16,7 @@ test('rounded launch prices exceed supplied bases and show exactly 20% off',()=>
 for(const [id,artworkName] of [['iit-mandi-tracksuit','Mountain Print'],['iit-mandi-tracksuit-minimal','Minimal Print']])test(`${id}: complete-set price and jacket-only personalisation`,()=>{
  const design=CAMPUS_DESIGNS.find(design=>design.id===id);
  assert.equal(design.priceCents,299900);
- assert.equal(design.listPriceCents,299900);
+ assert.equal(design.listPriceCents,374900);
  assert.equal(design.gallery.length,2);
  const items=[{id:design.id,size:'XL',artwork:'mountain',qty:1,unit_price:1}];
  assert.equal(orderTotals(items).grand_total,2999);
@@ -25,6 +25,25 @@ for(const [id,artworkName] of [['iit-mandi-tracksuit','Mountain Print'],['iit-ma
  assert.equal(printed.items[0].print_placement,'Jacket');
  assert.equal(printed.items[0].artwork_name,artworkName);
  assert.throws(()=>orderTotals([{...items[0],artwork:'ridge'}]),/valid size/);
+});
+
+test('catalog groups product types and keeps available colours ahead of sold-out colours',()=>{
+ const ranks=CAMPUS_DESIGNS.map(design=>CAMPUS_CATEGORY_ORDER.indexOf(design.category));
+ assert.deepEqual(ranks,[...ranks].sort((a,b)=>a-b));
+ for(const category of CAMPUS_CATEGORY_ORDER){
+  const stock=CAMPUS_DESIGNS.filter(design=>design.category===category).map(design=>Number(design.inStock===false));
+  assert.deepEqual(stock,[...stock].sort());
+ }
+});
+
+test('new acid-wash black hoodie is in stock and server-priced including optional print',()=>{
+ const design=CAMPUS_DESIGNS.find(design=>design.id==='mandi-acid-black-hoodie');
+ assert.equal(design.inStock,true);
+ assert.equal(design.priceCents,160000);
+ assert.equal(design.listPriceCents,200000);
+ const totals=orderTotals([{id:design.id,size:'XXXL',artwork:'mountain',qty:2,personalisation:true,name:'CSE 2027',unit_price:1}]);
+ assert.equal(totals.grand_total,3302);
+ assert.equal(totals.items[0].print_text,'CSE 2027');
 });
 test('server ignores submitted prices and retains print instructions',()=>{
   const totals=orderTotals([{id:'mandi-mountain-polo',size:'XXXL',qty:2,personalisation:true,name:'CSE 2027',unit_price:1}]);

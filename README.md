@@ -12,7 +12,9 @@ The Vite site has separate Brand (index.html), IIT Mandi Campus (campus.html), H
 
 ## Campus catalog
 
-Seven garment/colour variants each offer Cream Mountain and Green Ridge artwork, based on the approved original designs. The eighth product is the complete IIT Mandi tracksuit at ₹2,999, with selected front/back photographs and fixed mountain artwork. Sizes S–XXXL and optional ₹51 printing are available; tracksuit printing applies to the jacket. campus-catalog.js is shared by the UI and order API. Combo savings apply to complete pairs at the server as well as in the bag. Each ordered item stores the artwork, size and print instructions.
+The 14 campus styles are grouped by product type, with available colours first in each group. All show a rounded 20% discount against whole-rupee list prices; checkout uses the unchanged selling prices. The separate Acid-wash Black Hoodie (`mandi-acid-black-hoodie`) is in stock at ₹1,600 and has front, back and detail photos.
+
+The collection uses the approved institute chest emblem and campus back prints; each product lists its available artwork options. Sizes S–XXXL and optional ₹51 printing are available; tracksuit printing applies to the jacket. campus-catalog.js is shared by the UI and order API. Combo savings apply to complete pairs at the server as well as in the bag. Each ordered item stores the artwork, size and print instructions.
 
 Campus checkout posts to /api/orders. Configure the Supabase server variables and staff token in .env.example on the deployment. Vite alone does not execute Vercel functions. Browser tests intercept order writes and do not create real orders; live deployment credentials and database persistence are not verified.
 

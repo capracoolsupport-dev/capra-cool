@@ -15,10 +15,11 @@ Campus, Brand and Handmade remain separate pages with a shared header using the 
 7. Minimal Tracksuit Set at ₹2,999, with the selected full-logo chest front, simple trouser mountain and text-only IIT MANDI back. Both tracksuits have separate product links and order identifiers.
 8. Cream / Ivory Ridge Hoodie at ₹1,200, out of stock in all sizes. Three standalone front/back/detail photos preserve the full institute chest logo and Green Ridge back artwork with dark lettering for the light colour.
 9. Black/white and brown/cream varsity jackets at ₹2,999 each, plus a ₹600 heather grey polo. Each has three front/back/detail images, the complete institute chest logo and approved mountain back design. All three are out of stock in all sizes, enforced by the catalog, bag and API.
+10. A separate Acid-wash Black Hoodie at ₹1,600, in stock, with three views and optional ₹51 printing. Default listing groups product types and puts available colours first within each group. Every campus style shows a rounded 20% saving with unchanged selling prices and whole-rupee list prices.
 
 ## Pricing
 
-Launch prices: polos ₹600, washed tees ₹800, hoodies ₹1,200, zip hoodies ₹1,400, washed hoodies ₹1,600. Their list prices are launch prices divided by 0.8 for exactly 20% off. The ₹2,999 complete tracksuit has no invented comparison price or discount. All server calculations use integer paise.
+Launch prices: polos ₹600, washed tees ₹800, hoodies ₹1,200, zip hoodies ₹1,400, washed hoodies ₹1,600. Their list prices are launch prices divided by 0.8 for exactly 20% off. All campus styles now show a 20% discount label. ₹2,999 products use a whole-rupee list price of ₹3,749; labels round the percentage while checkout keeps the selling price fixed. All server calculations use integer paise.
 
 ## Verification
 

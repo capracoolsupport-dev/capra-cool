@@ -1,6 +1,6 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/campus-cream/*.png','/assets/campus-new/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
+const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/campus-cream/*.png','/assets/campus-new/*.png','/assets/campus-acid-black/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
 const imageUrl = (id,artwork='mountain',view=0) => CAMPUS_DESIGNS.find(design=>design.id===id)?.gallery?.[Number(view)||0] || `optimized/campus-approved/${id}-${artwork}.webp`;
 const sourceUrl = (id,artwork='mountain',view=0) => sourceImages['/'+imageUrl(id,artwork,view).replace(/^optimized\//,'assets/').replace(/\.webp$/,'.png')];
 const supportEmail = 'care@capracool.com';
@@ -133,7 +133,7 @@ function designMessage(design, item = {}) {
 function updateDesignEnquiry() {
   if (!activeDesign) return;
   const selected = preference();
-  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.category==='track'?'Jacket + trousers':activeDesign.listPriceCents>activeDesign.priceCents?'20% launch discount on garment':'Price per garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
+  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.category==='track'?'20% launch discount · Jacket + trousers':activeDesign.listPriceCents>activeDesign.priceCents?'20% launch discount on garment':'Price per garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
   if (activeSize) $('#saveDesign').innerHTML = `Add to bag — ${money(campusUnitCents(activeDesign,selected.personalisation))} <span aria-hidden="true">+</span>`;
   $('#saveDesign').disabled = activeDesign.inStock === false;
   if (activeDesign.inStock === false) {

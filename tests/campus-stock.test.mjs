@@ -39,7 +39,7 @@ test('both varsity colours and the grey polo keep approved prices and are blocke
   const design=CAMPUS_DESIGNS.find(design=>design.id===id);
   assert.equal(design.priceCents,price);
   assert.equal(design.gallery.length,3);
-  if(id.includes('varsity'))assert.equal(design.listPriceCents,price);
+  if(id.includes('varsity'))assert.equal(design.listPriceCents,374900);
   for(const size of CAMPUS_SIZES)assert.throws(()=>orderTotals([{id,artwork:'mountain',size,qty:1,inStock:true,unit_price:1}]),error=>error.status===409&&error.code==='OUT_OF_STOCK');
  }
 });
