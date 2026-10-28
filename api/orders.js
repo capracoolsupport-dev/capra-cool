@@ -42,6 +42,6 @@ export default async function handler(req, res) {
     send(res, 200, { order_id: orderId, ...totals });
   } catch (error) {
     console.error('order_submit_failed', error);
-    send(res, error.status || 500, { error: 'Order submission is unavailable right now.' });
+    send(res, error.status || 500, { error: error.code === 'OUT_OF_STOCK' ? error.message : 'Order submission is unavailable right now.' });
   }
 }

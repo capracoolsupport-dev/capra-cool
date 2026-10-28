@@ -25,6 +25,7 @@ export const CAMPUS_DESIGNS = [
   },
   {
     "id": "mandi-contrast-polo",
+    "inStock": false,
     "name": "Contrast Polo",
     "category": "polo",
     "colour": "Black / White",

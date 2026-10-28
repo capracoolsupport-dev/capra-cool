@@ -57,6 +57,12 @@ export function orderTotals(items = []) {
     const qty = Math.min(10, Math.max(1, Math.floor(Number(item.qty) || 1)));
     const size = cleanText(item.size, 8).toUpperCase();
     if (campus) {
+      if (campus.inStock === false) {
+        const error = new Error(`${campus.name} (${campus.colour}) is out of stock. Remove it from your bag to continue.`);
+        error.status = 409;
+        error.code = 'OUT_OF_STOCK';
+        throw error;
+      }
       const artwork=CAMPUS_ARTWORKS.find(art=>art.id===(item.artwork||'mountain'));
       const personalisation = item.personalisation === true;
       const print = personalisation ? cleanText(item.name, 40) : '';

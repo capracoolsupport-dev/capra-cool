@@ -16,6 +16,10 @@ Seven garment/colour variants each offer Cream Mountain and Green Ridge artwork,
 
 Campus checkout posts to /api/orders. Configure the Supabase server variables and staff token in .env.example on the deployment. Vite alone does not execute Vercel functions. Browser tests intercept order writes and do not create real orders; live deployment credentials and database persistence are not verified.
 
+## Campus stock
+
+The black/white Contrast Polo (`mandi-contrast-polo`) is marked `inStock: false` in `campus-catalog.js` for all sizes and artworks. Set that flag to `true` and publish to restore purchasing. Sold-out products remain visible; saved bags require removing unavailable items, and the order API rejects them before writing an order. This is a catalog setting; the admin order desk does not yet provide a stock toggle.
+
 ## Images
 
 Active campus mockups are in assets/campus-approved, selected tracksuit photographs in assets/tracksuit, brand mockups in assets/design-gold, and the supplied gold logo in assets/identity/capra-gold-original.png. The CSS logo frame preserves original pixels while hiding transparent padding. The source image folder on the Desktop is preserved. IMAGE_ASSET_GUIDE.md documents the organised export; APPROVED_IMAGE_PROMPTS.json and TRACKSUIT_IMAGE_PROMPTS.json record the built-in imagegen prompts.

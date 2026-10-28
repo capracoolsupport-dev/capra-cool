@@ -33,6 +33,7 @@ function loadBag() {
   } catch { return []; }
 }
 let bag = loadBag();
+const bagHasUnavailableItems = () => bag.some(item => designById(item.id).inStock === false);
 
 function artMarkup(design, {view = 0, overview = false, loading = 'lazy', artwork = 'mountain'} = {}) {
   return `<div class="campus-photo${design.gallery?' standalone-photo':''}${overview ? ' show-overview' : ''}" data-view="${view}" data-panels="${design.panels || 2}"><img src="${imageUrl(design.id,artwork,view)}" data-design-image="${design.id}" data-artwork="${artwork}" alt="${escapeHtml(`${design.name}, IIT Mandi — ${design.colour}`)}" loading="${loading}" decoding="async"></div>`;
@@ -54,9 +55,9 @@ function matchingDesigns(search = query, selectedCategory = category) {
 function renderProducts() {
   const designs = matchingDesigns();
   $('#campusProducts').innerHTML = designs.map(design => `<article class="campus-product" data-design-id="${design.id}">
-    <div class="product-art"><a class="product-image-link" href="#design/${design.id}" data-open-design="${design.id}" aria-label="View ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}">${artMarkup(design,{overview:design.overview})}<span class="image-view-label">${design.overview ? 'ALL VIEWS' : 'FRONT / BACK'}</span></a><button class="card-save" type="button" data-quick-save="${design.id}" aria-label="Save ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}" aria-pressed="${bag.some(item=>item.id === design.id)}">${bag.some(item=>item.id === design.id) ? '♥' : '♡'}</button></div>
+    <div class="product-art"><a class="product-image-link" href="#design/${design.id}" data-open-design="${design.id}" aria-label="View ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}">${artMarkup(design,{overview:design.overview})}<span class="image-view-label">${design.overview ? 'ALL VIEWS' : 'FRONT / BACK'}</span></a>${design.inStock === false ? '<span class="stock-badge">Out of stock</span>' : ''}<button class="card-save" type="button" data-quick-save="${design.id}" ${design.inStock === false ? 'disabled' : ''} aria-label="Save ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}" aria-pressed="${bag.some(item=>item.id === design.id)}">${bag.some(item=>item.id === design.id) ? '♥' : '♡'}</button></div>
     <div class="product-meta"><span>IIT MANDI / ${categories[design.category].toUpperCase()}</span>${design.collection === 'Washed' ? '<span>WASHED EDIT</span>' : ''}</div>
-    <h3><a href="#design/${design.id}" data-open-design="${design.id}">${escapeHtml(design.name)}</a></h3><div class="product-bottom"><p>${escapeHtml(design.colour)}${design.gsm ? ` · ${design.gsm} GSM` : ''}</p><button type="button" data-open-design="${design.id}">Choose size ↗</button></div><div class="card-prices"><strong>${money(design.priceCents)}</strong><s aria-label="List price ${money(design.listPriceCents)}">${money(design.listPriceCents)}</s><span class="launch-label">LAUNCH −20%</span></div>
+    <h3><a href="#design/${design.id}" data-open-design="${design.id}">${escapeHtml(design.name)}</a></h3><div class="product-bottom"><p>${escapeHtml(design.colour)}${design.gsm ? ` · ${design.gsm} GSM` : ''}</p><button type="button" data-open-design="${design.id}">${design.inStock === false ? 'View details ↗' : 'Choose size ↗'}</button></div><div class="card-prices"><strong>${money(design.priceCents)}</strong><s aria-label="List price ${money(design.listPriceCents)}">${money(design.listPriceCents)}</s><span class="launch-label">LAUNCH −20%</span></div>
   </article>`).join('') || '<div class="empty-results"><h3>No designs found.</h3><p>Try a different category or search.</p><button class="text-button" type="button" data-reset-filters>Show all designs ↗</button></div>';
   $('#campusResultCount').textContent = `${designs.length} ${designs.length === 1 ? 'style' : 'styles'}${washedOnly ? ' · Washed edit' : ''}`;
   $$('.filter-tabs button').forEach(button => {
@@ -107,7 +108,8 @@ function openDesign(id, updateHash = true) {
   image.src = imageUrl(design.id,activeArtwork);
   image.alt = `${design.name} — ${design.colour}, IIT Mandi`;
   activeSize = '';
-  $('#designSizes').innerHTML = CAMPUS_SIZES.map(size=>`<button type="button" data-size="${size}" aria-pressed="false">${size}</button>`).join('');
+  $('#designSizes').innerHTML = CAMPUS_SIZES.map(size=>`<button type="button" data-size="${size}" aria-pressed="false" ${design.inStock === false ? 'disabled' : ''}>${size}</button>`).join('');
+  $('#designPersonalisation').disabled = design.inStock === false;
   $('#designPersonalisation').checked = Boolean(design.personalised);
   $('#designName').value = '';
   $('#personalisationField').hidden = !design.personalised;
@@ -133,11 +135,17 @@ function updateDesignEnquiry() {
   const selected = preference();
   $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.gallery?'Jacket + trousers':'20% launch discount on garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
   if (activeSize) $('#saveDesign').innerHTML = `Add to bag — ${money(campusUnitCents(activeDesign,selected.personalisation))} <span aria-hidden="true">+</span>`;
+  $('#saveDesign').disabled = activeDesign.inStock === false;
+  if (activeDesign.inStock === false) {
+    $('#saveDesign').textContent = 'Out of stock';
+    $('#designPrice').insertAdjacentHTML('beforeend','<p class="stock-status" role="status">Out of stock in all sizes.</p>');
+  }
   $('#enquireDesign').href = mailLink(`IIT Mandi enquiry — ${activeDesign.name}`,`Hello CAPRA COOL,\n\nPlease confirm price, available sizes and delivery for:\n\n${designMessage(activeDesign,preference())}\n\nThank you.`);
 }
 function saveDesign(id, item = {}) {
   const design = designById(id);
   if (!design) return;
+  if (design.inStock === false) { showToast('This colour is currently out of stock.'); return; }
   const size = String(item.size || '').slice(0,20);
   const name = String(item.name || '').slice(0,40);
   const personalisation = Boolean(item.personalisation);
@@ -166,11 +174,17 @@ function renderBag() {
     return `<article class="enquiry-item">${artMarkup(design,{overview:true,artwork:item.artwork})}<div><strong>${escapeHtml(design.name)}</strong><p>${escapeHtml(design.colour)} · ${money(campusUnitCents(design,item.personalisation) * item.qty)}</p><small>${escapeHtml(artworkLabel(designById(item.id),item.artwork))}<br>Size: ${escapeHtml(item.size)}${item.name ? `<br>Name / department: ${escapeHtml(item.name)} (+₹51 each)` : ''}</small><div class="quantity-controls"><button type="button" data-quantity="-1" data-index="${index}" aria-label="Decrease ${escapeHtml(design.name)} quantity">−</button><span>${item.qty}</span><button type="button" data-quantity="1" data-index="${index}" aria-label="Increase ${escapeHtml(design.name)} quantity">+</button></div></div><button type="button" class="remove-design" data-remove="${index}" aria-label="Remove ${escapeHtml(design.name)}">×</button></article>`;
   }).join('') : '<div class="empty-bag"><span aria-hidden="true">↗</span><h3>Find a design you like.</h3><p>Your campus pieces will appear here.</p><button class="text-button" type="button" data-close-dialog>Explore the collection ↗</button></div>';
   const email = $('#emailCampusBag');
+  $$('.enquiry-item', $('#enquiryBagItems')).forEach((row,index) => {
+    if (designById(bag[index].id).inStock !== false) return;
+    $('small',row).insertAdjacentHTML('beforeend','<br><span class="stock-status">Out of stock · Remove this item to continue.</span>');
+    $$('[data-quantity]',row).forEach(button => { button.disabled = true; });
+  });
   email.hidden = !bag.length;
   email.href = mailLink('IIT Mandi collection enquiry',`Hello CAPRA COOL,\n\nPlease confirm prices, sizes, availability and delivery for these designs:\n\n${bag.map(item=>designMessage(designById(item.id),item)).join('\n\n')}\n\nThank you.`);
   const totals = bagTotals();
   $('#campusBagTotals').innerHTML = `<div><span>Subtotal</span><strong>${money(totals.subtotal)}</strong></div>${totals.discount?`<div class="combo-saving"><span>Combo saving</span><strong>−${money(totals.discount)}</strong></div>`:''}<div><span>Shipping</span><span>${totals.shipping ? money(totals.shipping) : bag.length ? 'Free' : '—'}</span></div><div><span>Total</span><strong>${money(totals.total)}</strong></div><small>Free shipping from ₹999 after savings. Personalisation charged per garment.</small>`;
-  $('#campusCheckoutOpen').disabled = !bag.length;
+  $('#campusCheckoutOpen').disabled = !bag.length || bagHasUnavailableItems();
+  if (bagHasUnavailableItems()) $('#campusBagTotals').insertAdjacentHTML('beforeend','<p class="stock-status" role="status">Remove the out-of-stock item to continue to checkout.</p>');
   bindImageFallbacks($('#enquiryBagItems'));
 }
 let toastTimer;
@@ -216,6 +230,7 @@ $('#clearCampusSearch').addEventListener('click',()=>{query='';washedOnly=false;
 $('#showWashed').addEventListener('click',()=>{query='';category='all';washedOnly=true;renderProducts();$('#collection').scrollIntoView({behavior:'smooth'});});
 $('#galleryControls').addEventListener('click',event=>{const button=event.target.closest('[data-view]');if(button)setGalleryView(button.dataset.view);});
 $('#saveDesign').addEventListener('click',()=>{
+  if (!activeDesign || activeDesign.inStock === false) return;
   const selected=preference();
   if(!selected.size || (selected.personalisation && !selected.name)) {
     $('#designOptionError').textContent=!selected.size ? 'Choose your size to continue.' : 'Enter the name or department you want printed.';
@@ -267,7 +282,7 @@ document.addEventListener('keydown',event=>{
   if(event.key==='/' && !document.querySelector('dialog[open]') && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){event.preventDefault();openSearch();}
 });
 $('#campusCheckoutOpen').addEventListener('click',()=>{
-  if(!bag.length)return;
+  if(!bag.length || bagHasUnavailableItems())return;
   const totals=bagTotals();
   $('#campusCheckoutSummary').innerHTML=bag.map(item=>`<div><span>${escapeHtml(designById(item.id).name)} · ${escapeHtml(item.size)} × ${item.qty}<small> · ${escapeHtml(artworkLabel(designById(item.id),item.artwork))}</small>${item.name ? `<br><small>Print: ${escapeHtml(item.name)}</small>` : ''}</span><strong>${money(campusUnitCents(designById(item.id),item.personalisation)*item.qty)}</strong></div>`).join('')+`${totals.discount?`<div class="combo-saving"><span>Combo saving</span><strong>−${money(totals.discount)}</strong></div>`:''}<div><span>Shipping</span><strong>${totals.shipping ? money(totals.shipping) : 'Free'}</strong></div><div><span>Total · Cash on Delivery</span><strong>${money(totals.total)}</strong></div>`;
   $('#campusCheckoutForm').hidden=false;
@@ -278,7 +293,7 @@ $('#campusCheckoutOpen').addEventListener('click',()=>{
 $('#campusCheckoutForm').addEventListener('submit',async event=>{
   event.preventDefault();
   const form=event.currentTarget;
-  if(!form.reportValidity() || !bag.length)return;
+  if(!form.reportValidity() || !bag.length || bagHasUnavailableItems())return;
   const button=$('button[type="submit"]',form);
   if(button.disabled)return;
   button.disabled=true;button.textContent='Submitting your order…';
