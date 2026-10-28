@@ -22,4 +22,28 @@ dialog{color:var(--ink);background:var(--paper);border:0;padding:0;box-shadow:0 
 .design-gallery .dialog-photo[data-panels="3"][data-view="2"]:not(.show-overview)>img{left:50%;transform:translateX(-83.3333%)}
 @media(max-width:560px){.design-gallery .dialog-photo:not(.show-overview){width:195px;height:260px;aspect-ratio:auto}.design-gallery .dialog-photo[data-panels="3"]:not(.show-overview){width:150px;height:260px;aspect-ratio:auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-.stock-badge{position:absolute;top:14px;left:14px;z-index:2;background:#20231f;color:#fff;padding:9px 12px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;pointer-events:none}.stock-status{color:#8c342a!important;font-size:12px;line-height:1.6;font-weight:600}.size-options button:disabled{opacity:.4;cursor:not-allowed}.card-save:disabled{opacity:.45;cursor:not-allowed}#saveDesign:disabled{background:#777a72;cursor:not-allowed;opacity:1}
+.stock-badge{
+ position:absolute;top:12px;left:12px;z-index:2;
+ display:inline-flex;align-items:center;gap:6px;
+ padding:7px 10px;border:1px solid #d9dcd2;border-radius:999px;
+ background:rgba(248,249,244,.96);color:#51594b;
+ font-size:9px;font-weight:500;line-height:1.3;letter-spacing:.025em;
+ pointer-events:none;
+}
+.stock-badge::before,.design-price>.stock-status::before{
+ content:'';width:5px;height:5px;flex-shrink:0;border-radius:50%;background:#818b76;
+}
+.stock-status{color:#62695b;font-size:11px;line-height:1.6;font-weight:400}
+.design-price>.stock-status{
+ display:flex;align-items:center;gap:7px;width:fit-content;
+ margin:14px 0 0;padding:6px 11px;border:1px solid #d9dcd2;border-radius:999px;
+ background:#eeefe8;color:#51594b;
+}
+.size-options button:disabled{
+ opacity:1;background:#f0f1eb;border-color:#e0e3d8;color:#92998a;cursor:not-allowed;
+}
+.card-save:disabled{opacity:.35;cursor:not-allowed}
+#saveDesign:disabled{
+ background:#e7e9e1;border:1px solid #d9dcd2;color:#727b67;
+ font-weight:500;letter-spacing:.025em;cursor:not-allowed;opacity:1;
+}
