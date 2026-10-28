@@ -63,7 +63,7 @@ export function orderTotals(items = []) {
         error.code = 'OUT_OF_STOCK';
         throw error;
       }
-      const artwork=CAMPUS_ARTWORKS.find(art=>art.id===(item.artwork||'mountain'));
+      const artwork=CAMPUS_ARTWORKS.find(art=>art.id===(item.artwork||campus.defaultArtwork||'mountain'));
       const personalisation = item.personalisation === true;
       const print = personalisation ? cleanText(item.name, 40) : '';
       if (!artwork || (campus.artworks && !campus.artworks.includes(artwork.id)) || !CAMPUS_SIZES.includes(size) || (personalisation && !print)) {

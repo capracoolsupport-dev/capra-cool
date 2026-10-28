@@ -1,7 +1,7 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
-const imageUrl = (id,artwork='mountain',view=0) => CAMPUS_DESIGNS.find(design=>design.id===id)?.gallery?.[Number(view)===1?1:0] || `optimized/campus-approved/${id}-${artwork}.webp`;
+const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/campus-cream/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
+const imageUrl = (id,artwork='mountain',view=0) => CAMPUS_DESIGNS.find(design=>design.id===id)?.gallery?.[Number(view)||0] || `optimized/campus-approved/${id}-${artwork}.webp`;
 const sourceUrl = (id,artwork='mountain',view=0) => sourceImages['/'+imageUrl(id,artwork,view).replace(/^optimized\//,'assets/').replace(/\.webp$/,'.png')];
 const supportEmail = 'care@capracool.com';
 const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit'};
@@ -95,7 +95,7 @@ function openDesign(id, updateHash = true) {
   const design = designById(id);
   if (!design) return;
   activeDesign = design;
-  activeArtwork = 'mountain';
+  activeArtwork = design.defaultArtwork || 'mountain';
   $('#designArtworks').innerHTML=availableArtworks(design).map(art=>`<button type="button" data-artwork-choice="${art.id}" aria-pressed="${art.id===activeArtwork}">${artworkLabel(design,art.id)}</button>`).join('');
   $('#designArtworkNote').textContent=design.galleryNote || (design.gallery?'White mountain back artwork with the original institute emblems. Front and back views of the complete set.':CAMPUS_ARTWORKS[0].description);
   $('.personalisation-toggle').lastChild.textContent=design.category==='track'?'Add jacket name / department print (+₹51)':'Add name / department print (+₹51)';
@@ -115,7 +115,7 @@ function openDesign(id, updateHash = true) {
   $('#personalisationField').hidden = !design.personalised;
   $('#designOptionError').hidden = true;
   $('#saveDesign').innerHTML = 'Choose a size <span aria-hidden="true">+</span>';
-  const views = design.gallery ? [['0','Front'],['1','Back']] : design.panels === 3 ? [['0','Front'],['1','Side'],['2','Back'],['all','All views']] : [['0','Front'],['1','Back'],['all','Both views']];
+  const views = design.gallery ? design.gallery.map((_,index)=>[String(index),design.galleryLabels?.[index] || ['Front','Back'][index] || 'Detail']) : design.panels === 3 ? [['0','Front'],['1','Side'],['2','Back'],['all','All views']] : [['0','Front'],['1','Back'],['all','Both views']];
   $('#galleryControls').innerHTML = views.map(([view,name])=>`<button type="button" data-view="${view}" aria-pressed="false">${name}</button>`).join('');
   setGalleryView(design.overview ? 'all' : '0');
   updateDesignEnquiry();
@@ -133,7 +133,7 @@ function designMessage(design, item = {}) {
 function updateDesignEnquiry() {
   if (!activeDesign) return;
   const selected = preference();
-  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.gallery?'Jacket + trousers':'20% launch discount on garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
+  $('#designPrice').innerHTML = `<strong>${money(campusUnitCents(activeDesign,selected.personalisation))}</strong>${activeDesign.listPriceCents>activeDesign.priceCents?`<s>${money(activeDesign.listPriceCents + (selected.personalisation ? PERSONALISATION_CENTS : 0))}</s>`:''}<small>${activeDesign.category==='track'?'Jacket + trousers':'20% launch discount on garment'} · ${selected.personalisation ? `${money(PERSONALISATION_CENTS)} print added` : 'Name / department print +₹51'}</small>`;
   if (activeSize) $('#saveDesign').innerHTML = `Add to bag — ${money(campusUnitCents(activeDesign,selected.personalisation))} <span aria-hidden="true">+</span>`;
   $('#saveDesign').disabled = activeDesign.inStock === false;
   if (activeDesign.inStock === false) {

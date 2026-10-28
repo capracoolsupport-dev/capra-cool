@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {CAMPUS_SIZES} from '../campus-catalog.js';
+import {CAMPUS_SIZES,CAMPUS_DESIGNS} from '../campus-catalog.js';
 import {orderTotals} from '../api/_shared.js';
 import ordersHandler from '../api/orders.js';
 
@@ -23,4 +23,13 @@ test('order endpoint returns a clear stock error before any database write',asyn
  assert.equal(response.statusCode,409);
  assert.match(response.payload.error,/out of stock/);
  assert.equal(writes,0);
+});
+
+test('cream hoodie keeps the hoodie price and blocks purchases in every size',()=>{
+ const design=CAMPUS_DESIGNS.find(design=>design.id==='mandi-cream-hoodie');
+ assert.equal(design.priceCents,120000);
+ assert.equal(design.listPriceCents,150000);
+ assert.equal(design.gallery.length,3);
+ assert.deepEqual(design.artworks,['ridge']);
+ for(const size of CAMPUS_SIZES)assert.throws(()=>orderTotals([{id:design.id,artwork:'ridge',size,qty:1}]),error=>error.status===409&&/Cream \/ Ivory/.test(error.message));
 });

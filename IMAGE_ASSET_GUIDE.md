@@ -1,5 +1,7 @@
 # Approved image assets
 
+Cream / Ivory Ridge Hoodie: `assets/campus-cream/iit-mandi-cream-hoodie-front.png`, `iit-mandi-cream-hoodie-back.png` and `iit-mandi-cream-hoodie-detail.png`. The three standalone photographs use the complete institute chest emblem and the approved Green Ridge layout with dark lettering on cream. The hoodie is listed at ₹1,200 and out of stock in all sizes. Built-in imagegen prompts and the rear-view revision are recorded in `CREAM_HOODIE_PROMPTS.json`.
+
 The supplied gold CAPRA COOL logo is the shared website identity across Brand, Campus and Handmade. Brand apparel uses the gold logo. Campus apparel keeps the approved IIT Mandi institute chest emblem and campus back prints.
 
 - `assets/campus-approved`: seven garment/colour variants with Cream Mountain or Green Ridge artwork; original references are preserved.
