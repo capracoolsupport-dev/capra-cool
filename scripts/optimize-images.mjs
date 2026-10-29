@@ -29,6 +29,25 @@ const sources = [
   'assets/sunflower-keychain.jpg'
 ];
 
+// Matching Brand angles are generated separately from their approved originals.
+const brandHoverDirectory = join(root, 'assets', 'brand-hover');
+try {
+  const target = join(outputDir, 'brand-hover');
+  await mkdir(target, {recursive:true});
+  for (const filename of await readdir(brandHoverDirectory)) {
+    if (!filename.endsWith('.png')) continue;
+    const stem = basename(filename, '.png');
+    const image = sharp(join(brandHoverDirectory, filename)).rotate().resize({width:1400,height:1600,fit:'inside',withoutEnlargement:true});
+    await Promise.all([
+      image.clone().webp({quality:86}).toFile(join(target, `${stem}.webp`)),
+      image.clone().avif({quality:62}).toFile(join(target, `${stem}.avif`))
+    ]);
+    console.log(`[images] optimized brand-hover/${filename}`);
+  }
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
+
 async function exists(path) {
   try { await access(path); return true; } catch { return false; }
 }

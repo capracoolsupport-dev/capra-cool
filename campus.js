@@ -35,12 +35,13 @@ function loadBag() {
 let bag = loadBag();
 const bagHasUnavailableItems = () => bag.some(item => designById(item.id).inStock === false);
 
-function artMarkup(design, {view = 0, overview = false, loading = 'lazy', artwork = 'mountain'} = {}) {
-  return `<div class="campus-photo${design.gallery?' standalone-photo':''}${overview ? ' show-overview' : ''}" data-view="${view}" data-panels="${design.panels || 2}"><img src="${imageUrl(design.id,artwork,view)}" data-design-image="${design.id}" data-artwork="${artwork}" alt="${escapeHtml(`${design.name}, IIT Mandi — ${design.colour}`)}" loading="${loading}" decoding="async"></div>`;
+function artMarkup(design, {view = 0, overview = false, loading = 'lazy', artwork = 'mountain', hoverPreview = false} = {}) {
+  const backPreview = hoverPreview && design.gallery?.[1] ? `<img class="campus-back-preview" src="${imageUrl(design.id,artwork,1)}" data-design-image="${design.id}" data-artwork="${artwork}" data-image-view="1" alt="" aria-hidden="true" loading="lazy" decoding="async">` : '';
+  return `<div class="campus-photo${design.gallery?' standalone-photo':''}${overview ? ' show-overview' : ''}" data-view="${view}" data-panels="${design.panels || 2}"><img src="${imageUrl(design.id,artwork,view)}" data-design-image="${design.id}" data-artwork="${artwork}" alt="${escapeHtml(`${design.name}, IIT Mandi — ${design.colour}`)}" loading="${loading}" decoding="async">${backPreview}</div>`;
 }
 function bindImageFallbacks(root) {
   $$('img[data-design-image]',root).forEach(image => {
-    image.addEventListener('error', () => { image.src = sourceUrl(image.dataset.designImage,image.dataset.artwork,image.closest('.campus-photo').dataset.view); }, {once:true});
+    image.addEventListener('error', () => { image.src = sourceUrl(image.dataset.designImage,image.dataset.artwork,image.dataset.imageView ?? image.closest('.campus-photo').dataset.view); }, {once:true});
   });
 }
 function matchingDesigns(search = query, selectedCategory = category) {
@@ -55,7 +56,7 @@ function matchingDesigns(search = query, selectedCategory = category) {
 function renderProducts() {
   const designs = matchingDesigns();
   $('#campusProducts').innerHTML = designs.map(design => `<article class="campus-product" data-design-id="${design.id}">
-    <div class="product-art"><a class="product-image-link" href="#design/${design.id}" data-open-design="${design.id}" aria-label="View ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}">${artMarkup(design,{overview:design.overview})}<span class="image-view-label">${design.overview ? 'ALL VIEWS' : 'FRONT / BACK'}</span></a>${design.inStock === false ? '<span class="stock-badge">Out of stock</span>' : ''}<button class="card-save" type="button" data-quick-save="${design.id}" ${design.inStock === false ? 'disabled' : ''} aria-label="Save ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}" aria-pressed="${bag.some(item=>item.id === design.id)}">${bag.some(item=>item.id === design.id) ? '♥' : '♡'}</button></div>
+    <div class="product-art"><a class="product-image-link" href="#design/${design.id}" data-open-design="${design.id}" aria-label="View ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}">${artMarkup(design,{overview:design.overview,hoverPreview:true})}<span class="image-view-label">${design.overview ? 'ALL VIEWS' : 'FRONT / BACK'}</span></a>${design.inStock === false ? '<span class="stock-badge">Out of stock</span>' : ''}<button class="card-save" type="button" data-quick-save="${design.id}" ${design.inStock === false ? 'disabled' : ''} aria-label="Save ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}" aria-pressed="${bag.some(item=>item.id === design.id)}">${bag.some(item=>item.id === design.id) ? '♥' : '♡'}</button></div>
     <div class="product-meta"><span>IIT MANDI / ${categories[design.category].toUpperCase()}</span>${design.collection === 'Washed' ? '<span>WASHED EDIT</span>' : ''}</div>
     <h3><a href="#design/${design.id}" data-open-design="${design.id}">${escapeHtml(design.name)}</a></h3><div class="product-bottom"><p>${escapeHtml(design.colour)}${design.gsm ? ` · ${design.gsm} GSM` : ''}</p><button type="button" data-open-design="${design.id}">${design.inStock === false ? 'View details ↗' : 'Choose size ↗'}</button></div><div class="card-prices"><strong>${money(design.priceCents)}</strong>${design.listPriceCents>design.priceCents?`<s aria-label="List price ${money(design.listPriceCents)}">${money(design.listPriceCents)}</s><span class="launch-label">LAUNCH −20%</span>`:""}</div>
   </article>`).join('') || '<div class="empty-results"><h3>No designs found.</h3><p>Try a different category or search.</p><button class="text-button" type="button" data-reset-filters>Show all designs ↗</button></div>';

@@ -1,5 +1,9 @@
 # Approved image assets
 
+Product-card hover previews cover all 14 Campus styles and all seven Brand products. Moving the mouse anywhere over a card shows its back; leaving restores the front. Touch devices keep the front and open product details on tap. Separate Campus back photographs retain their own source-image fallback.
+
+`assets/brand-hover` contains seven matching alternate-angle mockups created with the built-in imagegen tool. Original Brand photos are preserved. The Alpine Hoodie's original photo is its approved back view, so its generated companion is the front. Other new mockups show plain backs without inventing additional prints. Prompts, references and saved paths are recorded in `BRAND_HOVER_IMAGE_PROMPTS.json`; the optimizer creates WebP and AVIF versions under `optimized/brand-hover`.
+
 Acid-wash Black Hoodie: `assets/campus-acid-black/mandi-acid-black-hoodie-front.png`, `mandi-acid-black-hoodie-back.png` and `mandi-acid-black-hoodie-detail.png`. This separate cool charcoal/black colourway is in stock at ₹1,600 (list ₹2,000), with the complete institute chest emblem and Cream Mountain back print. Built-in imagegen prompts and saved paths are in `ACID_BLACK_HOODIE_PROMPTS.json`.
 
 The campus catalog is ordered by Polos, T-shirts, Hoodies, Zip hoodies, Varsity jackets and Tracksuits, with available items first within each type. All individual campus styles show a rounded 20% discount label. Selling prices are preserved; whole-rupee list prices are calculated above them. ₹2,999 styles list at ₹3,749.

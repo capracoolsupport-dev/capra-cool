@@ -1,0 +1,69 @@
+{
+  "tool": "Built-in image_gen",
+  "purpose": "Matching alternate angles for Brand product hover previews. Original photos preserved. Alpine original is the back; a new front is supplied.",
+  "images": [
+    {
+      "id": "summit-tee",
+      "view": "back",
+      "reference": "assets/product_summit_tee.jpg",
+      "detail": "Show the same male model from behind in the same ivory short-sleeve relaxed cotton tee, charcoal cargo trousers and mountain setting. Match the original full-body scale, silhouette and daylight. Plain ivory back with realistic shoulder seams and folds; the small chest mountain print is on the front and must not be repeated on the back. Keep the crossbody strap naturally across the back; do not let the bag conceal the tee.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover photograph for the CAPRA COOL Brand collection. Input image 1 is the exact garment, person, setting and framing reference. Primary request: Show the same male model from behind in the same ivory short-sleeve relaxed cotton tee, charcoal cargo trousers and mountain setting. Match the original full-body scale, silhouette and daylight. Plain ivory back with realistic shoulder seams and folds; the small chest mountain print is on the front and must not be repeated on the back. Keep the crossbody strap naturally across the back; do not let the bag conceal the tee. Photorealistic ecommerce image, portrait 3:4. Keep the garment's colour and material faithful, natural anatomy and fabric drape. Single uninterrupted photograph, one model, no collage, no labels, no watermark, no border. This is a matching alternate angle, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-7ab220f5-4fe0-4166-b25a-7ae2bb6893e5.png",
+      "savedPath": "assets/brand-hover/summit-tee-back.png"
+    },
+    {
+      "id": "alpine-hoodie",
+      "view": "front",
+      "reference": "assets/product_alpine_hoodie.jpg",
+      "detail": "The supplied reference already shows the approved BACK of the black hoodie with its large white ibex print. Create the complementary FRONT view of the same man and black pullover hoodie, same grey trousers, mountainous trail, overcast light and full-body framing. Hood down, kangaroo pocket, restrained small white CAPRA COOL ibex on left chest. No large front graphic. Backpack moved behind the torso so the front of the hoodie is visible. Do not replace the existing approved back print.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover photograph for the CAPRA COOL Brand collection. Input image 1 is the exact garment, person, setting and framing reference. Primary request: The supplied reference already shows the approved BACK of the black hoodie with its large white ibex print. Create the complementary FRONT view of the same man and black pullover hoodie, same grey trousers, mountainous trail, overcast light and full-body framing. Hood down, kangaroo pocket, restrained small white CAPRA COOL ibex on left chest. No large front graphic. Backpack moved behind the torso so the front of the hoodie is visible. Do not replace the existing approved back print. Photorealistic ecommerce image, portrait 3:4. Keep the garment's colour and material faithful, natural anatomy and fabric drape. Single uninterrupted photograph, one model, no collage, no labels, no watermark, no border. This is a matching alternate angle, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-94674a6d-6a38-4ef2-9ee6-970d3c64f0b8.png",
+      "savedPath": "assets/brand-hover/alpine-hoodie-front.png"
+    },
+    {
+      "id": "trail-tracksuit",
+      "view": "back",
+      "reference": "assets/product_trail_tracksuit.jpg",
+      "detail": "Turn the same male model 180 degrees to show the BACK of this deep olive technical zip jacket and matching tapered trousers. Preserve the original full-body scale, mountain ridge, lighting, black boots, fabric and fit. Back jacket is plain deep olive with natural construction seams; no new graphics, wording, logos or colour panels.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover photograph for the CAPRA COOL Brand collection. Input image 1 is the exact garment, person, setting and framing reference. Primary request: Turn the same male model 180 degrees to show the BACK of this deep olive technical zip jacket and matching tapered trousers. Preserve the original full-body scale, mountain ridge, lighting, black boots, fabric and fit. Back jacket is plain deep olive with natural construction seams; no new graphics, wording, logos or colour panels. Photorealistic ecommerce image, portrait 3:4. Keep the garment's colour and material faithful, natural anatomy and fabric drape. Single uninterrupted photograph, one model, no collage, no labels, no watermark, no border. This is a matching alternate angle, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-c34a86b5-ebbb-4f42-82f7-6139140591fd.png",
+      "savedPath": "assets/brand-hover/trail-tracksuit-back.png"
+    },
+    {
+      "id": "classic-tee",
+      "view": "back",
+      "reference": "assets/product_classic_tee.jpg",
+      "detail": "Show the BACK of exactly this black crew-neck cotton T-shirt laid flat on the same warm beige stone surface. Same garment outline, sleeve positions, natural texture, overhead camera, square framing and gentle shadows. Back is plain black, with neckline/shoulder seams. All original chest artwork stays on the unseen front and must not appear on the back. Do not add artwork, labels or slogans.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover image for the CAPRA COOL Brand collection. Input image 1 is the exact garment, background and framing reference. Primary request: Show the BACK of exactly this black crew-neck cotton T-shirt laid flat on the same warm beige stone surface. Same garment outline, sleeve positions, natural texture, overhead camera, square framing and gentle shadows. Back is plain black, with neckline/shoulder seams. All original chest artwork stays on the unseen front and must not appear on the back. Do not add artwork, labels or slogans. Photorealistic ecommerce mockup with faithful material and colour. Single uninterrupted photograph, no collage, no captions, no watermark, no border. Match the reference orientation and framing closely. This is an alternate angle of the existing product, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-c009ee68-df2b-411f-874c-47cf049c9ffc.png",
+      "savedPath": "assets/brand-hover/classic-tee-back.png"
+    },
+    {
+      "id": "capra-cool-tee",
+      "view": "back",
+      "reference": "assets/capra-cool-studio-front.jpg",
+      "detail": "Show the BACK of exactly this jet-black relaxed cotton-blend T-shirt, as an invisible-mannequin studio product photo on the same pale grey background. Same centred scale and garment silhouette, short sleeves and crew neck. Back is plain jet black with realistic rear neckline and shoulder seams; the small CAPRA COOL chest wordmark stays on the unseen front. Do not add a back print.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover image for the CAPRA COOL Brand collection. Input image 1 is the exact garment, background and framing reference. Primary request: Show the BACK of exactly this jet-black relaxed cotton-blend T-shirt, as an invisible-mannequin studio product photo on the same pale grey background. Same centred scale and garment silhouette, short sleeves and crew neck. Back is plain jet black with realistic rear neckline and shoulder seams; the small CAPRA COOL chest wordmark stays on the unseen front. Do not add a back print. Photorealistic ecommerce mockup with faithful material and colour. Single uninterrupted photograph, no collage, no captions, no watermark, no border. Match the reference orientation and framing closely. This is an alternate angle of the existing product, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-0f46a16a-a0a2-4825-817c-5b19339f9dd3.png",
+      "savedPath": "assets/brand-hover/capra-cool-tee-back.png"
+    },
+    {
+      "id": "horizon-hoodie",
+      "view": "back",
+      "reference": "assets/product_horizon_hoodie.jpg",
+      "detail": "Show the same female model turned away, revealing the BACK of the same olive fleece pullover hoodie, at the same Himalayan wooden roadside railing in the same misty sunset lighting. Keep full-body portrait framing, dark cargo trousers, hiking boots, knit handwarmers and natural fabric. For this garment view remove the backpack so it does not conceal the hoodie. Plain olive hood and back, retain existing sleeve artwork if visible; no new words or graphics. Do not introduce any unrelated brand logos.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover image for the CAPRA COOL Brand collection. Input image 1 is the exact garment, background and framing reference. Primary request: Show the same female model turned away, revealing the BACK of the same olive fleece pullover hoodie, at the same Himalayan wooden roadside railing in the same misty sunset lighting. Keep full-body portrait framing, dark cargo trousers, hiking boots, knit handwarmers and natural fabric. For this garment view remove the backpack so it does not conceal the hoodie. Plain olive hood and back, retain existing sleeve artwork if visible; no new words or graphics. Do not introduce any unrelated brand logos. Photorealistic ecommerce mockup with faithful material and colour. Single uninterrupted photograph, no collage, no captions, no watermark, no border. Match the reference orientation and framing closely. This is an alternate angle of the existing product, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-e4313fa6-08f8-4574-8c32-a68e9260a534.png",
+      "savedPath": "assets/brand-hover/horizon-hoodie-back.png"
+    },
+    {
+      "id": "peak-tracksuit",
+      "view": "back",
+      "reference": "assets/product_peak_tracksuit_clean.jpg",
+      "detail": "Show the BACK of exactly the same basalt-black technical tracksuit set laid flat on the same warm beige stone slab. Overhead square composition: jacket above, matching folded trousers below with the same overall arrangement and scale. Rear jacket has stand collar, raglan shoulder seams, elastic cuffs and plain black back. Front chest graphics and front zippers must not appear on the back. Preserve material, fit, colour, shadows and tidy styling; no new graphics, brand names or logos.",
+      "prompt": "Use case: product-mockup. Asset type: complementary product-card hover image for the CAPRA COOL Brand collection. Input image 1 is the exact garment, background and framing reference. Primary request: Show the BACK of exactly the same basalt-black technical tracksuit set laid flat on the same warm beige stone slab. Overhead square composition: jacket above, matching folded trousers below with the same overall arrangement and scale. Rear jacket has stand collar, raglan shoulder seams, elastic cuffs and plain black back. Front chest graphics and front zippers must not appear on the back. Preserve material, fit, colour, shadows and tidy styling; no new graphics, brand names or logos. Photorealistic ecommerce mockup with faithful material and colour. Single uninterrupted photograph, no collage, no captions, no watermark, no border. Match the reference orientation and framing closely. This is an alternate angle of the existing product, not a new garment design.",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-c0e40e56-4691-4868-ae8a-a5f8de52f2c1.png",
+      "savedPath": "assets/brand-hover/peak-tracksuit-back.png"
+    }
+  ]
+}

@@ -49,3 +49,8 @@ dialog{color:var(--ink);background:var(--paper);border:0;padding:0;box-shadow:0 
 }
 .campus-products .campus-photo.standalone-photo{aspect-ratio:3/4;background:#fff}
 @media(max-width:560px){.campus-products .campus-photo.standalone-photo{aspect-ratio:1}}
+
+/* Keep card hover previews consistent for paired artwork and separate back photos. */
+.campus-products .campus-back-preview{opacity:0;pointer-events:none;transition:opacity .16s ease}
+@media(hover:hover) and (pointer:fine){.campus-product:hover .campus-photo:not(.standalone-photo):not(.show-overview)>img{left:-100%}.campus-product:hover .campus-back-preview{opacity:1}}
+@media(prefers-reduced-motion:reduce){.campus-products .campus-back-preview{transition:none}}
