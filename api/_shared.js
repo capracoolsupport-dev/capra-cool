@@ -1,15 +1,6 @@
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, campusUnitCents, campusComboSavings, CAMPUS_ARTWORKS} from '../campus-catalog.js';
-const PRODUCTS = {
-  'summit-tee': { name: 'Summit Tee', price: 799, category: 'T-Shirt' },
-  'alpine-hoodie': { name: 'Alpine Hoodie', price: 1499, category: 'Hoodie' },
-  'trail-tracksuit': { name: 'Trail Tracksuit', price: 1999, category: 'Tracksuit' },
-  'classic-tee': { name: 'Capra Classic Tee', price: 799, category: 'T-Shirt' },
-  'capra-cool-tee': { name: 'Capra Cool Tee', price: 899, category: 'T-Shirt' },
-  'horizon-hoodie': { name: 'Horizon Hoodie', price: 1499, category: 'Hoodie' },
-  'peak-tracksuit': { name: 'Peak Tracksuit', price: 1999, category: 'Tracksuit' }
-};
-
-const VALID_SIZES = new Set(['S', 'M', 'L', 'XL', 'XXL']);
+import {BRAND_PRODUCTS,BRAND_CATEGORY_LABELS} from '../brand-catalog.js';
+const PRODUCTS = Object.fromEntries(BRAND_PRODUCTS.map(product=>[product.id,{...product,category:BRAND_CATEGORY_LABELS[product.category]}]));
 
 export function send(res, status, payload) {
   res.status(status).setHeader('Content-Type', 'application/json');
@@ -72,11 +63,16 @@ export function orderTotals(items = []) {
       normalized.push({id:campus.id,name:`IIT Mandi ${campus.name}`,category:campus.category,colour:campus.colour,size,artwork:artwork.id,artwork_name:campus.artworkName||artwork.name,qty,personalisation,print_text:print,...(campus.category==='track'&&personalisation?{print_placement:'Jacket'}:{}),unit_price:campusUnitCents(campus,personalisation)/100});
       continue;
     }
-    if (!product || !VALID_SIZES.has(size)) continue;
+    if (product?.inStock === false) {
+      const error = new Error(`${product.name} (${product.color}) is out of stock. Remove it from your bag to continue.`);
+      error.status = 409; error.code = 'OUT_OF_STOCK'; throw error;
+    }
+    if (!product || !product.sizes.includes(size)) continue;
     normalized.push({
       id: item.id,
       name: product.name,
       category: product.category,
+      colour: product.color,
       size,
       qty,
       unit_price: product.price

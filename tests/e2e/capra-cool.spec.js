@@ -37,15 +37,15 @@ test('production catalog and handmade images all load', async ({ page }, testInf
 
 test('filters and sort update the actual catalog without unsupported ratings', async ({ page }) => {
   await page.locator('[data-filter="tee"]').click();
-  await expect(page.locator('.product-card')).toHaveCount(3);
+  await expect(page.locator('.product-card')).toHaveCount(4);
   await expect(page.locator('[data-filter="tee"]')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('[data-filter="hoodie"]').click();
-  await expect(page.locator('.product-card')).toHaveCount(2);
+  await expect(page.locator('.product-card')).toHaveCount(6);
   await expect(page.locator('[data-product-id="alpine-hoodie"]')).toContainText('Black');
   await expect(page.locator('[data-product-id="horizon-hoodie"]')).toContainText('Olive');
   await page.locator('[data-filter="all"]').click();
   await page.locator('#sortSelect').selectOption('price-desc');
-  await expect(page.locator('.product-price').first()).toHaveText('₹1,999');
+  await expect(page.locator('.product-price').first()).toHaveText('₹2,999');
   await expect(page.locator('.product-badge')).toHaveCount(0);
   await expect(page.locator('#sortSelect option[value="rating"]')).toHaveCount(0);
 });
@@ -75,7 +75,7 @@ test('search and product dialogs contain focus and restore it when dismissed', a
   await page.locator('#searchOpen').click();
   await expect(page.locator('#searchInput')).toBeFocused();
   await page.locator('#searchInput').fill('hoodie');
-  await expect(page.locator('[data-search-product]')).toHaveCount(2);
+  await expect(page.locator('[data-search-product]')).toHaveCount(7);
   await page.locator('[data-search-product]').last().focus();
   await page.keyboard.press('Tab');
   await expect(page.locator('#searchClose')).toBeFocused();
@@ -94,10 +94,10 @@ test('search and product dialogs contain focus and restore it when dismissed', a
 test('checkout handles failure and retry with an isolated order response', async ({ page }) => {
   let requests = 0;
   let order;
-  await page.route('**/rest/v1/customer_orders', async route => {
+  await page.route('**/api/orders', async route => {
     requests += 1;
     order = route.request().postDataJSON();
-    await route.fulfill(requests === 1 ? { status: 503, json: { error: 'Test failure' } } : { status: 201, body: '' });
+    await route.fulfill(requests === 1 ? { status: 503, json: { error: 'Test failure: could not submit' } } : { status: 200, json: {order_id:'CC-BRAND-TEST'} });
   });
   await page.locator('[data-open-product="capra-cool-tee"]').first().click();
   await page.locator('[data-size="L"]').click();
@@ -120,8 +120,9 @@ test('checkout handles failure and retry with an isolated order response', async
   await form.getByRole('button', { name: 'Place order', exact: true }).click();
   await expect(page.locator('#checkoutSuccess')).toBeVisible();
   await expect(page.locator('#successOrderId')).not.toBeEmpty();
-  expect(order.items[0]).toMatchObject({ id: 'capra-cool-tee', size: 'L', qty: 1, unit_price: 899 });
-  expect(order.grand_total).toBe(998);
+  expect(order.items[0]).toMatchObject({ id: 'capra-cool-tee', size: 'L', qty: 1 });
+  expect(order.items[0]).not.toHaveProperty('unit_price');
+  expect(order.customer.email).toBe('storefront@example.test');
   await expect(page.locator('#bagCount')).toHaveText('0');
 });
 

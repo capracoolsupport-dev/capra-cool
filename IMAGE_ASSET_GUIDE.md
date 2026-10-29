@@ -1,6 +1,10 @@
 # Approved image assets
 
-Product-card hover previews cover all 14 Campus styles and all seven Brand products. Moving the mouse anywhere over a card shows its back; leaving restores the front. Touch devices keep the front and open product details on tap. Separate Campus back photographs retain their own source-image fallback.
+The Brand collection now contains the original seven pieces plus 14 separate CAPRA COOL adaptations of the Campus garments. The user confirmed matching Campus prices, sizes and stock status. New garments use the hill mark on the chest, completely plain backs, and a selective hill/streetwear back print on the washed tee. `assets/brand-collection` holds the approved front/back pairs; `assets/identity/capra-hill-mark.svg` and `.png` provide the hill reference. Earlier ibex polo drafts remain in the local ignored design-review archive. Prompt history is in `BRAND_COLLECTION_IMAGE_PROMPTS.json`.
+
+`brand-catalog.js` is shared by the storefront and order API. All 21 Brand styles have hover previews and front/back gallery buttons. Five new Brand styles are out of stock, blocked in the bag and on the server. New sizes are S–XXXL; existing Brand sizes remain unchanged. Brand checkout now uses `/api/orders`, with server-owned prices and stock checks. Tests intercept writes; no real order was created.
+
+Product-card hover previews cover all 14 Campus styles and all 21 Brand products. Moving the mouse anywhere over a card shows its back; leaving restores the front. Touch devices keep the front and open product details on tap. Separate Campus back photographs retain their own source-image fallback.
 
 `assets/brand-hover` contains seven matching alternate-angle mockups created with the built-in imagegen tool. Original Brand photos are preserved. The Alpine Hoodie's original photo is its approved back view, so its generated companion is the front. Other new mockups show plain backs without inventing additional prints. Prompts, references and saved paths are recorded in `BRAND_HOVER_IMAGE_PROMPTS.json`; the optimizer creates WebP and AVIF versions under `optimized/brand-hover`.
 

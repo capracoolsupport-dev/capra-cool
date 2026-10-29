@@ -82,11 +82,14 @@
       <div class="shop-toolbar">
         <div class="filter-group" aria-label="Product filters">
           <button class="filter-button active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-button" type="button" data-filter="polo" aria-pressed="false">Polos</button>
           <button class="filter-button" type="button" data-filter="tee" aria-pressed="false">T-shirts</button>
           <button class="filter-button" type="button" data-filter="hoodie" aria-pressed="false">Hoodies</button>
+          <button class="filter-button" type="button" data-filter="zip" aria-pressed="false">Zip hoodies</button>
+          <button class="filter-button" type="button" data-filter="varsity" aria-pressed="false">Varsity jackets</button>
           <button class="filter-button" type="button" data-filter="track" aria-pressed="false">Tracksuits</button>
         </div>
-        <span id="productCount" class="product-count">7 pieces</span>
+        <span id="productCount" class="product-count">21 pieces</span>
       </div>
       <div class="product-grid" id="productsGrid" aria-live="polite"></div>
     </section>
@@ -136,11 +139,11 @@
   <section class="modal" id="productModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
     <div class="modal-card product-modal-card">
       <button class="modal-close" data-modal-close type="button" aria-label="Close product">×</button>
-      <div class="product-modal-media"><img id="productModalImage" alt=""></div>
+      <div class="product-modal-media"><div id="brandGalleryImageFrame" class="brand-gallery-frame" data-view="0"><img id="productModalImage" alt=""></div><div class="brand-gallery-controls" id="brandGalleryControls" role="group" aria-label="Product views"></div></div>
       <div class="product-modal-copy">
         <p class="eyebrow" id="productModalCategory">CORE COLLECTION</p>
         <h2 id="productModalTitle"></h2>
-        <div class="modal-price"><strong id="productModalPrice"></strong><span>Pay on delivery</span></div>
+        <div class="modal-price"><strong id="productModalPrice"></strong><span id="productAvailability">Pay on delivery</span></div>
         <p id="productModalDescription"></p>
         <fieldset class="size-selector"><legend>Select size</legend><div id="productModalSizes"></div></fieldset>
         <details class="size-guide"><summary>Size guide</summary><div id="productSizeChart"></div></details>

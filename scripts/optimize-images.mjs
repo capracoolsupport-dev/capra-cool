@@ -30,9 +30,10 @@ const sources = [
 ];
 
 // Matching Brand angles are generated separately from their approved originals.
-const brandHoverDirectory = join(root, 'assets', 'brand-hover');
+for (const directory of ['brand-hover','brand-collection']) {
+const brandHoverDirectory = join(root, 'assets', directory);
 try {
-  const target = join(outputDir, 'brand-hover');
+  const target = join(outputDir, directory);
   await mkdir(target, {recursive:true});
   for (const filename of await readdir(brandHoverDirectory)) {
     if (!filename.endsWith('.png')) continue;
@@ -42,10 +43,11 @@ try {
       image.clone().webp({quality:86}).toFile(join(target, `${stem}.webp`)),
       image.clone().avif({quality:62}).toFile(join(target, `${stem}.avif`))
     ]);
-    console.log(`[images] optimized brand-hover/${filename}`);
+    console.log(`[images] optimized ${directory}/${filename}`);
   }
 } catch (error) {
   if (error.code !== 'ENOENT') throw error;
+}
 }
 
 async function exists(path) {

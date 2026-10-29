@@ -1,10 +1,11 @@
+import {BRAND_PRODUCTS as PRODUCTS, BRAND_CATEGORY_LABELS as CATEGORY_LABELS} from './brand-catalog.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const money = value => `₹${Number(value).toLocaleString('en-IN')}`;
 // Vite fingerprints imported images in production. Keep catalog source names
 // separate from their emitted URLs so optimized names stay stable.
 const ASSET_URLS = import.meta.glob([
-  '/assets/product_*.jpg', '/assets/capra-cool-studio-front.jpg', '/assets/brand-hover/*.png',
+  '/assets/product_*.jpg', '/assets/capra-cool-studio-front.jpg', '/assets/brand-hover/*.png', '/assets/brand-collection/*.png',
   '/assets/handmade-*.jpg', '/assets/sunflower-keychain.jpg'
 ], { eager: true, query: '?url', import: 'default' });
 const sourcePath = src => ASSET_URLS[`/${src}`] || src;
@@ -30,57 +31,7 @@ const SIZE_CHARTS = {
   }
 };
 
-const PRODUCTS = [
-  {
-    id: 'summit-tee', name: 'Summit Tee', category: 'tee', price: 799,
-    image: 'assets/product_summit_tee.jpg', backImage: 'assets/brand-hover/summit-tee-back.png', color: 'Ivory', gsm: '180 GSM',
-    fabric: 'Combed cotton', fit: 'Regular fit', sku: 'CC-TEE-001',
-    description: 'An everyday cotton tee with a small mountain chest print. Ivory, 180 GSM.',
-    care: 'Cold machine wash with similar colours. Line dry in shade.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'alpine-hoodie', name: 'Alpine Hoodie', category: 'hoodie', price: 1499,
-    image: 'assets/brand-hover/alpine-hoodie-front.png', backImage: 'assets/product_alpine_hoodie.jpg', color: 'Black', gsm: '380 GSM',
-    fabric: 'Brushed cotton fleece', fit: 'Structured athletic fit', sku: 'CC-HD-001',
-    description: 'Black brushed-fleece hoodie with the CAPRA COOL goat graphic on the back. 380 GSM.',
-    care: 'Gentle cold wash. Hang dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'trail-tracksuit', name: 'Trail Tracksuit', category: 'track', price: 1999,
-    image: 'assets/product_trail_tracksuit.jpg', backImage: 'assets/brand-hover/trail-tracksuit-back.png', color: 'Deep Olive', gsm: '340 GSM',
-    fabric: 'Technical double-knit', fit: 'Tapered outerwear set', sku: 'CC-TRK-001',
-    description: 'An olive zip jacket and tapered track pant, sold as a two-piece set. 340 GSM double-knit.',
-    care: 'Fasten zips, cold wash, air dry.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'classic-tee', name: 'Capra Classic Tee', category: 'tee', price: 799,
-    image: 'assets/product_classic_tee.jpg', backImage: 'assets/brand-hover/classic-tee-back.png', color: 'Jet Black', gsm: '180 GSM',
-    fabric: 'Heavy combed cotton', fit: 'Relaxed boxy cut', sku: 'CC-TEE-002', imageFit: 'contain',
-    description: 'Black cotton tee with a relaxed cut and CAPRA COOL chest mark. 180 GSM.',
-    care: 'Wash cold inside-out. Do not bleach. Cool iron.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'capra-cool-tee', name: 'Capra Cool Tee', category: 'tee', price: 899,
-    image: 'assets/capra-cool-studio-front.jpg', backImage: 'assets/brand-hover/capra-cool-tee-back.png', color: 'Jet Black', gsm: '220 GSM',
-    fabric: 'Cool-touch cotton blend', fit: 'Relaxed athletic fit', sku: 'CC-TEE-003', imageFit: 'contain',
-    description: 'A cotton-blend tee with a relaxed athletic fit and small chest wordmark. Jet Black, 220 GSM.',
-    care: 'Wash cold inside-out. Line dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'horizon-hoodie', name: 'Horizon Hoodie', category: 'hoodie', price: 1499,
-    image: 'assets/product_horizon_hoodie.jpg', backImage: 'assets/brand-hover/horizon-hoodie-back.png', color: 'Olive', gsm: '380 GSM',
-    fabric: 'Heavy brushed fleece', fit: 'Drop-shoulder structure', sku: 'CC-HD-002',
-    description: 'Olive fleece hoodie with sleeve artwork and a relaxed shoulder. 380 GSM.',
-    care: 'Cold gentle wash. Line dry. Do not tumble dry.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'peak-tracksuit', name: 'Peak Tracksuit', category: 'track', price: 1999,
-    image: 'assets/product_peak_tracksuit_clean.jpg', backImage: 'assets/brand-hover/peak-tracksuit-back.png', color: 'Basalt Black', gsm: '340 GSM',
-    fabric: 'Technical double-knit jersey', fit: 'Tapered performance cut', sku: 'CC-TRK-002', imageFit: 'contain',
-    description: 'Black zip jacket and matching track pants. A two-piece set in 340 GSM double-knit.',
-    care: 'Wash with like colours. Do not iron over logo. Air dry.', sizes: ['S','M','L','XL','XXL']
-  }
-];
+
 
 const ACCESSORIES = [
   { id:'handmade-muffler', name:'Handmade Muffler', price:460, image:'assets/handmade-muffler.jpg', note:'Small-batch winter knit', lowres:true },
@@ -89,7 +40,6 @@ const ACCESSORIES = [
   { id:'sunflower-keychain', name:'Sunflower Keychain', price:99, image:'assets/sunflower-keychain.jpg', note:'Handmade campus accessory', lowres:true }
 ];
 
-const CATEGORY_LABELS = { tee:'T-Shirt', hoodie:'Hoodie', track:'Tracksuit' };
 let currentFilter = 'all';
 let currentSort = 'featured';
 let activeProduct = null;
@@ -110,7 +60,7 @@ function safeStorageSet(key, value) {
 
 function optimizedPath(src, ext) {
   const filename = src.split('/').pop().replace(/\.[^.]+$/, '');
-  return `optimized/${src.includes('/brand-hover/') ? 'brand-hover/' : ''}${filename}.${ext}`;
+  return `optimized/${src.includes('/brand-collection/') ? 'brand-collection/' : src.includes('/brand-hover/') ? 'brand-hover/' : ''}${filename}.${ext}`;
 }
 
 function pictureMarkup(src, alt, options = {}) {
@@ -139,16 +89,18 @@ function renderProducts() {
   if (!grid) return;
   const list = sortedProducts();
   grid.innerHTML = list.map(product => `
-    <article class="product-card" data-product-id="${product.id}" data-image-fit="${product.imageFit || 'cover'}" data-reveal>
+    <article class="product-card" data-product-id="${product.id}" data-image-fit="${product.imageFit || 'cover'}" data-paired="${Boolean(product.pairedImage)}" data-reveal>
       <div class="product-image-wrap">
         ${pictureMarkup(product.image, `${product.name} — ${product.color}`, { extra:'width="768" height="1024"' })}
         <img class="product-back-image" src="${optimizedPath(product.backImage,'webp')}" data-back-source="${sourcePath(product.backImage)}" alt="" aria-hidden="true" width="768" height="1024" loading="lazy" decoding="async">
+        ${product.inStock===false?'<span class="brand-stock-badge">Out of stock</span>':''}
         <button class="product-image-button" type="button" data-open-product="${product.id}" aria-label="View ${escapeHtml(product.name)}"><span aria-hidden="true">+</span></button>
       </div>
       <div class="product-info">
         <div class="product-line"><h3 class="product-title">${escapeHtml(product.name)}</h3><span class="product-price">${money(product.price)}</span></div>
         <p class="product-sub">${escapeHtml(product.color)} · ${escapeHtml(product.gsm)}</p>
-        <button class="product-detail-link" type="button" data-open-product="${product.id}">Choose size ↗</button>
+        <p class="brand-launch-price" ${product.listPrice?'':'aria-hidden="true"'}>${product.listPrice?`<s>${money(product.listPrice)}</s><span>LAUNCH −20%</span>`:''}</p>
+        <button class="product-detail-link" type="button" data-open-product="${product.id}">${product.inStock===false?'View details':'Choose size'} ↗</button>
       </div>
     </article>
   `).join('');
@@ -179,19 +131,20 @@ function openProduct(id) {
   if (!product) return;
   activeProduct = product;
   activeSize = null;
-  const modalImage = $('#productModalImage');
-  modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = sourcePath(product.image); };
-  modalImage.src = optimizedPath(product.image, 'webp');
-  modalImage.alt = `${product.name} — ${product.color}`;
+  $('#brandGalleryControls').innerHTML=['Front','Back'].map((view,index)=>`<button type="button" data-brand-view="${index}" aria-pressed="${index===0}" aria-label="${view} view">${view}</button>`).join('');
+  $$('[data-brand-view]').forEach(button=>button.addEventListener('click',()=>setBrandGalleryView(Number(button.dataset.brandView))));
+  setBrandGalleryView(0);
   $('#productModalCategory').textContent = `${CATEGORY_LABELS[product.category]} · ${product.gsm}`;
   $('#productModalTitle').textContent = product.name;
   $('#productModalPrice').textContent = money(product.price);
+  $('#productAvailability').textContent = product.inStock===false?'Out of stock':'Pay on delivery';
   $('#productModalDescription').textContent = product.description;
   $('#productModalSpecs').innerHTML = [
     ['Fabric', product.fabric], ['Fit', product.fit], ['Colour', product.color], ['Care', product.care]
   ].map(([label,value]) => `<div><small>${label}</small><strong>${escapeHtml(value)}</strong></div>`).join('');
-  $('#productModalSizes').innerHTML = product.sizes.map(size => `<button class="size-chip" type="button" data-size="${size}" aria-pressed="false">${size}</button>`).join('');
-  $('#productAddToBag').textContent = 'Choose a size';
+  $('#productModalSizes').innerHTML = product.sizes.map(size => `<button class="size-chip" type="button" data-size="${size}" aria-pressed="false" ${product.inStock===false?'disabled':''}>${size}</button>`).join('');
+  $('#productAddToBag').disabled = product.inStock===false;
+  $('#productAddToBag').textContent = product.inStock===false?'Out of stock':'Choose a size';
   $('#productModal .size-guide').open = false;
   $('#productModal .product-details').open = false;
   $('#sizeError')?.remove();
@@ -209,13 +162,27 @@ function openProduct(id) {
   openModal($('#productModal'));
 }
 
+function setBrandGalleryView(view) {
+  if(!activeProduct)return;
+  const source=view===1?activeProduct.backImage:activeProduct.image;
+  const image=$('#productModalImage');
+  image.onerror=()=>{image.onerror=null;image.src=sourcePath(source);};
+  image.src=optimizedPath(source,'webp');
+  image.alt=`${activeProduct.name}, ${activeProduct.color}, ${view===1?'back':'front'}`;
+  $('#brandGalleryImageFrame').dataset.view=String(view);
+  $('#brandGalleryImageFrame').dataset.paired=String(Boolean(activeProduct.pairedImage));
+  $$('[data-brand-view]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.brandView)===view)));
+}
+
 function sizeChartTable(category) {
+  if(activeProduct?.sourceId)return '<p class="measurement-note">Available in S–XXXL. For garment measurements and fit advice, <a href="mailto:care@capracool.com">contact us before choosing your size</a>.</p>';
   const chart = SIZE_CHARTS[category] || SIZE_CHARTS.tee;
   const heads = category === 'track' ? ['Size','Chest / Waist','Top / Pant length','Shoulder'] : ['Size','Chest','Length','Shoulder'];
   return `<p class="measurement-note">Measurements in inches. Compare with a garment you own.</p><table class="size-table"><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${Object.entries(chart).map(([size,vals]) => `<tr><th scope="row">${size}</th>${vals.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
 
 function addActiveProductToCart() {
+  if(activeProduct?.inStock===false){showToast('This style is out of stock.');return;}
   if (!activeProduct) return;
   if (!activeSize) {
     if (!$('#sizeError')) $('#productModalSizes').insertAdjacentHTML('beforebegin', '<p class="size-error" id="sizeError" role="alert">Choose your size to continue.</p>');
@@ -243,6 +210,8 @@ function cartTotal() {
   }, 0);
 }
 
+function cartHasUnavailableProducts() { return cart.some(item=>productById(item.id)?.inStock===false); }
+
 function renderCart() {
   cart = cart.filter(item => productById(item.id) && item.qty > 0);
   const items = $('#cartItems');
@@ -255,8 +224,8 @@ function renderCart() {
     items.innerHTML = cart.map((item,index) => {
       const product = productById(item.id);
       return `<article class="cart-item">
-        <img src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt="${escapeHtml(product.name)}">
-        <div class="cart-item-copy"><strong>${escapeHtml(product.name)}</strong><small>${item.size} · ${escapeHtml(product.color)}</small><div class="qty-control"><button type="button" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${item.qty}</span><button type="button" data-qty="1" data-index="${index}" aria-label="Increase quantity">+</button></div></div>
+        <img class="${product.pairedImage?'brand-paired-thumbnail':''}" src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt="${escapeHtml(product.name)}">
+        <div class="cart-item-copy"><strong>${escapeHtml(product.name)}</strong><small>${item.size} · ${escapeHtml(product.color)}</small>${product.inStock===false?'<small class="cart-stock-note">Out of stock — remove to continue.</small>':''}<div class="qty-control"><button type="button" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${item.qty}</span><button type="button" data-qty="1" data-index="${index}" aria-label="Increase quantity" ${product.inStock===false?'disabled':''}>+</button></div></div>
         <div class="cart-item-side"><strong>${money(product.price * item.qty)}</strong><button class="remove-item" type="button" data-remove="${index}">Remove</button></div>
       </article>`;
     }).join('');
@@ -280,7 +249,7 @@ function renderCart() {
   const progress = Math.min(100, subtotal / CONFIG.freeShipping * 100);
   $('#shippingFill').style.width = `${progress}%`;
   $('#shippingMessage').textContent = subtotal >= CONFIG.freeShipping ? 'Complimentary shipping unlocked' : `Add ${money(CONFIG.freeShipping - subtotal)} for complimentary shipping`;
-  $('#checkoutOpen').disabled = cart.length === 0;
+  $('#checkoutOpen').disabled = cart.length === 0 || cartHasUnavailableProducts();
 }
 
 const overlayOpeners = new WeakMap();
@@ -344,8 +313,8 @@ function runSearch(query) {
     $('#searchResults').innerHTML = matches.map(item => `<a class="search-result" href="mailto:${CONFIG.supportEmail}?subject=${encodeURIComponent('Availability: '+item.name)}"><img src="${optimizedPath(item.image,'webp')}" alt=""><span><strong>${escapeHtml(item.name)}</strong><small>Ask about availability</small></span><span>↗</span></a>`).join('') || '<p>No pieces matched. Try muffler, cap or keychain.</p>';
     return;
   }
-  const matches = (q ? PRODUCTS.filter(p => [p.name,p.category,p.color,p.fabric,p.fit,p.gsm].join(' ').toLowerCase().includes(q)) : PRODUCTS).slice(0,6);
-  $('#searchResults').innerHTML = matches.map(product => `<button class="search-result" type="button" data-search-product="${product.id}"><img src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt=""><span><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.gsm)} · ${escapeHtml(product.fit)}</small></span><span>${money(product.price)}</span></button>`).join('') || '<p>No pieces matched that search. Try “tee”, “hoodie” or “tracksuit”.</p>';
+  const matches = q ? PRODUCTS.filter(p => [p.name,p.category,p.color,p.fabric,p.fit,p.gsm].join(' ').toLowerCase().includes(q)) : PRODUCTS.slice(0,6);
+  $('#searchResults').innerHTML = matches.map(product => `<button class="search-result" type="button" data-search-product="${product.id}"><img class="${product.pairedImage?'brand-paired-thumbnail':''}" src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt=""><span><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(product.gsm)} · ${escapeHtml(product.fit)}</small></span><span>${money(product.price)}</span></button>`).join('') || '<p>No pieces matched that search. Try “tee”, “hoodie” or “tracksuit”.</p>';
   $$('img[data-fallback-src]', $('#searchResults')).forEach(img => img.addEventListener('error', () => { img.src = img.dataset.fallbackSrc; }, {once:true}));
   $$('[data-search-product]').forEach(button => button.addEventListener('click', () => { closeSearch(); openProduct(button.dataset.searchProduct); }));
 }
@@ -406,6 +375,7 @@ async function postSupabase(table, payload) {
 
 function openCheckout() {
   if (!cart.length) { showToast('Your bag is empty.'); return; }
+  if (cartHasUnavailableProducts()) { showToast('Remove out-of-stock items from your bag to continue.'); return; }
   closeCart();
   renderCheckoutPreview();
   $('#checkoutForm').hidden = false;
@@ -423,41 +393,26 @@ function renderCheckoutPreview() {
 
 async function submitCheckout(event) {
   event.preventDefault();
+  if(cartHasUnavailableProducts()){showToast('Remove out-of-stock items from your bag to continue.');return;}
   const form = event.currentTarget;
   if (!form.reportValidity()) return;
   const button = $('button[type="submit"]', form);
   button.disabled = true; button.textContent = 'Submitting…';
   const data = new FormData(form);
-  const subtotal = cartTotal();
-  const shipping = subtotal >= CONFIG.freeShipping ? 0 : CONFIG.shippingFee;
-  const orderId = `CC-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2,6).toUpperCase()}`;
   const payload = {
-    id: orderId,
-    order_number: orderId,
-    customer_name: String(data.get('name') || '').trim(),
-    customer_phone: String(data.get('phone') || '').trim(),
-    customer_email: String(data.get('email') || '').trim(),
-    delivery_address: String(data.get('address') || '').trim(),
-    city: String(data.get('city') || '').trim(),
-    state: String(data.get('state') || '').trim(),
-    pincode: String(data.get('pincode') || '').trim(),
-    notes: String(data.get('notes') || '').trim(),
-    payment_method: String(data.get('payment_method') || 'cod'),
-    order_channel: 'web',
-    items: cart.map(item => { const p = productById(item.id); return { id:item.id, name:p.name, size:item.size, qty:item.qty, unit_price:p.price }; }),
-    subtotal,
-    shipping_fee: shipping,
-    grand_total: subtotal + shipping,
-    order_status: 'pending'
+    customer: Object.fromEntries(['name','phone','email','address','city','state','pincode','notes'].map(key=>[key,String(data.get(key)||'').trim()])),
+    items: cart.map(({id,size,qty})=>({id,size,qty}))
   };
   try {
-    await postSupabase('customer_orders', payload);
+    const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const result=await response.json();
+    if(!response.ok)throw new Error(result.error||'Order submission is unavailable right now.');
     cart = []; persistCart(); form.reset();
-    $('#successOrderId').textContent = orderId;
+    $('#successOrderId').textContent = result.order_id;
     form.hidden = true; $('#checkoutSuccess').hidden = false;
   } catch (error) {
     console.error('Order submission failed:', error);
-    showToast('We could not submit the order. Please email care@capracool.com and we’ll help immediately.');
+    showToast(error.message || 'We could not submit the order. Please email care@capracool.com for help.');
   } finally {
     button.disabled = false; button.textContent = 'Place order';
   }

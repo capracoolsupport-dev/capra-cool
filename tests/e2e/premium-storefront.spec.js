@@ -48,7 +48,7 @@ test('search returns matching clothing', async ({ page }) => {
   await expect(searchButton).toBeVisible();
   await searchButton.click();
   await page.locator('#searchInput').fill('hoodie');
-  await expect(page.locator('[data-search-product]')).toHaveCount(2);
+  await expect(page.locator('[data-search-product]')).toHaveCount(7);
 });
 
 test('all three stores share a stable header and handmade search works', async ({ page }, testInfo) => {

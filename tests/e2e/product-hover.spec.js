@@ -41,7 +41,7 @@ test('hover back image falls back to the back source rather than the front',asyn
 test('every Brand product shows its matching back image on card hover',async({page},testInfo)=>{
  await page.goto('/');
  test.skip(!await page.evaluate(()=>matchMedia('(hover:hover) and (pointer:fine)').matches),'Hover preview applies to mouse pointers.');
- await expect(page.locator('.product-card')).toHaveCount(7);
+ await expect(page.locator('.product-card')).toHaveCount(21);
  for(const card of await page.locator('.product-card').all()){
   const back=card.locator('.product-back-image');
   await card.locator('h3').hover();
@@ -55,7 +55,7 @@ test('every Brand product shows its matching back image on card hover',async({pa
  await expect(alpine.locator('.product-back-image')).toHaveAttribute('src',/product_alpine_hoodie\.webp$/);
  await alpine.screenshot({path:`test-results/brand-back-hover-${testInfo.project.name}.png`});
  await page.locator('[data-filter="hoodie"]').click();
- await expect(page.locator('.product-back-image')).toHaveCount(2);
+ await expect(page.locator('.product-back-image')).toHaveCount(6);
 });
 
 test('Brand cards retain their front on touch and product click opens the front',async({page})=>{
