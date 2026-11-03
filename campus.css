@@ -54,3 +54,41 @@ dialog{color:var(--ink);background:var(--paper);border:0;padding:0;box-shadow:0 
 .campus-products .campus-back-preview{opacity:0;pointer-events:none;transition:opacity .16s ease}
 @media(hover:hover) and (pointer:fine){.campus-product:hover .campus-photo:not(.standalone-photo):not(.show-overview)>img{left:-100%}.campus-product:hover .campus-back-preview{opacity:1}}
 @media(prefers-reduced-motion:reduce){.campus-products .campus-back-preview{transition:none}}
+
+/* Group enquiries use the same restrained type and colours as the collection. */
+.campus-orders{padding-block:64px;border-top:1px solid var(--line)}
+.campus-orders-heading{max-width:650px;margin-bottom:32px}
+.campus-orders-heading .eyebrow{color:var(--muted);margin-bottom:12px}
+.campus-orders-heading h2{font-size:clamp(36px,4vw,56px)}
+.campus-orders-heading>p:last-child{color:var(--muted);max-width:540px;margin:18px 0 0}
+.campus-order-preview{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center}
+.campus-order-preview figure{margin:0;min-width:0}
+.campus-order-preview picture{display:block;background:#eeede6}
+.campus-order-preview img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
+.campus-order-preview figcaption{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6}
+.campus-garment-details .eyebrow{margin-bottom:16px}
+.campus-garment-details dl{margin:0}
+.campus-garment-details dl>div{padding:14px 0;border-bottom:1px solid var(--line)}
+.campus-garment-details dt{font-size:14px}
+.campus-garment-details dd{margin:4px 0 0;color:var(--muted);font-size:12px}
+.campus-garment-details>p:not(.eyebrow){font-size:12px;color:var(--muted);margin:18px 0}
+.campus-garment-details .text-button{font-size:12px}
+.campus-order-steps{list-style:none;padding:0;margin:40px 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;border-block:1px solid var(--line)}
+.campus-order-steps li{display:flex;gap:16px;padding:24px 0}
+.campus-order-steps li>span{font-size:11px;color:var(--accent);padding-top:3px}
+.campus-order-steps h3{font-size:14px;font-weight:500;margin:0 0 8px}
+.campus-order-steps p{font-size:12px;color:var(--muted);margin:0;max-width:260px}
+.campus-order-enquiry{border:0;padding-block:8px 0;gap:80px;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+.campus-order-enquiry>div,.campus-order-enquiry form{min-width:0}
+.campus-order-enquiry h3{font:400 42px/1.1 var(--serif);letter-spacing:-.035em;margin:0}
+.campus-delivery{border-left:2px solid #a9af9e;padding-left:20px;margin:28px 0}
+.campus-delivery h4{font-size:14px;font-weight:500;margin:0 0 12px}
+.campus-delivery p{color:var(--muted);font-size:12px;margin:10px 0;max-width:370px}
+.campus-delivery a{display:inline-block;font-size:11px;text-decoration:underline;text-underline-offset:4px;margin:6px 16px 0 0}
+.campus-order-enquiry>div>.text-button{font-size:11px;overflow-wrap:anywhere}
+.campus-order-enquiry .form-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.campus-order-enquiry #bulkDateNote{margin:-8px 0 20px}
+.bulk-draft h4{font-size:13px;font-weight:500;margin:0 0 14px}
+.bulk-draft pre{font:12px/1.8 var(--sans);white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 18px}
+@media(max-width:1000px){.campus-order-preview{gap:28px}.campus-order-enquiry{gap:36px}}
+@media(max-width:700px){.campus-orders{padding-block:40px}.campus-order-preview{grid-template-columns:1fr;gap:28px}.campus-order-steps{grid-template-columns:1fr;gap:0;margin:28px 0}.campus-order-steps li{padding:18px 0}.campus-order-steps li+li{border-top:1px solid var(--line)}.campus-order-steps p{max-width:none}.campus-order-enquiry{grid-template-columns:1fr;padding:0;gap:30px}.campus-order-enquiry h3{font-size:36px}.campus-orders-heading>p:last-child{font-size:13px}.campus-order-enquiry .form-two{grid-template-columns:1fr;gap:0}.campus-order-enquiry form>.button{width:100%}.campus-order-enquiry input,.campus-order-enquiry select,.campus-order-enquiry textarea{font-size:16px}}

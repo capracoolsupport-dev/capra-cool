@@ -23,6 +23,10 @@ Launch prices: polos ₹600, washed tees ₹800, hoodies ₹1,200, zip hoodies �
 
 ## Verification
 
+The “Order for your campus” section now includes catalogue-backed garment specifications, clearly labelled IIT Mandi design previews, artwork approval steps and separate delivery guidance for custom and standard orders. The Brand page links directly to it. Group enquiries collect campus, group, garment, quantity, delivery PIN, optional required date and notes; shoppers review the complete text before opening an email draft. Editing the form clears the previous draft. No request is sent automatically. Customer photos remain pending; the owner approved labelled design previews in their place.
+
+For this section, the production build and 12 relevant Playwright checks passed across desktop, tablet and mobile. A separate visual review confirmed the Brand link, image loading, no horizontal overflow, PIN validation, flexible-date copy and safe draft rendering. The existing editorial image was moved into the section to avoid repeating it on the Campus page. No new images or external messages were needed.
+
 Production build succeeds. Browser checks cover desktop, tablet and mobile, and eight pricing/artwork/server tests pass. Images, product selection, artwork persistence, combo discounts, keyboard dialogs, mock checkout retry and staff print display are covered. Desktop/mobile layouts are visually reviewed. No real orders are submitted.
 
 Production database configuration and actual order persistence still need verification on deployment. Image references, export locations and prompt records are documented in IMAGE_ASSET_GUIDE.md.

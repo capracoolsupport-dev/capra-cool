@@ -11,14 +11,14 @@ test('campus identity, first-screen action and approved artwork production image
   await expect(page.locator('.campus-product')).toHaveCount(14);
   await expect.poll(()=>page.locator('.hero-rack img').evaluateAll(images=>images.every(img=>img.complete&&img.naturalWidth>0))).toBeTruthy();
   await page.screenshot({path:`test-results/campus-${testInfo.project.name}.png`});
-  for(const image of await page.locator('.campus-product img, .campus-editorial img').all()){
+  for(const image of await page.locator('.campus-product img, .campus-order-preview img').all()){
     await image.scrollIntoViewIfNeeded();
     await expect.poll(()=>image.evaluate(img=>img.complete&&img.naturalWidth>0)).toBeTruthy();
   }
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
   await expect(page.locator('#campusProducts')).not.toContainText('Summit Tee');
   await expect(page.locator('.footer-main a[href="index.html"]')).toBeVisible();
-  await page.locator('.campus-editorial').screenshot({path:`test-results/campus-editorial-${testInfo.project.name}.png`});
+  await page.locator('.campus-order-preview').screenshot({path:`test-results/campus-editorial-${testInfo.project.name}.png`});
 });
 
 test('category navigation, washed edit and sorting operate on the catalog',async({page})=>{
@@ -91,9 +91,12 @@ test('search keyboard flow finds only campus designs',async({page})=>{
 
 test('group enquiry creates a reviewable draft without sending it',async({page})=>{
   const form=page.locator('#campusBulkForm');
+  await form.locator('[name="campus"]').fill('IIT Mandi');
   await form.locator('[name="group"]').fill('IIT Mandi CSE 2027');
   await form.locator('[name="garment"]').selectOption('Hoodies');
   await form.locator('[name="quantity"]').fill('40');
+  await form.locator('[name="deliveryPin"]').fill('175005');
+  await form.locator('[name="neededBy"]').fill('2026-12-15');
   await form.locator('[name="notes"]').fill('Department print on back');
   await form.getByRole('button',{name:'Prepare your enquiry'}).click();
   await expect(page.locator('#bulkDraftReady')).toBeVisible();
@@ -101,6 +104,15 @@ test('group enquiry creates a reviewable draft without sending it',async({page})
   expect(draft).toContain('IIT Mandi CSE 2027');
   expect(draft).toContain('Approx. quantity: 40');
   expect(draft).toContain('Department print on back');
+  expect(draft).toContain('Campus / institution: IIT Mandi');
+  expect(draft).toContain('Delivery PIN: 175005');
+  expect(draft).toContain('Needed by: 2026-12-15');
+  await expect(page.locator('#bulkDraftSummary')).toContainText('Approx. quantity: 40');
+  await expect(page.locator('#bulkDraftTitle')).toBeFocused();
+  await form.locator('[name="quantity"]').fill('45');
+  await expect(page.locator('#bulkDraftReady')).toBeHidden();
+  await form.getByRole('button',{name:'Prepare your enquiry'}).click();
+  await expect(page.locator('#bulkDraftSummary')).toContainText('Approx. quantity: 45');
 });
 
 test('campus checkout preserves print options on failure and success',async({page})=>{

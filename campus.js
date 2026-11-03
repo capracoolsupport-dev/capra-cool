@@ -274,10 +274,16 @@ $('#campusBulkForm').addEventListener('submit',event=>{
   const form=event.currentTarget;
   if(!form.reportValidity())return;
   const data=new FormData(form);
-  const body=`Hello CAPRA COOL,\n\nIIT Mandi group enquiry\nGroup: ${data.get('group')}\nGarment: ${data.get('garment')}\nApprox. quantity: ${data.get('quantity')}\nNotes: ${data.get('notes') || 'None'}\n\nPlease share pricing, size guidance and production timelines.`;
-  $('#bulkEmailDraft').href=mailLink('IIT Mandi — group order enquiry',body);
+  const body=`Hello CAPRA COOL,\n\nCampus group enquiry\nCampus / institution: ${String(data.get('campus')).trim()}\nGroup: ${String(data.get('group')).trim()}\nGarment: ${data.get('garment')}\nApprox. quantity: ${data.get('quantity')}\nDelivery PIN: ${data.get('deliveryPin')}\nNeeded by: ${data.get('neededBy') || 'Flexible — please advise'}\nNotes: ${String(data.get('notes')).trim() || 'None'}\n\nPlease share pricing, garment measurements, artwork approval steps and a production / delivery timeline.`;
+  $('#bulkEmailDraft').href=mailLink('Campus — group order enquiry',body);
+  $('#bulkDraftSummary').textContent=body;
   $('#bulkDraftReady').hidden=false;
-  $('#bulkEmailDraft').focus();
+  $('#bulkDraftTitle').focus();
+});
+$('#campusBulkForm').addEventListener('input',()=>{
+  $('#bulkDraftReady').hidden=true;
+  $('#bulkEmailDraft').href='mailto:care@capracool.com';
+  $('#bulkDraftSummary').textContent='';
 });
 document.addEventListener('keydown',event=>{
   if(event.key==='/' && !document.querySelector('dialog[open]') && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){event.preventDefault();openSearch();}
