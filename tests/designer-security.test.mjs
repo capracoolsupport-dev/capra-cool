@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import {randomUUID} from 'node:crypto';
-import {defaultDocument,estimateDesign,STUDIO_RATES,validateDocument,fitElement,zoneFor} from '../designer/catalog.js';
+import {defaultDocument,estimateDesign,STUDIO_RATES,validateDocument,fitElement,zoneFor,upgradeDocument,projectElement} from '../designer/catalog.js';
 import {validateUpload,safeSvg,guestOwner} from '../api/_studio.js';
 import {orderTotals} from '../api/_shared.js';
 import designer from '../api/designer.js';
@@ -31,6 +31,30 @@ test('uploads enforce decoded formats, size limits and SVG content restrictions'
   await assert.rejects(()=>validateUpload({mime:'image/png',data:Buffer.alloc(2097153).toString('base64')}),/2 MB/);
   for(const svg of ['<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>','<!DOCTYPE svg [<!ENTITY x SYSTEM "file:///etc/passwd">]><svg/>','<svg><image href="https://attacker.test/track"/></svg>','<svg onload="alert(1)"><path d="M0 0"/></svg>','<svg><path fill="url(https://attacker.test/a)"/></svg>'])assert.throws(()=>safeSvg(svg),/SVG/);
   const safe=await validateUpload({name:'safe.svg',mime:'image/svg+xml',data:Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path fill="#00ff00" d="M0 0h100v100z"/></svg>').toString('base64')});assert.equal(safe.width,100);
+  const webp=await sharp(png).webp().toBuffer();
+  const review=await validateUpload({name:'four-angle-review.webp',mime:'image/webp',data:webp.toString('base64')},{preview:true});assert.equal(review.ext,'webp');
+});
+
+test('larger print surfaces retain legacy designs and keep sleeve editing separate from front projection',()=>{
+  for(const garment of ['tshirt','oversized-tshirt','hoodie','oversized-hoodie']){
+    for(const face of ['front','back','leftSleeve','rightSleeve']){
+      const old=zoneFor(garment,face,1),next=zoneFor(garment,face,2);
+      assert.ok(next.w>old.w);assert.ok(next.h>old.h);
+      const element={...textElement(face),x:old.x+old.w/2,y:old.y+old.h/2,width:old.w*.6,height:20};
+      const original={...defaultDocument(),version:1,productId:garment,elements:[element]};
+      validateDocument(original);const upgraded=upgradeDocument(original);validateDocument(upgraded);
+      assert.equal(upgraded.version,2);assert.equal(upgraded.elements[0].id,element.id);
+      assert.equal(upgraded.elements[0].text,element.text);
+      assert.equal(estimateDesign(upgraded,STUDIO_RATES).totalCents,estimateDesign(original,STUDIO_RATES).totalCents);
+      assert.deepEqual(original.elements[0],element);
+      if(face.endsWith('Sleeve')){
+        const saved=upgraded.elements[0],side=projectElement(saved,garment,face,2),front=projectElement(saved,garment,'front',2);
+        assert.equal(side.x,saved.x);assert.equal(side.width,saved.width);assert.notEqual(front.x,saved.x);
+      }
+    }
+    const enlarged={...defaultDocument(),productId:garment,elements:[fitElement({...textElement(),width:240,height:180},zoneFor(garment,'front'))]};
+    validateDocument(enlarged);assert.throws(()=>validateDocument({...enlarged,version:1}),/printable/);
+  }
 });
 test('private upload → immutable design → trusted checkout preserves artwork and rejects other guests',async()=>{
   const originalFetch=globalThis.fetch,oldEnv={...process.env};

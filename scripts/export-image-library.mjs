@@ -42,5 +42,6 @@ await copy('BRAND_HOVER_IMAGE_PROMPTS.json','BRAND_HOVER_IMAGE_PROMPTS.json');
 await copy('BRAND_COLLECTION_IMAGE_PROMPTS.json','BRAND_COLLECTION_IMAGE_PROMPTS.json');
 await copy('BRAND_COLLECTION_PLAN.md','BRAND_COLLECTION_PLAN.md');
 await copy('DESIGNER_IMAGE_PROMPTS.json','DESIGNER_IMAGE_PROMPTS.json');
+await copy('DESIGNER_SLEEVE_IMAGE_PROMPTS.json','DESIGNER_SLEEVE_IMAGE_PROMPTS.json');
 await fs.writeFile(path.join(destination,'image-manifest.json'),JSON.stringify(entries,null,2));
 console.log(`Exported ${entries.length} files to ${destination}; existing files preserved.`);

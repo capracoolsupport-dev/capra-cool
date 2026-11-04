@@ -17,11 +17,39 @@ export const MAX_FILE_BYTES = 2*1024*1024;
 export const MAX_ELEMENTS = 24;
 export const MAX_ASSETS = 12;
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-export function zoneFor(productId,face) {
+export function zoneFor(productId,face,version=2) {
   const hood=productId.includes('hoodie');
-  if(face==='leftSleeve')return {x:480,y:240,w:45,h:85};
-  if(face==='rightSleeve')return {x:75,y:240,w:45,h:85};
-  return face==='back'?{x:205,y:hood?260:210,w:190,h:300}:{x:205,y:hood?265:210,w:190,h:hood?190:300};
+  if(version===1){
+    if(face==='leftSleeve')return {x:480,y:240,w:45,h:85};
+    if(face==='rightSleeve')return {x:75,y:240,w:45,h:85};
+    return face==='back'?{x:205,y:hood?260:210,w:190,h:300}:{x:205,y:hood?265:210,w:190,h:hood?190:300};
+  }
+  const oversized=productId.startsWith('oversized');
+  if(isSleeve(face)){
+    const left=face==='leftSleeve';
+    if(hood)return {x:left?280:oversized?235:250,y:oversized?290:250,w:oversized?85:70,h:oversized?330:360};
+    return {x:left?(oversized?265:275):(oversized?225:215),y:oversized?250:185,w:110,h:oversized?135:130};
+  }
+  return face==='back'?{x:155,y:hood?260:195,w:290,h:hood?380:420}:{x:hood?165:155,y:hood?245:195,w:hood?270:290,h:hood?235:400};
+}
+export function isSleeve(face){return face==='leftSleeve'||face==='rightSleeve';}
+// Sleeve editing uses the side photograph. Front previews project the same saved
+// surface onto the narrower sleeve visible from the front; they are not editable.
+export function displayZoneFor(productId,face,view,version=2){
+  if(isSleeve(face)&&view==='front')return {x:face==='leftSleeve'?475:60,y:230,w:65,h:productId.includes('hoodie')?340:110};
+  return zoneFor(productId,face,version);
+}
+export function projectElement(element,productId,view,version=2){
+  const source=zoneFor(productId,element.face,version),target=displayZoneFor(productId,element.face,view,version);
+  return {...element,x:target.x+(element.x-source.x)*target.w/source.w,y:target.y+(element.y-source.y)*target.h/source.h,width:element.width*target.w/source.w,height:element.height*target.h/source.h};
+}
+export function upgradeDocument(document){
+  if(document.version===2)return document;
+  return {...document,version:2,elements:document.elements.map(e=>{
+    if(!isSleeve(e.face))return fitElement(e,zoneFor(document.productId,e.face));
+    const old=zoneFor(document.productId,e.face,1),next=zoneFor(document.productId,e.face),scale=Math.min(next.w/old.w,next.h/old.h);
+    return fitElement({...e,x:next.x+(e.x-old.x)*next.w/old.w,y:next.y+(e.y-old.y)*next.h/old.h,width:e.width*scale,height:e.height*scale},next);
+  })};
 }
 export function placementsFor(face) {
   if(face==='front')return [{id:'leftChest',name:'Left chest',x:.76,y:.17,w:.27},{id:'centreChest',name:'Centre chest',x:.5,y:.24,w:.55},{id:'largeFront',name:'Large front print',x:.5,y:.5,w:.85}];
@@ -54,7 +82,7 @@ export function estimateDesign(document,rates=EMPTY_RATES) {
   }
   return {lines,areas,totalCents:lines.reduce((sum,l)=>sum+l.cents,0),complete:valid.confirmed,version:valid.version};
 }
-export function defaultDocument(){return {version:1,productId:'tshirt',colour:'black',size:'M',method:'print',elements:[]};}
+export function defaultDocument(){return {version:2,productId:'tshirt',colour:'black',size:'M',method:'print',elements:[]};}
 export function elementBounds(element){
   const r=element.angle*Math.PI/180,cos=Math.abs(Math.cos(r)),sin=Math.abs(Math.sin(r));
   return {w:element.width*cos+element.height*sin,h:element.width*sin+element.height*cos};
@@ -68,14 +96,14 @@ export function fitElement(element,zone) {
   return next;
 }
 export function validateDocument(raw) {
-  if(!raw||raw.version!==1||!GARMENTS.some(g=>g.id===raw.productId)||!COLOURS.some(c=>c.id===raw.colour)||!SIZES.includes(raw.size)||!['print','embroidery'].includes(raw.method))throw new Error('Invalid garment options.');
+  if(!raw||![1,2].includes(raw.version)||!GARMENTS.some(g=>g.id===raw.productId)||!COLOURS.some(c=>c.id===raw.colour)||!SIZES.includes(raw.size)||!['print','embroidery'].includes(raw.method))throw new Error('Invalid garment options.');
   if(!Array.isArray(raw.elements)||raw.elements.length<1||raw.elements.length>MAX_ELEMENTS)throw new Error(`Add 1–${MAX_ELEMENTS} design elements.`);
   const ids=new Set();
   const elements=raw.elements.map(e=>{
     if(!e||!UUID.test(e.id)||ids.has(e.id)||!FACES.includes(e.face)||!['image','text'].includes(e.kind))throw new Error('Invalid design element.');
     ids.add(e.id);
     if(![e.x,e.y,e.width,e.height,e.angle].every(Number.isFinite)||e.width<4||e.height<4||Math.abs(e.angle)>360)throw new Error('Invalid design dimensions.');
-    const zone=zoneFor(raw.productId,e.face), b=elementBounds(e);
+    const zone=zoneFor(raw.productId,e.face,raw.version), b=elementBounds(e);
     if(e.x-b.w/2<zone.x-.2||e.x+b.w/2>zone.x+zone.w+.2||e.y-b.h/2<zone.y-.2||e.y+b.h/2>zone.y+zone.h+.2)throw new Error('Keep your artwork inside the printable area.');
     const next={id:e.id,face:e.face,kind:e.kind,x:e.x,y:e.y,width:e.width,height:e.height,angle:e.angle};
     if(e.kind==='image'){
@@ -87,5 +115,5 @@ export function validateDocument(raw) {
     return next;
   });
   if(new Set(elements.filter(e=>e.kind==='image').map(e=>e.assetId)).size>MAX_ASSETS)throw new Error('Too many uploaded files.');
-  return {version:1,productId:raw.productId,colour:raw.colour,size:raw.size,method:raw.method,elements};
+  return {version:raw.version,productId:raw.productId,colour:raw.colour,size:raw.size,method:raw.method,elements};
 }

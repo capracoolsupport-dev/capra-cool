@@ -34,6 +34,14 @@ All tools work with actual uploaded files; artwork survives view and garment swi
 
 Production Vite build passed. The complete Chrome suite passed 131 checks with four expected mouse-hover skips on touch projects. All 22 Node checks passed, including private upload → design save → order persistence through an in-memory Supabase HTTP transport, forged-price rejection, ownership isolation, CSRF rejection and SVG validation. Browser checks include a real canvas mouse drag with a rendered-pixel assertion, all supported upload formats, four print areas, text style changes, front/back export, undo/redo, reload recovery, mixed-cart persistence, checkout confirmation and failure recovery. Final desktop/tablet/mobile screenshots were inspected. No real customer order was submitted. Production dependencies had no reported audit vulnerabilities in the installation audit; production database and bucket access remain unverified until deployment setup is complete.
 
+## Sleeve side-angle update
+
+Added photographic left/right side-profile pairs for all four garments and calibrated the editable sleeve regions to the outer arm. The front view projects sleeve artwork for context; selecting that projection opens its side editor. Enlarged tees' front/back surfaces to 290 px wide, hoodie fronts to 270 px and hoodie backs to 290 px, with increased heights. Sleeve surfaces are also larger, with long printable regions on hoodie sleeves. These are mockup coordinates, not claims about physical print dimensions.
+
+Document version 2 stores the new geometry; version 1 validation remains supported for saved orders. The editor upgrades earlier drafts without changing element identities, text or prices. Reviews now include front, back and both sleeve profiles; WebP keeps the four-angle upload below the existing size limit and the server still produces a safe PNG for private serving.
+
+The production build, 15 Studio browser checks (desktop/tablet/mobile) and geometry/upload/order server checks passed. All eight side photographs and the final rendered placements were visually reviewed. Pricing, colour choices, stock and ordinary shopping are unchanged by this update.
+
 ## Operational handoff
 
 `CUSTOM_DESIGNER_SETUP.md` contains the exact Supabase SQL and Vercel environment setup. The owner requested guided steps; the migration and server credential have not yet been verified in production. The Vercel connector cannot access the existing project, and its team-authorization link returned “Team not found”; existing GitHub Desktop → Vercel deployment remains the release path. A push made during implementation contained the previous campus-order commit, because the studio had not yet been committed.

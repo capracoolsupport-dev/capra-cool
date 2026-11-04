@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import sharp from 'sharp';
-import {STUDIO_RATES,estimateDesign,GARMENTS,COLOURS,SIZES} from '../../designer/catalog.js';
+import {STUDIO_RATES,estimateDesign,GARMENTS,COLOURS,SIZES,zoneFor} from '../../designer/catalog.js';
 const assetId='11111111-1111-4111-8111-111111111111',previewId='22222222-2222-4222-8222-222222222222',designId='33333333-3333-4333-8333-333333333333';
 test.beforeEach(async({page})=>{
   await page.route('**/api/designer?*',async route=>{
@@ -50,7 +50,7 @@ test('real canvas upload, transforms, colour, views, history and local draft rec
   await expect(page.locator('.studio-estimate')).toContainText('₹1,400');
   await page.getByRole('button',{name:'Review your design'}).click();
   await expect(page.locator('.studio-review')).toBeVisible();
-  await expect.poll(()=>page.locator('.studio-review img').evaluate(img=>img.complete&&img.naturalWidth===1200)).toBeTruthy();
+  await expect.poll(()=>page.locator('.studio-review img').evaluate(img=>img.complete&&img.naturalWidth===1200&&img.naturalHeight===1680)).toBeTruthy();
   await page.locator('.studio-review').screenshot({path:`test-results/designer-review-${testInfo.project.name}.png`});
   await page.getByRole('button',{name:'Close design review'}).click();
   await page.getByRole('button',{name:'Reset',exact:true}).click();
@@ -127,4 +127,34 @@ test('SVG, JPEG and WEBP artwork works on all four priced areas',async({page},te
   await expect(page.locator('.studio-review')).toContainText('Left sleeve, Right sleeve');
   await expect(page.locator('.studio-review')).toContainText('Embroidery');
   await page.locator('.studio-review').screenshot({path:`test-results/designer-all-areas-${testInfo.project.name}.png`});
+});
+
+test('each garment shows distinct left/right side angles with a larger editable sleeve surface',async({page},testInfo)=>{
+  for(const garment of GARMENTS){
+    await page.getByLabel('Choose your fit').selectOption(garment.id);
+    const images=[];
+    for(const face of ['leftSleeve','rightSleeve']){
+      await page.getByRole('button',{name:face==='leftSleeve'?'Left sleeve':'Right sleeve',exact:true}).click();
+      await expect(page.locator('.studio-board-container')).toHaveAttribute('data-view',face);
+      await expect(page.locator('.studio-board-container')).toHaveAttribute('data-angle','side');
+      await expect(page.locator('.studio-preview-caption')).toContainText('SIDE ANGLE');
+      images.push(await page.locator('.lower-canvas').evaluate(canvas=>canvas.toDataURL()));
+      if(garment.id==='tshirt'){
+        await page.getByRole('button',{name:/Add custom text/}).click();
+        await page.getByRole('textbox',{name:'Your text',exact:true}).fill(face==='leftSleeve'?'LEFT':'RIGHT');
+        const max=await page.getByLabel('Design width',{exact:true}).getAttribute('max');
+        expect(Number(max)).toBe(zoneFor(garment.id,face).w);expect(Number(max)).toBeGreaterThan(45);
+        await page.getByRole('button',{name:'Move down',exact:true}).click();
+      }
+      await page.locator('.studio-preview').screenshot({path:`test-results/designer-${garment.id}-${face}-${testInfo.project.name}.png`});
+    }
+    expect(images[0]).not.toEqual(images[1]);
+  }
+  await page.getByRole('button',{name:'Front',exact:true}).click();
+  await expect(page.locator('.studio-board-container')).toHaveAttribute('data-angle','straight');
+  await page.getByRole('button',{name:'Review your design'}).click();
+  const preview=page.locator('.studio-review img');
+  await expect.poll(()=>preview.evaluate(img=>img.complete&&img.naturalHeight===1680)).toBeTruthy();
+  expect(await preview.getAttribute('src')).toMatch(/^data:image\/webp;base64,/);
+  expect((await preview.getAttribute('src')).length*3/4).toBeLessThan(2097152);
 });

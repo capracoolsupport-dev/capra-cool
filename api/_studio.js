@@ -66,7 +66,7 @@ export function safeSvg(source){
 export async function validateUpload(body,{preview=false}={}){
   const {data,mime,name}=body||{};
   const allowed=['image/png','image/jpeg','image/webp','image/svg+xml'];
-  if(!allowed.includes(mime)||(preview&&mime!=='image/png')||typeof data!=='string'||!data.length||data.length>Math.ceil(MAX_FILE_BYTES/3)*4+4||!/^[A-Za-z0-9+/]+={0,2}$/.test(data))throw studioError('Use a PNG, JPG, SVG or WEBP file up to 2 MB.');
+  if(!allowed.includes(mime)||(preview&&!['image/png','image/webp'].includes(mime))||typeof data!=='string'||!data.length||data.length>Math.ceil(MAX_FILE_BYTES/3)*4+4||!/^[A-Za-z0-9+/]+={0,2}$/.test(data))throw studioError('Use a PNG, JPG, SVG or WEBP file up to 2 MB.');
   const original=Buffer.from(data,'base64');
   if(original.length>MAX_FILE_BYTES)throw studioError('Artwork exceeds the 2 MB limit.',413);
   let input=original;
