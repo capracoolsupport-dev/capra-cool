@@ -1,0 +1,4 @@
+const DB='capra-design-studio';
+function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB,1);req.onupgradeneeded=()=>req.result.createObjectStore('drafts');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
+export async function loadDraft(){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('drafts');const request=tx.objectStore('drafts').get('active');request.onsuccess=()=>{db.close();resolve(request.result||null);};request.onerror=()=>{db.close();reject(request.error);};});}
+export async function saveDraft(value){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('drafts','readwrite');tx.objectStore('drafts').put(value,'active');tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error);};});}

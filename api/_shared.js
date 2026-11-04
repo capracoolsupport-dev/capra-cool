@@ -1,5 +1,6 @@
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, campusUnitCents, campusComboSavings, CAMPUS_ARTWORKS} from '../campus-catalog.js';
 import {BRAND_PRODUCTS,BRAND_CATEGORY_LABELS} from '../brand-catalog.js';
+import {CUSTOM_ORDER_ITEM} from './_studio-order-token.js';
 const PRODUCTS = Object.fromEntries(BRAND_PRODUCTS.map(product=>[product.id,{...product,category:BRAND_CATEGORY_LABELS[product.category]}]));
 
 export function send(res, status, payload) {
@@ -43,6 +44,8 @@ export function orderTotals(items = []) {
   const normalized = [];
   for (const item of items) {
     if (!item || typeof item !== 'object') continue;
+    if(item[CUSTOM_ORDER_ITEM]===true){const {[CUSTOM_ORDER_ITEM]:_verified,...saved}=item;normalized.push(saved);continue;}
+    if(String(item.id||'').startsWith('custom:')||item.designId){const error=new Error('Custom designs must be loaded from private storage.');error.status=400;throw error;}
     const campus = CAMPUS_DESIGNS.find(design => design.id === item.id);
     const product = PRODUCTS[item.id];
     const qty = Math.min(10, Math.max(1, Math.floor(Number(item.qty) || 1)));

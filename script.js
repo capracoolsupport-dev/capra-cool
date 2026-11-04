@@ -1,4 +1,5 @@
 import {BRAND_PRODUCTS as PRODUCTS, BRAND_CATEGORY_LABELS as CATEGORY_LABELS} from './brand-catalog.js';
+import {GARMENTS,COLOURS,FACE_NAMES,UUID} from './designer/catalog.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const money = value => `₹${Number(value).toLocaleString('en-IN')}`;
@@ -45,6 +46,27 @@ let currentSort = 'featured';
 let activeProduct = null;
 let activeSize = null;
 let cart = safeParse(safeStorageGet('capraCoolCart'), []);
+if(!Array.isArray(cart))cart=[];
+const customCartState=new Map();
+function isCustom(item){return UUID.test(item?.designId||'')&&item.id===`custom:${item.designId}`;}
+function cartProduct(item){
+  if(!isCustom(item))return productById(item.id);
+  const c=item.custom||{},g=GARMENTS.find(g=>g.id===c.productId),colour=COLOURS.find(x=>x.id===c.colour),state=customCartState.get(item.designId);
+  return {id:item.id,name:g?`Custom ${g.name}`:'Custom garment',color:colour?.name||'Custom colour',price:Number.isFinite(c.price)&&c.price>=0?c.price:0,image:UUID.test(c.previewId||'')?`/api/designer?action=asset&id=${c.previewId}`:'',custom:true,notice:state===true?'':typeof state==='string'?state:'Checking your saved design…',inStock:state===true};
+}
+async function hydrateCustomCart(){
+  const ids=[...new Set(cart.filter(isCustom).map(i=>i.designId))];
+  await Promise.all(ids.map(async id=>{
+    try{
+      const response=await fetch(`/api/designer?action=design&id=${id}`),saved=await response.json();
+      if(!response.ok)throw new Error(saved.error||'Reopen your design before checkout.');
+      if(saved.priceChanged)throw new Error('Price updated. Reopen your design to review.');
+      cart=cart.map(item=>item.designId!==id?item:{...item,size:saved.document.size,custom:{productId:saved.document.productId,colour:saved.document.colour,price:saved.quote.totalCents/100,previewId:saved.previewId,areas:saved.quote.areas,method:saved.document.method}});
+      customCartState.set(id,true);
+    }catch(error){customCartState.set(id,error.message);}
+  }));
+  if(ids.length)persistCart();
+}
 
 function safeParse(value, fallback) {
   try { return value ? JSON.parse(value) : fallback; } catch { return fallback; }
@@ -205,15 +227,15 @@ function persistCart() {
 
 function cartTotal() {
   return cart.reduce((sum, item) => {
-    const product = productById(item.id);
+    const product = cartProduct(item);
     return sum + (product ? product.price * item.qty : 0);
   }, 0);
 }
 
-function cartHasUnavailableProducts() { return cart.some(item=>productById(item.id)?.inStock===false); }
+function cartHasUnavailableProducts() { return cart.some(item=>cartProduct(item)?.inStock===false); }
 
 function renderCart() {
-  cart = cart.filter(item => productById(item.id) && item.qty > 0);
+  cart = cart.filter(item => cartProduct(item) && item.qty > 0);
   const items = $('#cartItems');
   const count = cart.reduce((sum,item) => sum + item.qty, 0);
   $('#bagCount').textContent = count;
@@ -222,10 +244,10 @@ function renderCart() {
     items.innerHTML = '<div class="cart-empty">Your bag is empty.<br><small>Add a core piece to begin.</small></div>';
   } else {
     items.innerHTML = cart.map((item,index) => {
-      const product = productById(item.id);
+      const product = cartProduct(item);
       return `<article class="cart-item">
-        <img class="${product.pairedImage?'brand-paired-thumbnail':''}" src="${optimizedPath(product.image,'webp')}" data-fallback-src="${sourcePath(product.image)}" alt="${escapeHtml(product.name)}">
-        <div class="cart-item-copy"><strong>${escapeHtml(product.name)}</strong><small>${item.size} · ${escapeHtml(product.color)}</small>${product.inStock===false?'<small class="cart-stock-note">Out of stock — remove to continue.</small>':''}<div class="qty-control"><button type="button" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${item.qty}</span><button type="button" data-qty="1" data-index="${index}" aria-label="Increase quantity" ${product.inStock===false?'disabled':''}>+</button></div></div>
+        <img class="${product.pairedImage?'brand-paired-thumbnail':''}" src="${escapeHtml(product.custom?product.image:optimizedPath(product.image,'webp'))}" ${product.custom?'':`data-fallback-src="${sourcePath(product.image)}"`} alt="${escapeHtml(product.name)}">
+        <div class="cart-item-copy"><strong>${escapeHtml(product.name)}</strong><small>${escapeHtml(item.size)} · ${escapeHtml(product.color)}</small>${product.custom?`<small>${escapeHtml(item.custom?.method||'Print')} · ${escapeHtml((item.custom?.areas||[]).map(f=>FACE_NAMES[f]||'').join(', '))}</small><a class="custom-cart-edit" href="design.html?id=${item.designId}">View / edit design ↗</a>${product.notice?`<small class="cart-stock-note">${escapeHtml(product.notice)}</small>`:''}`:product.inStock===false?'<small class="cart-stock-note">Out of stock — remove to continue.</small>':''}<div class="qty-control"><button type="button" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${item.qty}</span><button type="button" data-qty="1" data-index="${index}" aria-label="Increase quantity" ${product.inStock===false?'disabled':''}>+</button></div></div>
         <div class="cart-item-side"><strong>${money(product.price * item.qty)}</strong><button class="remove-item" type="button" data-remove="${index}">Remove</button></div>
       </article>`;
     }).join('');
@@ -375,7 +397,7 @@ async function postSupabase(table, payload) {
 
 function openCheckout() {
   if (!cart.length) { showToast('Your bag is empty.'); return; }
-  if (cartHasUnavailableProducts()) { showToast('Remove out-of-stock items from your bag to continue.'); return; }
+  if (cartHasUnavailableProducts()) { showToast('Check unavailable items or reopen custom designs in your bag to continue.'); return; }
   closeCart();
   renderCheckoutPreview();
   $('#checkoutForm').hidden = false;
@@ -387,7 +409,7 @@ function renderCheckoutPreview() {
   const subtotal = cartTotal();
   const shipping = subtotal >= CONFIG.freeShipping ? 0 : CONFIG.shippingFee;
   $('#checkoutPreview').innerHTML = cart.map(item => {
-    const p = productById(item.id); return `<div class="checkout-preview-row"><span>${escapeHtml(p.name)} · ${escapeHtml(p.color)} · ${item.size} × ${item.qty}</span><strong>${money(p.price * item.qty)}</strong></div>`;
+    const p = cartProduct(item); return `<div class="checkout-preview-row"><span>${escapeHtml(p.name)} · ${escapeHtml(p.color)} · ${escapeHtml(item.size)} × ${item.qty}${p.custom?`<small> · ${escapeHtml(item.custom.method)} · ${escapeHtml(item.custom.areas.map(f=>FACE_NAMES[f]||'').join(', '))}</small>`:''}</span><strong>${money(p.price * item.qty)}</strong></div>`;
   }).join('') + `<div class="checkout-preview-row"><span>Shipping</span><strong>${shipping ? money(shipping) : 'Complimentary'}</strong></div><div class="checkout-preview-row"><span>Total</span><strong>${money(subtotal + shipping)}</strong></div>`;
 }
 
@@ -401,7 +423,7 @@ async function submitCheckout(event) {
   const data = new FormData(form);
   const payload = {
     customer: Object.fromEntries(['name','phone','email','address','city','state','pincode','notes'].map(key=>[key,String(data.get(key)||'').trim()])),
-    items: cart.map(({id,size,qty})=>({id,size,qty}))
+    items: cart.map(item=>({id:item.id,size:item.size,qty:item.qty,...(isCustom(item)?{designId:item.designId}:{})}))
   };
   try {
     const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
@@ -409,6 +431,9 @@ async function submitCheckout(event) {
     if(!response.ok)throw new Error(result.error||'Order submission is unavailable right now.');
     cart = []; persistCart(); form.reset();
     $('#successOrderId').textContent = result.order_id;
+    $('#customOrderSummary')?.remove();
+    const customItems=(result.items||[]).filter(item=>item.design_id);
+    if(customItems.length){const summary=document.createElement('div');summary.id='customOrderSummary';summary.innerHTML=customItems.map(item=>`<p>${escapeHtml(item.name)} · ${escapeHtml(item.colour)} · ${escapeHtml(item.size)}<br><small>Design reference: ${escapeHtml(item.design_id)} · Artwork and placements saved with your order.</small></p>`).join('');$('#checkoutSuccess').append(summary);}
     form.hidden = true; $('#checkoutSuccess').hidden = false;
   } catch (error) {
     console.error('Order submission failed:', error);
@@ -528,6 +553,8 @@ function init() {
   configureWhatsApp();
   bindEvents();
   prepareRevealElements();
+  hydrateCustomCart();
+  if(new URLSearchParams(location.search).get('bag')==='1')openCart();
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});

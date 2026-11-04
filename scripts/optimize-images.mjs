@@ -30,7 +30,7 @@ const sources = [
 ];
 
 // Matching Brand angles are generated separately from their approved originals.
-for (const directory of ['brand-hover','brand-collection']) {
+for (const directory of ['brand-hover','brand-collection','designer']) {
 const brandHoverDirectory = join(root, 'assets', directory);
 try {
   const target = join(outputDir, directory);

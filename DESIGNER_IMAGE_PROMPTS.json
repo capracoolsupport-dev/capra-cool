@@ -1,0 +1,30 @@
+{
+  "tool": "built-in image_gen",
+  "use": "Blank photographic front and back garment pairs. Tinting and artwork compositing happen live in Fabric.js.",
+  "images": [
+    {
+      "id": "tshirt",
+      "prompt": "Use case: product-mockup. Create a professional e-commerce customization base asset: exactly two regular-fit short-sleeve crew neck T-shirt views side by side, FRONT on the left and BACK on the right. Landscape 1536x1024 composition, each garment centered in its own equal 768x1024 half, hem at 940px, neckline at 80px. Entire garment including both sleeves inside its half with 45px margin. Orthographic straight-on ghost mannequin product photography, perfectly symmetric relaxed garment with subtle realistic cotton fabric weave, gentle folds and rib seams, neutral light grey fabric with soft white highlights. Both views same size and shape. Absolutely blank, no logos, no text, no graphics, no labels, no person, no hanger. Real transparent alpha background around garments, no backdrop, no floor, no cast shadow outside garment. This will be color tinted in an interactive canvas; keep fabric texture clear and folds shallow, chest and upper back flat and printable. Keep front and back separated with transparent gap. Photorealistic high quality apparel, minimal luxury studio lighting.",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-2a923d5d-20a0-4f83-bf6c-3856528aba7a.png",
+      "saved": "assets/designer/tshirt.png"
+    },
+    {
+      "id": "oversized-tshirt",
+      "prompt": "Use case: product-mockup. Create a professional e-commerce customization base asset: exactly two oversized short-sleeve boxy drop-shoulder crew neck T-shirt views side by side, FRONT on the left and BACK on the right. Landscape 1536x1024 composition, each garment centered in its own equal 768x1024 half, hem at 940px, neckline at 80px. Entire garment including both sleeves inside its half with 45px margin. Orthographic straight-on ghost mannequin product photography, perfectly symmetric relaxed garment with subtle realistic cotton fabric weave, gentle folds and rib seams, neutral light grey fabric with soft white highlights. Both views same size and shape. Absolutely blank, no logos, no text, no graphics, no labels, no person, no hanger. Real transparent alpha background around garments, no backdrop, no floor, no cast shadow outside garment. This will be color tinted in an interactive canvas; keep fabric texture clear and folds shallow, chest and upper back flat and printable. Keep front and back separated with transparent gap. Photorealistic high quality apparel, minimal luxury studio lighting.",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-55acf571-b826-43b2-aed9-14518c0f3eaa.png",
+      "saved": "assets/designer/oversized-tshirt.png"
+    },
+    {
+      "id": "hoodie",
+      "prompt": "Use case: product-mockup. Create a professional e-commerce customization base asset: exactly two regular-fit pullover hoodie with hood, drawstrings and kangaroo pocket views side by side, FRONT on the left and BACK on the right. Landscape 1536x1024 composition, each garment centered in its own equal 768x1024 half, hem at 940px, neckline at 80px. Entire garment including both sleeves inside its half with 45px margin. Orthographic straight-on ghost mannequin product photography, perfectly symmetric relaxed garment with subtle realistic cotton fabric weave, gentle folds and rib seams, neutral light grey fabric with soft white highlights. Both views same size and shape. Absolutely blank, no logos, no text, no graphics, no labels, no person, no hanger. Real transparent alpha background around garments, no backdrop, no floor, no cast shadow outside garment. This will be color tinted in an interactive canvas; keep fabric texture clear and folds shallow, chest and upper back flat and printable. Keep front and back separated with transparent gap. Photorealistic high quality apparel, minimal luxury studio lighting.",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-580ea3c0-3259-4925-8782-48bcbed9ba29.png",
+      "saved": "assets/designer/hoodie.png"
+    },
+    {
+      "id": "oversized-hoodie",
+      "prompt": "Use case: product-mockup. Create a professional e-commerce customization base asset: exactly two oversized boxy drop-shoulder pullover hoodie with generous sleeves and kangaroo pocket views side by side, FRONT on the left and BACK on the right. Landscape 1536x1024 composition, each garment centered in its own equal 768x1024 half, hem at 940px, neckline at 80px. Entire garment including both sleeves inside its half with 45px margin. Orthographic straight-on ghost mannequin product photography, perfectly symmetric relaxed garment with subtle realistic cotton fabric weave, gentle folds and rib seams, neutral light grey fabric with soft white highlights. Both views same size and shape. Absolutely blank, no logos, no text, no graphics, no labels, no person, no hanger. Real transparent alpha background around garments, no backdrop, no floor, no cast shadow outside garment. This will be color tinted in an interactive canvas; keep fabric texture clear and folds shallow, chest and upper back flat and printable. Keep front and back separated with transparent gap. Photorealistic high quality apparel, minimal luxury studio lighting.",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-8b73594a-6e80-4bed-9401-466343403bd0.png",
+      "saved": "assets/designer/oversized-hoodie.png"
+    }
+  ]
+}

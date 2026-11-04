@@ -1,11 +1,13 @@
 import { cleanEmail, cleanText, createOrderId, isEmail, methodAllowed, orderTotals, postSupabase, readJson, send } from './_shared.js';
+import {normalizeCustomItems,checkOrigin} from './_studio.js';
 
 export default async function handler(req, res) {
   if (!methodAllowed(req, res)) return;
 
   try {
     const body = await readJson(req);
-    const totals = orderTotals(body.items);
+    if(body.items?.some?.(item=>item?.designId||String(item?.id||'').startsWith('custom:')))checkOrigin(req);
+    const totals = orderTotals(await normalizeCustomItems(req,res,body.items||[]));
     const customer_email = cleanEmail(body.customer?.email);
     const customer_phone = cleanText(body.customer?.phone, 24).replace(/[^\d+\s-]/g, '');
     const pincode = cleanText(body.customer?.pincode, 6);
@@ -42,6 +44,6 @@ export default async function handler(req, res) {
     send(res, 200, { order_id: orderId, ...totals });
   } catch (error) {
     console.error('order_submit_failed', error);
-    send(res, error.status || 500, { error: error.code === 'OUT_OF_STOCK' ? error.message : 'Order submission is unavailable right now.' });
+    send(res, error.status || 500, { error: error.code === 'OUT_OF_STOCK' || error.studio ? error.message : 'Order submission is unavailable right now.' });
   }
 }
