@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('shopping action and search are visible in the first viewport', async ({ page }, testInfo) => {
-  await expect(page.getByRole('heading', { name: 'Wear higher.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Summer collection.' })).toBeVisible();
   await expect(page.locator('#searchOpen')).toBeInViewport();
   await expect(page.locator('.hero-actions .button')).toBeInViewport();
   await expect.poll(() => page.locator('.hero-media img').evaluate(img => img.complete && img.naturalWidth > 0)).toBeTruthy();

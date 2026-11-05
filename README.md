@@ -24,6 +24,10 @@ The React / Fabric.js studio at `/design` supports four fits, five colours, XSâ€
 
 Apply `supabase/custom_designer.sql` and configure the server-only Supabase service credential before enabling private cloud saving. `CUSTOM_DESIGNER_SETUP.md` gives the steps. Saving fails closed when storage is unavailable; drafts stay on the device. `tests/designer-security.test.mjs` verifies content validation, guest ownership and the full save/order contract against a test transport; `tests/e2e/designer.spec.js` checks the real editor and cart in Chrome. Original artwork, design geometry and previews remain attached to custom order items and are available privately in the staff order desk.
 
+## Homepage collection highlights
+
+The Brand homepage has six rotating collection highlights: Summer, Winter, College, Gym, Corporate and Conference. Summer filters tees/polos; Winter filters hoodies, zip hoodies and varsity jackets. College opens the separate Campus store. The three other merchandise campaigns preselect the group enquiry form, which builds a reviewed email draft and does not submit automatically. Controls support arrows, keyboard navigation, touch swipes, pause, focus/hover pauses and reduced motion. Campaign images are labelled design previews, with no implied customer endorsements. `home-highlights.js` contains campaign copy and destinations; `CAMPAIGN_IMAGE_PROMPTS.json` records the six built-in imagegen briefs and source paths.
+
 ## Campus stock
 
 The black/white Contrast Polo (`mandi-contrast-polo`), cream Ridge Hoodie (`mandi-cream-hoodie`), black/white and brown/cream varsity jackets (`mandi-varsity-black`, `mandi-varsity-brown`) and grey polo (`mandi-grey-polo`) are marked `inStock: false` in `campus-catalog.js` for all sizes. Set a product's flag to `true` and publish to restore purchasing. Sold-out products remain visible; saved bags require removing unavailable items, and the order API rejects them before writing an order. This is a catalog setting; the admin order desk does not yet provide a stock toggle.

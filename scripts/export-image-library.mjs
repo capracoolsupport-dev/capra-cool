@@ -17,6 +17,7 @@ async function walk(directory){
   if(entry.isDirectory()){await walk(source);continue;}
   if(!/\.(png|jpe?g|svg|webp|avif)$/i.test(entry.name))continue;
   const name=clean(entry.name);
+  if(source.split(path.sep).includes('campaigns')){await copy(source,path.join('Campaigns',name));continue;}
   const group=source.split(path.sep).includes('designer')?'Design-Studio/Mockups':source.split(path.sep).includes('brand-collection')?'Brand/Hill-Collection':source.split(path.sep).includes('brand-hover')?'Brand/Hover-Views':source.includes(`${path.sep}campus-acid-black${path.sep}`)?'Campus/Acid-Wash-Black':source.includes(`${path.sep}campus-new${path.sep}`)?(name.includes('varsity')?'Campus/Varsity':'Campus/Grey-Polo'):source.includes(`${path.sep}campus-cream${path.sep}`)?'Campus/Cream-Hoodie':source.includes(`${path.sep}tracksuit${path.sep}`)?(/-(front|back)\.png$/.test(name)?'Campus/Tracksuit':'Archive/Tracksuit'):source.includes(`${path.sep}campus-approved${path.sep}`)?'Campus/Approved':source.includes(`${path.sep}design-gold${path.sep}`)?(name.startsWith('mandi-')?'Archive/Discarded-gold-campus':'Brand/Gold'):source.includes(`${path.sep}design-v2${path.sep}`)?'Archive/Monochrome-proposals':source.includes(`${path.sep}identity${path.sep}`)?'Logos':source.includes(`${path.sep}campus${path.sep}`)?'Campus':source.includes(`${path.sep}editorial${path.sep}`)?'Editorial':/^handmade|keychain|charms|spiderman/.test(name)?'Handmade':/^iit-/.test(name)?'Campus/Archive':/logo|crest|mark|hangtag/.test(name)?'Logos/Originals':/^(test-|corner-|model-|pdp-|heart-|catalog-grid|discover-section)/.test(name)?'Archive':'Brand';
   await copy(source,path.join(group,name));
  }
@@ -43,5 +44,6 @@ await copy('BRAND_COLLECTION_IMAGE_PROMPTS.json','BRAND_COLLECTION_IMAGE_PROMPTS
 await copy('BRAND_COLLECTION_PLAN.md','BRAND_COLLECTION_PLAN.md');
 await copy('DESIGNER_IMAGE_PROMPTS.json','DESIGNER_IMAGE_PROMPTS.json');
 await copy('DESIGNER_SLEEVE_IMAGE_PROMPTS.json','DESIGNER_SLEEVE_IMAGE_PROMPTS.json');
+await copy('CAMPAIGN_IMAGE_PROMPTS.json','CAMPAIGN_IMAGE_PROMPTS.json');
 await fs.writeFile(path.join(destination,'image-manifest.json'),JSON.stringify(entries,null,2));
 console.log(`Exported ${entries.length} files to ${destination}; existing files preserved.`);

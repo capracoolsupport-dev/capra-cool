@@ -34,6 +34,10 @@ Built-in imagegen produced the raster edits. Prompt records are in `APPROVED_IMA
 The image-library export is organised under `App Image/Website Assets/2026-10-27 Approved` with Campus/Approved, Campus/Tracksuit, Brand/Gold, Logos, Web-ready and Archive folders. Run `scripts/export-image-library.mjs` with that destination to create the manifest and copies; existing files are preserved.
 
 Browser checkout tests intercept writes and do not create real orders. Live database persistence requires separate authenticated order verification.
+# Homepage campaign images
+
+The six landscape campaign photographs in `assets/campaigns/*-v1.png` illustrate Summer, Winter, College, Gym, Corporate and Conference highlights on the Brand homepage. They were made with built-in imagegen and are labelled collection design previews, not customer photos. The College campaign uses the approved IIT Mandi editorial as its reference. `CAMPAIGN_IMAGE_PROMPTS.json` records all six final prompts and original generated paths. Optimized AVIF/WebP files are built into `public/optimized/campaigns/`; the export script copies originals to `Campaigns/`, web copies to `Web-ready/campaigns/` and includes the prompt record.
+
 # Custom designer mockups
 
 The four blank garment pairs in `assets/designer/` were generated with the built-in image-generation tool for the interactive React / Fabric studio. Each PNG has an alpha background, front on the left and back on the right. `DESIGNER_IMAGE_PROMPTS.json` records the final prompts and original generated file paths. Optimized WebP/AVIF copies are built in `public/optimized/designer/`. The runtime tints a photographic base and composites actual customer artwork; these are blank preview garments rather than customer photographs. Uploaded artwork is private user data and is never exported into this public image library.

@@ -1,5 +1,6 @@
 import {BRAND_PRODUCTS as PRODUCTS, BRAND_CATEGORY_LABELS as CATEGORY_LABELS} from './brand-catalog.js';
 import {GARMENTS,COLOURS,FACE_NAMES,UUID} from './designer/catalog.js';
+import {initHomeHighlights} from './home-highlights.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const money = value => `₹${Number(value).toLocaleString('en-IN')}`;
@@ -100,7 +101,8 @@ function escapeHtml(value = '') {
 function productById(id) { return PRODUCTS.find(product => product.id === id); }
 
 function sortedProducts() {
-  let list = currentFilter === 'all' ? [...PRODUCTS] : PRODUCTS.filter(product => product.category === currentFilter);
+  const seasonal={summer:['tee','polo'],winter:['hoodie','zip','varsity']};
+  let list = currentFilter === 'all' ? [...PRODUCTS] : PRODUCTS.filter(product => seasonal[currentFilter]?.includes(product.category) || product.category === currentFilter);
   if (currentSort === 'price-asc') list.sort((a,b) => a.price - b.price);
   if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
   return list;
@@ -545,6 +547,8 @@ function bindEvents() {
 }
 
 function init() {
+  const collection=new URLSearchParams(location.search).get('collection');
+  if(['summer','winter'].includes(collection))currentFilter=collection;
   renderProducts();
   renderAccessories();
   renderCart();
@@ -552,6 +556,16 @@ function init() {
   runSearch('');
   configureWhatsApp();
   bindEvents();
+  const selectCollection=value=>{
+    currentFilter=value;
+    $$('.filter-button').forEach(button=>{
+      button.classList.toggle('active',button.dataset.filter===value);
+      button.setAttribute('aria-pressed',String(button.dataset.filter===value));
+    });
+    renderProducts();
+  };
+  if(collection)selectCollection(currentFilter);
+  initHomeHighlights(selectCollection);
   prepareRevealElements();
   hydrateCustomCart();
   if(new URLSearchParams(location.search).get('bag')==='1')openCart();

@@ -411,4 +411,54 @@ button,a,input,textarea,select,summary { -webkit-tap-highlight-color:transparent
 .campus-order-link p:not(.eyebrow){font-size:13px;line-height:1.8;color:var(--stone);max-width:540px;margin:18px 0 0}
 .campus-order-link>.button{flex-shrink:0}
 @media(max-width:760px){.campus-order-link{align-items:flex-start;flex-direction:column;gap:24px}}
+
+/* Seasonal and group merchandise campaigns share one calm, accessible hero. */
+.collection-hero{height:auto;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+.collection-hero .hero-copy{min-height:500px;padding:44px clamp(28px,4.5vw,66px)}
+.collection-hero .hero-copy h1{font-size:clamp(44px,5.2vw,72px);line-height:1.05;white-space:pre-line;letter-spacing:-.055em;margin:12px 0 22px}
+.collection-hero .hero-intro{min-height:54px;font-size:15px;max-width:340px}
+.collection-hero .hero-media{min-height:500px;height:auto;align-self:stretch;touch-action:pan-y}
+.collection-hero .hero-media img{object-position:50% 50%}
+.collection-hero .hero-actions{gap:16px;flex-direction:row;flex-wrap:wrap;align-items:center}
+.collection-hero .hero-actions .button{padding:0 18px;gap:18px}
+.collection-hero .hero-footnote{margin-top:38px;font-size:10px}
+.collection-hero .hero-media-caption{font-size:8px;letter-spacing:.1em}
+.highlight-controls{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:var(--paper);border-bottom:1px solid var(--line);gap:24px}
+.highlight-tabs{display:flex;gap:26px;min-width:0;overflow-x:auto;scrollbar-width:thin}
+.highlight-tabs button{position:relative;border:0;background:none;white-space:nowrap;font-size:11px;color:var(--stone);padding:20px 0;min-height:56px}
+.highlight-tabs button[aria-pressed="true"]{color:var(--ink);font-weight:600}
+.highlight-tabs button[aria-pressed="true"]::after{content:"";position:absolute;inset:auto 0 0;height:2px;background:var(--ink)}
+.highlight-playback{display:flex;gap:6px;flex-shrink:0}
+.highlight-playback button{border:1px solid var(--line);border-radius:50%;background:transparent;width:38px;height:38px;font-size:16px;display:grid;place-items:center}
+.highlight-playback button:hover{background:var(--paper-2)}
+.merchandise-enquiry{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,7vw,100px);border-bottom:1px solid var(--line);scroll-margin-top:120px}
+.merchandise-enquiry h2{font:400 clamp(34px,3.5vw,48px)/1.15 var(--serif);letter-spacing:-.035em;margin:0 0 22px}
+.merchandise-enquiry p:not(.eyebrow){font-size:13px;color:var(--stone);line-height:1.8}
+.merchandise-enquiry dl{margin:28px 0}
+.merchandise-enquiry dl>div{border-top:1px solid var(--line);padding:14px 0}
+.merchandise-enquiry dt{font-size:12px;font-weight:600}
+.merchandise-enquiry dd{margin:4px 0 0;font-size:12px;color:var(--stone)}
+.merchandise-enquiry .field{margin-bottom:16px}
+.merchandise-enquiry .field select{width:100%;min-height:46px;background:transparent;border:1px solid var(--line);padding:10px;font-size:13px;color:var(--ink)}
+.merchandise-enquiry .merchandise-form-note{font-size:11px;max-width:400px;margin:14px 0 0}
+#merchandiseDraft{background:var(--paper-2);padding:20px;margin-top:24px;font-size:12px}
+#merchandiseDraft pre{font:inherit;white-space:pre-wrap;overflow-wrap:anywhere;margin:14px 0 20px}
+@media(max-width:1000px) and (min-width:761px){.collection-hero .hero-copy{padding:32px}.collection-hero .hero-copy h1{font-size:48px}.collection-hero .hero-secondary{font-size:11px}.highlight-tabs{gap:20px}.highlight-controls{gap:16px;padding:0 20px}}
+@media(max-width:760px){
+  .collection-hero{display:grid;grid-template-columns:minmax(0,1fr)}
+  .collection-hero .hero-copy{min-height:300px;padding:28px 20px 24px}
+  .collection-hero .hero-copy h1{font-size:44px;margin:8px 0 14px;max-width:340px}
+  .collection-hero .hero-intro{min-height:44px;font-size:13px;margin-bottom:18px;max-width:320px}
+  .collection-hero .hero-actions{gap:12px}
+  .collection-hero .hero-actions .button{font-size:11px;min-height:44px;padding:0 13px;gap:10px}
+  .collection-hero .hero-secondary{font-size:10px}
+  .collection-hero .hero-media{min-height:0;height:260px;order:1;width:100%}
+  .collection-hero .hero-media img{object-position:center 48%}
+  .highlight-controls{order:2;padding:0 16px 10px;gap:0;flex-wrap:wrap}
+  .highlight-tabs{gap:22px;width:100%;flex:none}
+  .highlight-tabs button{min-height:48px;padding:14px 0}
+  .highlight-playback{margin-top:9px;width:100%;justify-content:flex-end;gap:8px}
+  .highlight-playback button{width:44px;height:44px}
+  .merchandise-enquiry{grid-template-columns:1fr;gap:30px}
+}
 .product-modal-card{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.product-modal-media{min-width:0;width:100%;height:auto;align-self:stretch;aspect-ratio:auto}.brand-gallery-frame{min-width:0;flex-shrink:1}@media(max-width:760px){.product-modal-media{height:280px}}

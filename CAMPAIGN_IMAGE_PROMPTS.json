@@ -1,0 +1,43 @@
+{
+  "tool": "Built-in image_gen",
+  "purpose": "Homepage collection and group merchandise campaign design previews. Not customer photos; garment specifications and artwork confirmed before production.",
+  "images": [
+    {
+      "id": "summer",
+      "file": "assets/campaigns/summer-v1.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-926f8087-76f8-4804-8722-977a6dada144.png",
+      "prompt": "Use case: ads-marketing. Asset type: CAPRA COOL summer collection website campaign photograph, wide landscape 1536x1024. Create an understated fashion editorial still life: ivory and washed-black heavyweight cotton crew-neck T-shirts hanging neatly from two wooden hangers on a simple rail beside a sunlit pale limestone wall, a small glimpse of soft green Himalayan foothills at the far edge. Small restrained dark mountain chest embroidery, no words. Cotton weave and natural folds must look realistic. Warm summer daylight, soft shadows, refined cream/stone/black palette. Compose garments centrally with generous margins so a portrait crop also works. Photograph only, no typography, no banners, no watermark, no collage, no invented brand names, no people. Match a quiet contemporary Himalayan streetwear storefront."
+    },
+    {
+      "id": "winter",
+      "file": "assets/campaigns/winter-v1.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-7eeb9245-c584-4916-8f94-c0dd20ecc6be.png",
+      "prompt": "Use case: ads-marketing. Asset type: CAPRA COOL winter collection website campaign photograph, wide landscape 1536x1024. Quiet high-end editorial fashion still life of a charcoal black heavyweight pullover hoodie and an olive fleece hoodie neatly hanging on wooden hangers in front of a weathered warm-grey mountain lodge wall, pale misty Himalayan ridge in the distance. Real brushed cotton fleece, thick ribbing, soft natural folds, subtle small tonal mountain embroidery at left chest, no words. Cool winter morning light balanced with warm stone. Restrained neutral palette, central garments framed with generous margins for portrait crop. No people, no typography, no collage, no watermark. Consistent understated fashion photography for a Himalayan streetwear storefront."
+    },
+    {
+      "id": "college",
+      "file": "assets/campaigns/college-v1.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-fc8f2840-ff5e-4c08-ad11-bfe0163cebfc.png",
+      "prompt": "Use case: ads-marketing. Asset type: CAPRA COOL college merchandise collection website campaign photograph, landscape 1536x1024. Reference image is an approved product design: preserve the black hoodie and maroon/cream polo, their IIT MANDI lettering, mountain graphic, and smaller 'IITians in Himalayas' back text. Create a new editorial still life with those two garments hanging on wooden hangers from a slim black rail in a sunlit modern campus corridor, pale concrete, distant soft Himalayan greenery. Both garment backs visible, realistic cotton textures and correct practical garment proportions, understated cream/maroon/black palette. Central garments with generous margins for portrait crop. No people, no extra logos, no promotional typography, no collage, no watermark. This is a merchandise design preview, not a real customer photo.",
+      "reference": "assets/editorial/campus-collection-editorial.png"
+    },
+    {
+      "id": "gym",
+      "file": "assets/campaigns/gym-v1.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-73352d52-aaf2-4a31-abe6-851c31fe9e6f.png",
+      "prompt": "Use case: ads-marketing. Asset type: CAPRA COOL gym merchandise website campaign photograph, wide landscape 1536x1024. Understated fashion editorial still life in a quiet modern gym: one black cotton crew-neck T-shirt and a black zip-front track jacket with subtle charcoal side panels hang neatly on wooden hangers from a slim rail, folded matching track trousers below, an out-of-focus training bench at the edge. Real cotton and double-knit textures, realistic folds, discrete small tonal mountain chest mark, no writing or third-party logos. Soft daylight, warm concrete, black/charcoal/stone palette, central garments and generous margins for portrait crop. No people, no graphic text, no collage, no watermark. This is a proposed team merchandise design preview, not a customer endorsement or performance demonstration."
+    },
+    {
+      "id": "corporate",
+      "file": "assets/campaigns/corporate-v1.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-18015f0b-3a1e-432a-acc4-8f55f6588529.png",
+      "prompt": "Use case: ads-marketing. Asset type: CAPRA COOL corporate merchandise website campaign photograph, wide landscape 1536x1024. A refined editorial still life of navy blue and warm beige cotton pique polo shirts on wooden hangers beside a quiet modern workspace with light oak desk and warm concrete wall. Shirt fronts visible, crisp practical collars, small simple tone-on-tone mountain chest embroidery, beautifully realistic pique fabric and natural folds. No lettering or identifiable company logo. Soft window light, navy/oat/stone colour palette, composition centrally frames garments with generous crop-safe margins. No people, no promotional typography, no watermark, no collage. Proposed corporate merchandise design preview for an understated Himalayan clothing brand."
+    },
+    {
+      "id": "conference",
+      "file": "assets/campaigns/conference-v1.png",
+      "source": "C:\\Users\\hp\\.codex\\generated_images\\01a152fd-5749-7522-a19b-2b2ce62068d0\\exec-e9388f05-a5d8-47ba-b1fd-3e3c1f188ee1.png",
+      "prompt": "Use case: ads-marketing. Asset type: CAPRA COOL conference merchandise website campaign photograph, wide landscape 1536x1024. A sophisticated realistic editorial still life on a light oak conference welcome table: two carefully folded heavyweight cotton crew-neck T-shirts in ivory and warm charcoal, one ivory tee draped over the back of a nearby chair so its front can be seen. Small simple dark mountain chest mark, no words. A plain unbranded paper notebook, simple blank event badge on a black lanyard and capped pen arranged quietly nearby. Soft natural light in a modern warm concrete event venue, muted cream/charcoal/oak palette, highly realistic garment fabric, central grouping and generous margins for mobile crop. No people, no readable text, no third-party brands, no promotional overlays, no watermark, no collage. Proposed conference merchandise design preview."
+    }
+  ]
+}
