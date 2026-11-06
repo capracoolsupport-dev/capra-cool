@@ -18,13 +18,6 @@ export const BRAND_ORIGINAL_PRODUCTS = [
     care: 'Gentle cold wash. Hang dry in shade. Do not iron directly on print.', sizes: ['S','M','L','XL','XXL']
   },
   {
-    id: 'trail-tracksuit', name: 'Trail Tracksuit', category: 'track', price: 1999,
-    image: 'assets/product_trail_tracksuit.jpg', backImage: 'assets/brand-hover/trail-tracksuit-back.png', color: 'Deep Olive', gsm: '340 GSM',
-    fabric: 'Technical double-knit', fit: 'Tapered outerwear set', sku: 'CC-TRK-001',
-    description: 'An olive zip jacket and tapered track pant, sold as a two-piece set. 340 GSM double-knit.',
-    care: 'Fasten zips, cold wash, air dry.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
     id: 'classic-tee', name: 'Capra Classic Tee', category: 'tee', price: 799,
     image: 'assets/product_classic_tee.jpg', backImage: 'assets/brand-hover/classic-tee-back.png', color: 'Jet Black', gsm: '180 GSM',
     fabric: 'Heavy combed cotton', fit: 'Relaxed boxy cut', sku: 'CC-TEE-002', imageFit: 'contain',
@@ -44,13 +37,6 @@ export const BRAND_ORIGINAL_PRODUCTS = [
     fabric: 'Heavy brushed fleece', fit: 'Drop-shoulder structure', sku: 'CC-HD-002',
     description: 'Olive fleece hoodie with sleeve artwork and a relaxed shoulder. 380 GSM.',
     care: 'Cold gentle wash. Line dry. Do not tumble dry.', sizes: ['S','M','L','XL','XXL']
-  },
-  {
-    id: 'peak-tracksuit', name: 'Peak Tracksuit', category: 'track', price: 1999,
-    image: 'assets/product_peak_tracksuit_clean.jpg', backImage: 'assets/brand-hover/peak-tracksuit-back.png', color: 'Basalt Black', gsm: '340 GSM',
-    fabric: 'Technical double-knit jersey', fit: 'Tapered performance cut', sku: 'CC-TRK-002', imageFit: 'contain',
-    description: 'Black zip jacket and matching track pants. A two-piece set in 340 GSM double-knit.',
-    care: 'Wash with like colours. Do not iron over logo. Air dry.', sizes: ['S','M','L','XL','XXL']
   }
 ];
 
