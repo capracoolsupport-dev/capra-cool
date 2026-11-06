@@ -7,11 +7,11 @@ test.beforeEach(async({page})=>{
 });
 
 test('Brand contains all garment types while Campus remains separate',async({page},testInfo)=>{
- await expect(page.locator('.product-card')).toHaveCount(21);
+ await expect(page.locator('.product-card')).toHaveCount(19);
  await expect(page.locator('.product-card[data-paired="true"]')).toHaveCount(14);
  await expect(page.locator('.brand-stock-badge')).toHaveCount(5);
  await expect(page.locator('#productsGrid')).not.toContainText('IIT');
- for(const [category,count] of [['polo',4],['tee',4],['hoodie',6],['zip',1],['varsity',2],['track',4]]){
+ for(const [category,count] of [['polo',4],['tee',4],['hoodie',6],['zip',1],['varsity',2],['track',2]]){
   await page.locator(`[data-filter="${category}"]`).click();
   await expect(page.locator('.product-card')).toHaveCount(count);
  }

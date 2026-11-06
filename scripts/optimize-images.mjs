@@ -10,6 +10,7 @@ const sources = [
   'assets/crop_hero_model_3x4.jpg',
   'assets/editorial/campus-collection-editorial.png',
   'assets/editorial/handmade-knits-editorial.png',
+  'assets/editorial/himalayan-story-mountain-v4.png',
   'assets/test_hero_crop.jpg',
   'assets/collection_tees.jpg',
   'assets/collection_hoodies.jpg',
@@ -30,7 +31,7 @@ const sources = [
 ];
 
 // Matching Brand angles are generated separately from their approved originals.
-for (const directory of ['brand-hover','brand-collection','designer','campaigns']) {
+for (const directory of ['brand-hover','brand-collection','brand-mountain','designer','campaigns']) {
 const brandHoverDirectory = join(root, 'assets', directory);
 try {
   const target = join(outputDir, directory);

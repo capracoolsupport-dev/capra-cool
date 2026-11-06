@@ -1,0 +1,9 @@
+{
+  "tool": "built-in image_gen",
+  "asset": "assets/editorial/himalayan-story-branded-v3.png",
+  "prompt": "Edit the first reference photograph only. Preserve the same woman, face, hairstyle, pose, olive hoodie, mountains, lighting, framing and photographic quality. Add small premium ivory embroidery on the wearer's left chest (right side of image): the CAPRA COOL ibex symbol and exact uppercase text 'CAPRA COOL', using the second reference as brand identity. Make a tasteful compact chest logo about 9 cm wide, realistically stitched into the fleece, conforming to folds and perspective. Clearly readable correct lettering. Do not include the WEAR HIGHER tagline at this small scale. No other text or changes.",
+  "references": [
+    "assets/editorial/himalayan-story-v2.png",
+    "assets/identity/capra-ibex-monochrome-lockup.png"
+  ]
+}

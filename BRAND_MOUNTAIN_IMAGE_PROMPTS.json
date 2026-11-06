@@ -1,0 +1,180 @@
+{
+  "tool": "built-in image_gen",
+  "direction": "Fine alpine mountain outline matching user reference; small chest embroidery, charcoal on light fabric and ivory on dark. No front text or goat. Campus unchanged.",
+  "logoReference": "assets/identity/capra-alpine-outline-reference.png",
+  "images": [
+    {
+      "id": "summit-tee",
+      "src": "assets/product_summit_tee.jpg",
+      "tone": "charcoal",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-40a2490f-4d37-4ff6-a293-feaf9bc9dc23.png",
+      "savedPath": "assets/brand-mountain/summit-tee-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the garment photograph to edit. Image 2 is the exact branding reference, a fine irregular alpine mountain ridge outline. Replace ALL existing branding/text/logos on the shirt with ONLY this small mountain outline, about 4 cm wide on the wearer's left chest (right side of the photograph). Use charcoal thin embroidery following the fabric naturally. NO lettering, NO goat, NO thick geometric chevrons, NO underline strokes. Preserve the exact garment, color, fit, photograph layout, model if present, background, lighting and framing. Remove old central text and logo completely if present. Keep everything else unchanged. The new mountain branding must be subtle and small like premium minimal everyday clothing."
+    },
+    {
+      "id": "classic-tee",
+      "src": "assets/product_classic_tee.jpg",
+      "tone": "ivory",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-f97e87f5-30f0-4b18-bbdf-6f24b2d9d58a.png",
+      "savedPath": "assets/brand-mountain/classic-tee-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the garment photograph to edit. Image 2 is the exact branding reference, a fine irregular alpine mountain ridge outline. Replace ALL existing branding/text/logos on the shirt with ONLY this small mountain outline, about 4 cm wide on the wearer's left chest (right side of the photograph). Use ivory thin embroidery following the fabric naturally. NO lettering, NO goat, NO thick geometric chevrons, NO underline strokes. Preserve the exact garment, color, fit, photograph layout, model if present, background, lighting and framing. Remove old central text and logo completely if present. Keep everything else unchanged. The new mountain branding must be subtle and small like premium minimal everyday clothing."
+    },
+    {
+      "id": "capra-cool-tee",
+      "src": "assets/capra-cool-studio-front.jpg",
+      "tone": "ivory",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-0c8679a7-d8f9-4aeb-8415-053075cfd2b4.png",
+      "savedPath": "assets/brand-mountain/capra-cool-tee-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the garment photograph to edit. Image 2 is the exact branding reference, a fine irregular alpine mountain ridge outline. Replace ALL existing branding/text/logos on the shirt with ONLY this small mountain outline, about 4 cm wide on the wearer's left chest (right side of the photograph). Use ivory thin embroidery following the fabric naturally. NO lettering, NO goat, NO thick geometric chevrons, NO underline strokes. Preserve the exact garment, color, fit, photograph layout, model if present, background, lighting and framing. Remove old central text and logo completely if present. Keep everything else unchanged. The new mountain branding must be subtle and small like premium minimal everyday clothing."
+    },
+    {
+      "id": "alpine-hoodie",
+      "src": "assets/brand-hover/alpine-hoodie-front.png",
+      "tone": "ivory",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-e522e839-2920-425f-832b-cb73abd0529c.png",
+      "savedPath": "assets/brand-mountain/alpine-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing garment photo; image 2 is the new thin irregular alpine mountain-outline logo reference. Change garment branding ONLY. Replace old chest logos/lettering with ONLY the small mountain ridge outline from image 2, ivory embroidery about 4 cm wide at wearer's left chest. Remove old goat, CAPRA COOL, ALPINIST lettering and geometric hill marks from garment. No words, no underlines, no geometric chevrons.  Preserve exact garment color, texture, construction, people, backgrounds, photographic lighting and framing. Keep logo tiny and tasteful, natural stitch texture. Do not change anything else."
+    },
+    {
+      "id": "horizon-hoodie",
+      "src": "assets/product_horizon_hoodie.jpg",
+      "tone": "ivory",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-1c49d553-6320-4519-8138-49df7a2e51aa.png",
+      "savedPath": "assets/brand-mountain/horizon-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing garment photo; image 2 is the new thin irregular alpine mountain-outline logo reference. Change garment branding ONLY. Replace old chest logos/lettering with ONLY the small mountain ridge outline from image 2, ivory embroidery about 4 cm wide at wearer's left chest. Remove old goat, CAPRA COOL, ALPINIST lettering and geometric hill marks from garment. No words, no underlines, no geometric chevrons.  Preserve exact garment color, texture, construction, people, backgrounds, photographic lighting and framing. Keep logo tiny and tasteful, natural stitch texture. Do not change anything else."
+    },
+    {
+      "id": "capra-ridge-polo",
+      "src": "assets/brand-collection/capra-ridge-polo-hill-v2.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-a2e62b58-bfd2-415c-ad93-395d8cc96c04.png",
+      "savedPath": "assets/brand-mountain/capra-ridge-polo-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing garment photo front-left/back-right pair; image 2 is the new thin irregular alpine mountain-outline logo reference. Change garment branding ONLY. Replace old chest logos/lettering with ONLY the small mountain ridge outline from image 2, ivory embroidery about 4 cm wide at wearer's left chest. Remove old goat, CAPRA COOL, ALPINIST lettering and geometric hill marks from garment. No words, no underlines, no geometric chevrons. Preserve the two-panel front-left/back-right arrangement exactly, and keep the back completely plain. Preserve exact garment color, texture, construction, people, backgrounds, photographic lighting and framing. Keep logo tiny and tasteful, natural stitch texture. Do not change anything else."
+    },
+    {
+      "id": "capra-oxblood-polo",
+      "src": "assets/brand-collection/capra-oxblood-polo-hill-v2.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-b13e0af9-790f-4300-a752-5ddace2f59dc.png",
+      "savedPath": "assets/brand-mountain/capra-oxblood-polo-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing garment photo front-left/back-right pair; image 2 is the new thin irregular alpine mountain-outline logo reference. Change garment branding ONLY. Replace old chest logos/lettering with ONLY the small mountain ridge outline from image 2, ivory embroidery about 4 cm wide at wearer's left chest. Remove old goat, CAPRA COOL, ALPINIST lettering and geometric hill marks from garment. No words, no underlines, no geometric chevrons. Preserve the two-panel front-left/back-right arrangement exactly, and keep the back completely plain. Preserve exact garment color, texture, construction, people, backgrounds, photographic lighting and framing. Keep logo tiny and tasteful, natural stitch texture. Do not change anything else."
+    },
+    {
+      "id": "capra-contrast-polo",
+      "src": "assets/brand-collection/capra-contrast-polo-hill-v2.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-3e03a4e9-7ba1-4fed-b545-daa64ffed04b.png",
+      "savedPath": "assets/brand-mountain/capra-contrast-polo-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing front-left/back-right product pair. Image 2 is the exact new fine alpine mountain ridge emblem. Replace the old geometric chest mark and ALL chest lettering with ONLY this thin natural mountain outline, subtle ivory embroidery approximately 4 cm wide on wearer's left chest of the FRONT garment. NO text or words beside or beneath it, NO underline bars, NO thick chevrons. Preserve the garment colors, fabric textures, shape, collars, cuffs, seams, lighting, scale and two-panel arrangement. Keep the BACK exactly as it is: completely plain fabric. Do not change anything else."
+    },
+    {
+      "id": "capra-heather-polo",
+      "src": "assets/brand-collection/capra-heather-polo-hill-v2.png",
+      "tone": "charcoal",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-da1a80f4-2113-47af-ad6a-d2f09ec2774b.png",
+      "savedPath": "assets/brand-mountain/capra-heather-polo-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing front-left/back-right product pair. Image 2 is the exact new fine alpine mountain ridge emblem. Replace the old geometric chest mark and ALL chest lettering with ONLY this thin natural mountain outline, subtle charcoal embroidery approximately 4 cm wide on wearer's left chest of the FRONT garment. NO text or words beside or beneath it, NO underline bars, NO thick chevrons. Preserve the garment colors, fabric textures, shape, collars, cuffs, seams, lighting, scale and two-panel arrangement. Keep the BACK exactly as it is: completely plain fabric. Do not change anything else."
+    },
+    {
+      "id": "capra-washed-tee",
+      "src": "assets/brand-collection/capra-washed-tee.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-5759ca46-693d-4d35-b3f0-a171dea3f577.png",
+      "savedPath": "assets/brand-mountain/capra-washed-tee-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing front-left/back-right product pair. Image 2 is the exact new fine alpine mountain ridge emblem. Replace the old geometric chest mark and ALL chest lettering with ONLY this thin natural mountain outline, subtle ivory embroidery approximately 4 cm wide on wearer's left chest of the FRONT garment. NO text or words beside or beneath it, NO underline bars, NO thick chevrons. Preserve the garment colors, fabric textures, shape, collars, cuffs, seams, lighting, scale and two-panel arrangement. Keep the BACK exactly as it is: preserve the existing rectangular alpine landscape artwork and its CAPRA COOL lettering. Do not change anything else."
+    },
+    {
+      "id": "capra-core-hoodie",
+      "src": "assets/brand-collection/capra-core-hoodie.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-b8f3901a-a5eb-4533-852b-1be926e1c951.png",
+      "savedPath": "assets/brand-mountain/capra-core-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing front-left/back-right product pair. Image 2 is the exact new fine alpine mountain ridge emblem. Replace the old geometric chest mark and ALL chest lettering with ONLY this thin natural mountain outline, subtle ivory embroidery approximately 4 cm wide on wearer's left chest of the FRONT garment. NO text or words beside or beneath it, NO underline bars, NO thick chevrons. Preserve the garment colors, fabric textures, shape, collars, cuffs, seams, lighting, scale and two-panel arrangement. Keep the BACK exactly as it is: completely plain fabric. Do not change anything else."
+    },
+    {
+      "id": "capra-washed-hoodie",
+      "src": "assets/brand-collection/capra-washed-hoodie.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-2b932be8-d492-4e75-84ec-f737efe91cd3.png",
+      "savedPath": "assets/brand-mountain/capra-washed-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 is the existing front-left/back-right product pair. Image 2 is the exact new fine alpine mountain ridge emblem. Replace the old geometric chest mark and ALL chest lettering with ONLY this thin natural mountain outline, subtle ivory embroidery approximately 4 cm wide on wearer's left chest of the FRONT garment. NO text or words beside or beneath it, NO underline bars, NO thick chevrons. Preserve the garment colors, fabric textures, shape, collars, cuffs, seams, lighting, scale and two-panel arrangement. Keep the BACK exactly as it is: completely plain fabric. Do not change anything else."
+    },
+    {
+      "id": "capra-acid-hoodie",
+      "src": "assets/brand-collection/capra-acid-hoodie.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-8804a853-d62e-4c7b-be4c-5ae5f7f067d7.png",
+      "savedPath": "assets/brand-mountain/capra-acid-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right garment pair, image 2 exact thin natural alpine mountain ridge branding reference. Replace ALL old chest branding, geometric peaks, underlines and CAPRA COOL words with ONLY the small ivory mountain-outline embroidery from image 2, approximately 4 cm wide at wearer's left chest of front garment. No text, no goats, no underline bars, no thick geometric chevrons. Keep the back completely plain. Preserve EXACT garment colors, wash patterns, texture, cut, collar, buttons/zippers, cuffs, seams, lighting, framing and front-left/back-right arrangement. Only change chest branding."
+    },
+    {
+      "id": "capra-ivory-hoodie",
+      "src": "assets/brand-collection/capra-ivory-hoodie.png",
+      "tone": "charcoal",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-4a39b320-6ddb-40af-9fb8-19a9ff4efacf.png",
+      "savedPath": "assets/brand-mountain/capra-ivory-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right garment pair, image 2 exact thin natural alpine mountain ridge branding reference. Replace ALL old chest branding, geometric peaks, underlines and CAPRA COOL words with ONLY the small charcoal mountain-outline embroidery from image 2, approximately 4 cm wide at wearer's left chest of front garment. No text, no goats, no underline bars, no thick geometric chevrons. Keep the back completely plain. Preserve EXACT garment colors, wash patterns, texture, cut, collar, buttons/zippers, cuffs, seams, lighting, framing and front-left/back-right arrangement. Only change chest branding."
+    },
+    {
+      "id": "capra-zip-hoodie",
+      "src": "assets/brand-collection/capra-zip-hoodie.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-5d6d96d5-d24d-4b55-88da-aee08dc83447.png",
+      "savedPath": "assets/brand-mountain/capra-zip-hoodie-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right garment pair, image 2 exact thin natural alpine mountain ridge branding reference. Replace ALL old chest branding, geometric peaks, underlines and CAPRA COOL words with ONLY the small ivory mountain-outline embroidery from image 2, approximately 4 cm wide at wearer's left chest of front garment. No text, no goats, no underline bars, no thick geometric chevrons. Keep the back completely plain. Preserve EXACT garment colors, wash patterns, texture, cut, collar, buttons/zippers, cuffs, seams, lighting, framing and front-left/back-right arrangement. Only change chest branding."
+    },
+    {
+      "id": "capra-varsity-black",
+      "src": "assets/brand-collection/capra-varsity-black.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-b9d32027-2f3a-479c-ae6a-4064fffe52a4.png",
+      "savedPath": "assets/brand-mountain/capra-varsity-black-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right garment pair, image 2 exact thin natural alpine mountain ridge branding reference. Replace ALL old chest branding, geometric peaks, underlines and CAPRA COOL words with ONLY the small ivory mountain-outline embroidery from image 2, approximately 4 cm wide at wearer's left chest of front garment. No text, no goats, no underline bars, no thick geometric chevrons. Keep the back completely plain. Preserve EXACT garment colors, wash patterns, texture, cut, collar, buttons/zippers, cuffs, seams, lighting, framing and front-left/back-right arrangement. Only change chest branding."
+    },
+    {
+      "id": "capra-varsity-brown",
+      "src": "assets/brand-collection/capra-varsity-brown.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-77c19fd1-1cd7-41bb-9f0f-7dc672fc3573.png",
+      "savedPath": "assets/brand-mountain/capra-varsity-brown-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right varsity jacket pair, image 2 exact new thin alpine mountain ridge logo. Replace ALL old chest branding and lettering with ONLY a tiny ivory embroidered mountain outline from image 2, about 4 cm wide, on wearer's left chest.  NO text, no goats, no underline bars, no geometric chevrons. Keep the back plain. Preserve EXACT garment colors, texture, construction, cuffs, collar, zip/buttons, lighting, full garment framing and existing front-left/back-right arrangement. Change branding only."
+    },
+    {
+      "id": "capra-ridge-tracksuit",
+      "src": "assets/brand-collection/capra-ridge-tracksuit.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-247a87a0-4ae6-4b63-a183-a5cf45f81405.png",
+      "savedPath": "assets/brand-mountain/capra-ridge-tracksuit-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right jacket AND trousers set pair, image 2 exact new thin alpine mountain ridge logo. Replace ALL old chest branding and lettering with ONLY a tiny ivory embroidered mountain outline from image 2, about 4 cm wide, on wearer's left chest. Also replace the small front thigh mark with the same tiny mountain outline, 3 cm wide. Preserve all jacket and trouser panels, white trim accents, fit and entire set. NO text, no goats, no underline bars, no geometric chevrons. Keep the back plain. Preserve EXACT garment colors, texture, construction, cuffs, collar, zip/buttons, lighting, full garment framing and existing front-left/back-right arrangement. Change branding only."
+    },
+    {
+      "id": "capra-essential-tracksuit",
+      "src": "assets/brand-collection/capra-essential-tracksuit.png",
+      "tone": "ivory",
+      "paired": true,
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-70b1e1d2-b9e0-4207-83c4-3d04e5995cad.png",
+      "savedPath": "assets/brand-mountain/capra-essential-tracksuit-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Image 1 existing front-left/back-right jacket AND trousers set pair, image 2 exact new thin alpine mountain ridge logo. Replace ALL old chest branding and lettering with ONLY a tiny ivory embroidered mountain outline from image 2, about 4 cm wide, on wearer's left chest. Also replace the small front thigh mark with the same tiny mountain outline, 3 cm wide. Preserve all jacket and trouser panels, white trim accents, fit and entire set. NO text, no goats, no underline bars, no geometric chevrons. Keep the back plain. Preserve EXACT garment colors, texture, construction, cuffs, collar, zip/buttons, lighting, full garment framing and existing front-left/back-right arrangement. Change branding only."
+    },
+    {
+      "id": "alpine-hoodie-back",
+      "src": "assets/product_alpine_hoodie.jpg",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-2c7852ed-6b35-4bb8-9c2b-81b5b943e9ec.png",
+      "savedPath": "assets/brand-mountain/alpine-hoodie-back-outline-v1.png",
+      "prompt": "Use case precise-object-edit. Preserve this exact back-view black hoodie photograph, man, backpack, mountain landscape, composition, lighting and fabric. Remove the large goat graphic and every old printed mark from the BACK of the hoodie, leaving clean plain black fleece. The new branding is a tiny mountain on the front chest and must not be visible from this rear view. No replacement back artwork, no text. Change only the hoodie branding."
+    }
+  ]
+}

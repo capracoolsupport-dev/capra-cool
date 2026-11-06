@@ -7,7 +7,7 @@ const money = value => `₹${Number(value).toLocaleString('en-IN')}`;
 // Vite fingerprints imported images in production. Keep catalog source names
 // separate from their emitted URLs so optimized names stay stable.
 const ASSET_URLS = import.meta.glob([
-  '/assets/product_*.jpg', '/assets/capra-cool-studio-front.jpg', '/assets/brand-hover/*.png', '/assets/brand-collection/*.png',
+  '/assets/product_*.jpg', '/assets/capra-cool-studio-front.jpg', '/assets/brand-hover/*.png', '/assets/brand-collection/*.png', '/assets/brand-mountain/*.png',
   '/assets/handmade-*.jpg', '/assets/sunflower-keychain.jpg'
 ], { eager: true, query: '?url', import: 'default' });
 const sourcePath = src => ASSET_URLS[`/${src}`] || src;
@@ -83,7 +83,7 @@ function safeStorageSet(key, value) {
 
 function optimizedPath(src, ext) {
   const filename = src.split('/').pop().replace(/\.[^.]+$/, '');
-  return `optimized/${src.includes('/brand-collection/') ? 'brand-collection/' : src.includes('/brand-hover/') ? 'brand-hover/' : ''}${filename}.${ext}`;
+  return `optimized/${src.includes('/brand-mountain/') ? 'brand-mountain/' : src.includes('/brand-collection/') ? 'brand-collection/' : src.includes('/brand-hover/') ? 'brand-hover/' : ''}${filename}.${ext}`;
 }
 
 function pictureMarkup(src, alt, options = {}) {
