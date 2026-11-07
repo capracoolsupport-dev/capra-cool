@@ -1,9 +1,11 @@
 // Shared by the browser and order API. Amounts are integer paise.
 export const CAMPUS_SIZES = ['S','M','L','XL','XXL','XXXL'];
 export const PERSONALISATION_CENTS = 5100;
-export const CAMPUS_CATEGORY_ORDER = ['polo','tee','hoodie','zip','varsity','track'];
+export const CAMPUS_CATEGORY_ORDER = ['polo','tee','sweatshirt','hoodie','zip','bomber','varsity','track'];
 export const CAMPUS_ARTWORKS = [{id:'mountain',name:'Cream Mountain',description:'Arched IIT MANDI lettering, cream mountain artwork and the IITians in Himalayas line.'},{id:'ridge',name:'Green Ridge',description:'Straight IIT Mandi lettering, the green ridge line and IITians in Himalayas.'}];
 export const CAMPUS_DESIGNS = [
+  {id:'mandi-navy-bomber',name:'Navy Bomber Jacket',category:'bomber',colour:'Navy Blue',collection:'Outerwear',base:1500,launchPrice:1500,gsm:350,inStock:true,artworks:['mountain','ridge'],description:'Navy-blue cotton-fleece bomber jacket with a full zip, ribbed collar, cuffs and hem, and side pockets. Complete IIT Mandi chest emblem; choose Cream Mountain or Green Ridge on the back. Regular unisex fit. Sizes S–XXXL.'},
+  {id:'mandi-coffee-sweatshirt',name:'Coffee Brown Sweatshirt',category:'sweatshirt',colour:'Coffee Brown',collection:'Fleece',base:1500,launchPrice:1500,gsm:350,inStock:true,artworks:['mountain','ridge'],description:'Coffee-brown heavyweight cotton-fleece sweatshirt with a crew neck, full sleeves, ribbed cuffs and hem. Complete IIT Mandi chest emblem; choose Cream Mountain or Green Ridge on the back. Regular unisex fit. Sizes S–XXXL.'},
   {
     "id": "mandi-mountain-polo",
     "name": "Mountain Polo",

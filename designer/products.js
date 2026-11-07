@@ -27,6 +27,7 @@ export function productZone(product,face){
  if(!product?.photo)return null;
  const zones={mug:{x:190,y:285,w:210,h:220},cap:{x:205,y:220,w:190,h:100},tote:{x:155,y:355,w:290,h:245},bottle:{x:235,y:270,w:130,h:270},cushion:{x:150,y:245,w:300,h:300},notebook:{x:180,y:220,w:240,h:360}};
  if(zones[product.family])return zones[product.family];
+ if(face==='front'&&['bomber','zip'].includes(product.family))return {x:345,y:350,w:105,h:135};
  if(product.family==='track')return {x:190,y:150,w:220,h:160};
  // Catalog pairs are framed as complete straight-on garments; keep additions
  // below existing chest branding and away from collars, fasteners and hems.

@@ -8,7 +8,7 @@ import {GARMENTS,documentForProduct,productFaces,productSizes,productMethods,val
 import {GIFT_PRODUCTS} from '../designer/products.js';
 const withText=id=>{const doc=documentForProduct(id),z=zoneFor(id,'front');return {...doc,elements:[{id:randomUUID(),kind:'text',text:'YOUR IDEA',font:'sans',fill:'#223322',face:'front',x:z.x+z.w/2,y:z.y+z.h/2,width:60,height:20,angle:0}]};};
 test('all existing Brand and Campus products retain prices, stock, sizes and valid customization documents',()=>{
- assert.equal(GARMENTS.length,43);assert.equal(new Set(GARMENTS.map(p=>p.id)).size,43);
+ assert.equal(GARMENTS.length,47);assert.equal(new Set(GARMENTS.map(p=>p.id)).size,47);
  for(const p of [...BRAND_PRODUCTS,...CAMPUS_DESIGNS]){
   const custom=GARMENTS.find(g=>g.id===p.id),doc=withText(p.id),quote=estimateDesign(doc,STUDIO_RATES);
   assert.equal(custom.baseCents,p.priceCents??p.price*100);assert.equal(custom.inStock,p.inStock!==false);

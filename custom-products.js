@@ -2,8 +2,8 @@ import {mountCatalogFilters,productCategory,colourValues} from './catalog-filter
 import {GARMENTS,productSizes,productColours} from './designer/catalog.js';
 const urls=import.meta.glob(['/assets/designer/*.png','/assets/brand-mountain/*.png','/assets/campus-approved/*.png','/assets/campus-new/*.png','/assets/campus-cream/*.png','/assets/campus-acid-black/*.png','/assets/tracksuit/*.png'],{eager:true,query:'?url',import:'default'});
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const types=[['tee','T-shirts'],['polo','Polos'],['hoodie','Hoodies'],['zip','Zip hoodies'],['varsity','Varsity jackets'],['track','Tracksuits'],['mug','Mugs'],['cap','Caps'],['tote','Bags'],['bottle','Bottles'],['cushion','Home gifts'],['notebook','Stationery']];
-const clothing=new Set(['tee','polo','hoodie','zip','varsity','track']);
+const types=[['tee','T-shirts'],['polo','Polos'],['sweatshirt','Sweatshirts'],['hoodie','Hoodies'],['zip','Zip hoodies'],['bomber','Bomber jackets'],['varsity','Varsity jackets'],['track','Tracksuits'],['mug','Mugs'],['cap','Caps'],['tote','Bags'],['bottle','Bottles'],['cushion','Home gifts'],['notebook','Stationery']];
+const clothing=new Set(['tee','polo','sweatshirt','hoodie','zip','bomber','varsity','track']);
 let customFilters=null;
 let category='all',subcategory='all';
 function updateTypes(){

@@ -4,7 +4,7 @@ test('every campus card shows its back on hover and restores the front on leave'
  await page.goto('/campus.html');
  test.skip(!await page.evaluate(()=>matchMedia('(hover:hover) and (pointer:fine)').matches),'Hover preview applies to mouse pointers.');
  const cards=page.locator('.campus-product');
- await expect(cards).toHaveCount(14);
+ await expect(cards).toHaveCount(16);
  for(const card of await cards.all()){
   // Hover the name too: the interaction covers the complete product card.
   await card.locator('h3').hover();

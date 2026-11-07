@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {STUDIO_RATES} from '../../designer/catalog.js';
 test.beforeEach(async({page})=>{await page.route('**/api/designer?*',route=>route.fulfill({json:{storageReady:false,rates:STUDIO_RATES}}));});
 test('custom product range filters, searches and opens the chosen product',async({page},testInfo)=>{
- await page.goto('/design-tips');await expect(page.locator('.custom-card')).toHaveCount(43);
+ await page.goto('/design-tips');await expect(page.locator('.custom-card')).toHaveCount(47);
  await page.getByRole('button',{name:'Mugs',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(1);
  await page.screenshot({path:`test-results/custom-products-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('searchbox').fill('mug');await expect(page.locator('.custom-card')).toHaveCount(1);

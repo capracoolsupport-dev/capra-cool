@@ -1,7 +1,7 @@
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, CAMPUS_CATEGORY_ORDER} from './campus-catalog.js';
 
 // Browser and order API use the same Brand identity, stock and selling prices.
-export const BRAND_CATEGORY_LABELS = {polo:'Polo',tee:'T-Shirt',hoodie:'Hoodie',zip:'Zip hoodie',varsity:'Varsity jacket',track:'Tracksuit'};
+export const BRAND_CATEGORY_LABELS = {polo:'Polo',tee:'T-Shirt',sweatshirt:'Sweatshirt',hoodie:'Hoodie',zip:'Zip hoodie',bomber:'Bomber jacket',varsity:'Varsity jacket',track:'Tracksuit'};
 export const BRAND_ORIGINAL_PRODUCTS = [
   {
     id: 'summit-tee', name: 'Summit Tee', category: 'tee', price: 799,
@@ -41,6 +41,8 @@ export const BRAND_ORIGINAL_PRODUCTS = [
 ];
 
 const additions = [
+ ['capra-navy-bomber','mandi-navy-bomber','Navy Bomber Jacket','Navy-blue cotton-fleece bomber jacket with a full zip, ribbed collar, cuffs and hem, side pockets and a small ivory mountain-outline chest emblem. Plain back. 350 GSM.'],
+ ['capra-coffee-sweatshirt','mandi-coffee-sweatshirt','Coffee Brown Sweatshirt','Coffee-brown heavyweight cotton-fleece crewneck sweatshirt with ribbed cuffs and hem, a small ivory mountain-outline chest emblem and a plain back. 350 GSM.'],
  ['capra-ridge-polo','mandi-mountain-polo','Ridge Polo','Small ivory mountain-outline chest embroidery and a completely plain back.'],
  ['capra-oxblood-polo','mandi-maroon-polo','Oxblood Contrast Polo','Cream collar and cuffs with a small mountain-outline chest mark and a completely plain back.'],
  ['capra-contrast-polo','mandi-contrast-polo','Contrast Polo','White collar and cuffs, ivory mountain-outline chest embroidery and a completely plain back.'],
@@ -60,7 +62,7 @@ const additions = [
 export const BRAND_ADAPTED_PRODUCTS = additions.map(([id,sourceId,name,description])=>{
  const source=CAMPUS_DESIGNS.find(product=>product.id===sourceId);
  if(!source) throw new Error('Missing source garment: '+sourceId);
- const fabric=source.category==='polo'?'Cotton piqué':source.category==='tee'?'Cotton jersey':['hoodie','zip'].includes(source.category)?'Fleece':'See garment details';
+ const fabric=source.category==='polo'?'Cotton piqué':source.category==='tee'?'Cotton jersey':['hoodie','zip','sweatshirt','bomber'].includes(source.category)?'Cotton fleece':'See garment details';
  return {id,sourceId,name,description,category:source.category,color:source.colour,
   price:source.priceCents/100,listPrice:source.listPriceCents/100,inStock:source.inStock!==false,
   gsm:source.gsm?source.gsm+' GSM':source.category==='track'?'Jacket + trousers':source.category==='zip'?'Zip-front hoodie':'Snap-front jacket',

@@ -4,10 +4,10 @@ test('campus catalog follows the product sequence and every style shows 20% off'
  await page.goto('/campus.html');
  expect(await page.locator('.campus-product').evaluateAll(cards=>cards.map(card=>card.dataset.designId))).toEqual([
   'mandi-mountain-polo','mandi-maroon-polo','mandi-contrast-polo','mandi-grey-polo',
-  'mandi-washed-tee','mandi-mountain-hoodie','mandi-washed-hoodie','mandi-acid-black-hoodie','mandi-cream-hoodie',
-  'mandi-mountain-zip','mandi-varsity-black','mandi-varsity-brown','iit-mandi-tracksuit','iit-mandi-tracksuit-minimal'
+  'mandi-washed-tee','mandi-coffee-sweatshirt','mandi-mountain-hoodie','mandi-washed-hoodie','mandi-acid-black-hoodie','mandi-cream-hoodie',
+  'mandi-mountain-zip','mandi-navy-bomber','mandi-varsity-black','mandi-varsity-brown','iit-mandi-tracksuit','iit-mandi-tracksuit-minimal'
  ]);
- await expect(page.locator('.campus-product .launch-label')).toHaveCount(14);
+ await expect(page.locator('.campus-product .launch-label')).toHaveCount(16);
  for(const label of await page.locator('.campus-product .launch-label').all())await expect(label).toContainText('20%');
  await expect(page.locator('[data-design-id="mandi-varsity-black"] .card-prices')).toContainText('₹2,999');
  await expect(page.locator('[data-design-id="mandi-varsity-black"] .card-prices s')).toHaveText('₹3,749');

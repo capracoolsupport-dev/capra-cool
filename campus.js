@@ -5,7 +5,7 @@ const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/
 const imageUrl = (id,artwork='mountain',view=0) => CAMPUS_DESIGNS.find(design=>design.id===id)?.gallery?.[Number(view)||0] || `optimized/campus-approved/${id}-${artwork}.webp`;
 const sourceUrl = (id,artwork='mountain',view=0) => sourceImages['/'+imageUrl(id,artwork,view).replace(/^optimized\//,'assets/').replace(/\.webp$/,'.png')];
 const supportEmail = 'care@capracool.com';
-const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit',varsity:'Varsity jacket'};
+const categories = {sweatshirt:'Sweatshirt',bomber:'Bomber jacket',polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',track:'Tracksuit',varsity:'Varsity jacket'};
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, PERSONALISATION_CENTS, campusUnitCents, CAMPUS_COMBOS, campusComboSavings, CAMPUS_ARTWORKS} from './campus-catalog.js';
 const money = cents => `₹${(cents / 100).toLocaleString('en-IN',{minimumFractionDigits:cents % 100 ? 2 : 0, maximumFractionDigits:2})}`;
 

@@ -35,14 +35,14 @@ test('seasonal actions filter actual products and normal shopping still works',a
   await expect(page.locator('[data-filter="summer"]')).toHaveAttribute('aria-pressed','true');
   await page.locator('[data-highlight="1"]').click();
   await page.locator('#highlightAction').click();
-  await expect(page.locator('.product-card')).toHaveCount(9);
+  await expect(page.locator('.product-card')).toHaveCount(11);
   await expect(page.locator('[data-filter="winter"]')).toHaveAttribute('aria-pressed','true');
   await page.locator('[data-filter="all"]').click();await expect(page.locator('.product-card')).toHaveCount(21);
   await page.locator('[data-open-product="summit-tee"]').first().click();
   await page.locator('.size-chip[data-size="M"]').click();await page.locator('#productAddToBag').click();
   await expect(page.locator('#bagCount')).toHaveText('1');
   await page.goto('/?collection=winter#shop');
-  await expect(page.locator('.product-card')).toHaveCount(9);
+  await expect(page.locator('.product-card')).toHaveCount(11);
   await expect(page.locator('[data-filter="winter"]')).toHaveAttribute('aria-pressed','true');
 });
 

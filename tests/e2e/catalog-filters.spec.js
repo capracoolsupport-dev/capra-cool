@@ -8,23 +8,23 @@ test('Brand filters combine type, size, stock, search and reset',async({page},te
  await check(root,'sizes','XXXL');await check(root,'availability','In stock');await expect(page.locator('.product-card')).toHaveCount(2);
  await page.getByRole('searchbox',{name:'Search collection products'}).fill('oxblood');await expect(page.locator('.product-card')).toHaveCount(1);
  await page.screenshot({path:`test-results/brand-filters-${testInfo.project.name}.png`,fullPage:false});
- await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.product-card')).toHaveCount(19);
+ await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.product-card')).toHaveCount(21);
  await page.getByRole('searchbox',{name:'Search collection products'}).fill('no-such-product');await expect(page.locator('.catalog-filter-empty')).toBeVisible();
- await page.getByRole('button',{name:'Clear all filters',exact:true}).click();await expect(page.locator('.product-card')).toHaveCount(19);
+ await page.getByRole('button',{name:'Clear all filters',exact:true}).click();await expect(page.locator('.product-card')).toHaveCount(21);
 });
 test('Campus filters reflect supplied stock, sizes and prices',async({page})=>{
  await page.goto('/campus');const root=await panel(page,'Campus product filters');
  await check(root,'availability','Out of stock');await expect(page.locator('.campus-product')).toHaveCount(5);
  await check(root,'sizes','XXXL');await expect(page.locator('.campus-product')).toHaveCount(5);
  await check(root,'price','2000-5000');await expect(page.locator('.campus-product')).toHaveCount(2);
- await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.campus-product')).toHaveCount(14);
+ await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.campus-product')).toHaveCount(16);
 });
 test('Custom filters distinguish quote products, one-size products and sorted prices',async({page},testInfo)=>{
  await page.goto('/design-tips');const root=await panel(page,'Custom product filters');
  await check(root,'availability','Quote required');await expect(page.locator('.custom-card')).toHaveCount(6);
  await check(root,'sizes','One size');await check(root,'price','quote');await expect(page.locator('.custom-card')).toHaveCount(6);
  await page.screenshot({path:`test-results/custom-filters-${testInfo.project.name}.png`});
- await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(43);
+ await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(47);
  await page.getByLabel('Sort filtered products').selectOption('price-desc');await expect(page.locator('.custom-card').first()).toContainText('2,999');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
 });

@@ -1,0 +1,74 @@
+{
+  "price": 1500,
+  "inStock": true,
+  "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "XXXL"
+  ],
+  "images": [
+    {
+      "id": "capra-navy-bomber",
+      "kind": "brand",
+      "source": "artifacts/review/bomber-front.jpg",
+      "garment": "navy-blue 350 GSM cotton-fleece bomber jacket, silver full-length front zipper CLOSED, low ribbed round bomber collar, matching ribbed cuffs and hem, two slanted side pockets, regular unisex fit",
+      "reference": "assets/identity/capra-alpine-outline-reference.png",
+      "saved": "assets/brand-mountain/capra-navy-bomber-outline-v1.png",
+      "prompt": "Use case product-mockup. Garment construction reference image 1: make a new clean studio catalog photograph of the SAME navy-blue 350 GSM cotton-fleece bomber jacket, silver full-length front zipper CLOSED, low ribbed round bomber collar, matching ribbed cuffs and hem, two slanted side pockets, regular unisex fit. Keep its exact colour and garment construction; remove every existing supplier logo or lettering. Do not copy the people or scenery. Show ONLY the garment, no people, as an invisible-mannequin product pair: FRONT centered in left half and BACK centered in right half of one landscape 3:2 image. Front/back same size, fully visible sleeves and hem, generous margins, no clipping. Plain warm-white studio background and soft natural shadows, premium realistic fabric texture. Branding reference image 2: reproduce ONLY the small fine jagged alpine mountain outline in ivory embroidery, approximately 4 cm wide on wearer's LEFT chest (viewer right). No lettering, no underline strokes, no goats. The back is completely plain fabric. No institute branding. No extra text, no watermark, no header, no price, no panel labels. The product pair must match the website's existing front-left/back-right garment images.",
+      "generated": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-eb99591e-92b2-4349-b370-c1148599adfc.png"
+    },
+    {
+      "id": "capra-coffee-sweatshirt",
+      "kind": "brand",
+      "source": "artifacts/review/sweatshirt-front.jpg",
+      "garment": "coffee-brown 350 GSM heavyweight cotton-fleece crewneck sweatshirt, round ribbed neckline, long sleeves, matching ribbed cuffs and hem, regular unisex fit, NO hood, NO kangaroo pocket, NO zipper",
+      "reference": "assets/identity/capra-alpine-outline-reference.png",
+      "saved": "assets/brand-mountain/capra-coffee-sweatshirt-outline-v1.png",
+      "prompt": "Use case product-mockup. Garment construction reference image 1: make a new clean studio catalog photograph of the SAME coffee-brown 350 GSM heavyweight cotton-fleece crewneck sweatshirt, round ribbed neckline, long sleeves, matching ribbed cuffs and hem, regular unisex fit, NO hood, NO kangaroo pocket, NO zipper. Keep its exact colour and garment construction; remove every existing supplier logo or lettering. Do not copy the people or scenery. Show ONLY the garment, no people, as an invisible-mannequin product pair: FRONT centered in left half and BACK centered in right half of one landscape 3:2 image. Front/back same size, fully visible sleeves and hem, generous margins, no clipping. Plain warm-white studio background and soft natural shadows, premium realistic fabric texture. Branding reference image 2: reproduce ONLY the small fine jagged alpine mountain outline in ivory embroidery, approximately 4 cm wide on wearer's LEFT chest (viewer right). No lettering, no underline strokes, no goats. The back is completely plain fabric. No institute branding. No extra text, no watermark, no header, no price, no panel labels. The product pair must match the website's existing front-left/back-right garment images.",
+      "generated": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-3f21ed19-0772-4c82-9d76-3d0baebdefce.png"
+    },
+    {
+      "id": "mandi-navy-bomber-mountain",
+      "kind": "mountain",
+      "source": "artifacts/review/bomber-front.jpg",
+      "garment": "navy-blue 350 GSM cotton-fleece bomber jacket, silver full-length zipper CLOSED, low ribbed round collar, matching ribbed cuffs and hem, two side pockets, regular unisex fit",
+      "reference": "assets/campus-approved/reference-mountain.png",
+      "saved": "assets/campus-approved/mandi-navy-bomber-mountain.png",
+      "prompt": "Use case product-mockup. Garment construction reference image 1: make a new clean studio catalog photograph of the SAME navy-blue 350 GSM cotton-fleece bomber jacket, silver full-length zipper CLOSED, low ribbed round collar, matching ribbed cuffs and hem, two side pockets, regular unisex fit. Keep its exact colour and garment construction; remove every existing supplier logo or lettering. Do not copy the people or scenery. Show ONLY the garment, no people, as an invisible-mannequin product pair: FRONT centered in left half and BACK centered in right half of one landscape 3:2 image. Front/back same size, fully visible sleeves and hem, generous margins, no clipping. Plain warm-white studio background and soft natural shadows, premium realistic fabric texture. Branding reference image 2 is the authoritative Campus artwork, not a garment reference. Front: small COMPLETE IIT Mandi institute emblem at wearer's LEFT chest, retaining the gate, bridge, coloured hill/orbit strokes and compact institute text. Back: large arched uppercase 'IIT MANDI', the approved cream mountain illustration directly below, then exact line 'IITians in Himalayas', all cream; match the typography, proportions, colours and print layout of image 2. Do not substitute the Brand mountain logo. No extra text, no watermark, no header, no price, no panel labels. The product pair must match the website's existing front-left/back-right garment images.",
+      "generated": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-1d2bfaf2-27c4-4870-b482-7dc532959002.png"
+    },
+    {
+      "id": "mandi-navy-bomber-ridge",
+      "kind": "ridge",
+      "source": "artifacts/review/bomber-front.jpg",
+      "garment": "navy-blue 350 GSM cotton-fleece bomber jacket, silver full-length zipper CLOSED, low ribbed round collar, matching ribbed cuffs and hem, two side pockets, regular unisex fit",
+      "reference": "assets/campus-approved/reference-ridge.png",
+      "saved": "assets/campus-approved/mandi-navy-bomber-ridge.png",
+      "prompt": "Use case product-mockup. Garment construction reference image 1: make a new clean studio catalog photograph of the SAME navy-blue 350 GSM cotton-fleece bomber jacket, silver full-length zipper CLOSED, low ribbed round collar, matching ribbed cuffs and hem, two side pockets, regular unisex fit. Keep its exact colour and garment construction; remove every existing supplier logo or lettering. Do not copy the people or scenery. Show ONLY the garment, no people, as an invisible-mannequin product pair: FRONT centered in left half and BACK centered in right half of one landscape 3:2 image. Front/back same size, fully visible sleeves and hem, generous margins, no clipping. Plain warm-white studio background and soft natural shadows, premium realistic fabric texture. Branding reference image 2 is the authoritative Campus artwork, not a garment reference. Front: small COMPLETE IIT Mandi institute emblem at wearer's LEFT chest, retaining the gate, bridge, coloured hill/orbit strokes and compact institute text. Back: straight ivory 'IIT Mandi' lettering, the approved green flowing double-ridge line directly below, then ivory exact line 'IITians in Himalayas'; match the typography, proportions, colours and print layout of image 2. Do not substitute the Brand mountain logo. No extra text, no watermark, no header, no price, no panel labels. The product pair must match the website's existing front-left/back-right garment images.",
+      "generated": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-99c30e0a-291b-4e5e-8fae-eb6a3abb4f78.png"
+    },
+    {
+      "id": "mandi-coffee-sweatshirt-mountain",
+      "kind": "mountain",
+      "source": "artifacts/review/sweatshirt-front.jpg",
+      "garment": "coffee-brown 350 GSM heavyweight cotton-fleece crewneck sweatshirt, ribbed round neck, long sleeves, matching ribbed cuffs and hem, regular fit, NO hood, NO pockets, NO zipper",
+      "reference": "assets/campus-approved/reference-mountain.png",
+      "saved": "assets/campus-approved/mandi-coffee-sweatshirt-mountain.png",
+      "prompt": "Use case product-mockup. Garment construction reference image 1: make a new clean studio catalog photograph of the SAME coffee-brown 350 GSM heavyweight cotton-fleece crewneck sweatshirt, ribbed round neck, long sleeves, matching ribbed cuffs and hem, regular fit, NO hood, NO pockets, NO zipper. Keep its exact colour and garment construction; remove every existing supplier logo or lettering. Do not copy the people or scenery. Show ONLY the garment, no people, as an invisible-mannequin product pair: FRONT centered in left half and BACK centered in right half of one landscape 3:2 image. Front/back same size, fully visible sleeves and hem, generous margins, no clipping. Plain warm-white studio background and soft natural shadows, premium realistic fabric texture. Branding reference image 2 is the authoritative Campus artwork, not a garment reference. Front: small COMPLETE IIT Mandi institute emblem at wearer's LEFT chest, retaining the gate, bridge, coloured hill/orbit strokes and compact institute text. Back: large arched uppercase 'IIT MANDI', the approved cream mountain illustration directly below, then exact line 'IITians in Himalayas', all cream; match the typography, proportions, colours and print layout of image 2. Do not substitute the Brand mountain logo. No extra text, no watermark, no header, no price, no panel labels. The product pair must match the website's existing front-left/back-right garment images.",
+      "generated": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-ccd72959-4318-4675-8218-73b62754df53.png"
+    },
+    {
+      "id": "mandi-coffee-sweatshirt-ridge",
+      "kind": "ridge",
+      "source": "artifacts/review/sweatshirt-front.jpg",
+      "garment": "coffee-brown 350 GSM heavyweight cotton-fleece crewneck sweatshirt, ribbed round neck, long sleeves, matching ribbed cuffs and hem, regular fit, NO hood, NO pockets, NO zipper",
+      "reference": "assets/campus-approved/reference-ridge.png",
+      "saved": "assets/campus-approved/mandi-coffee-sweatshirt-ridge.png",
+      "prompt": "Use case product-mockup. Garment construction reference image 1: make a new clean studio catalog photograph of the SAME coffee-brown 350 GSM heavyweight cotton-fleece crewneck sweatshirt, ribbed round neck, long sleeves, matching ribbed cuffs and hem, regular fit, NO hood, NO pockets, NO zipper. Keep its exact colour and garment construction; remove every existing supplier logo or lettering. Do not copy the people or scenery. Show ONLY the garment, no people, as an invisible-mannequin product pair: FRONT centered in left half and BACK centered in right half of one landscape 3:2 image. Front/back same size, fully visible sleeves and hem, generous margins, no clipping. Plain warm-white studio background and soft natural shadows, premium realistic fabric texture. Branding reference image 2 is the authoritative Campus artwork, not a garment reference. Front: small COMPLETE IIT Mandi institute emblem at wearer's LEFT chest, retaining the gate, bridge, coloured hill/orbit strokes and compact institute text. Back: straight ivory 'IIT Mandi' lettering, the approved green flowing double-ridge line directly below, then ivory exact line 'IITians in Himalayas'; match the typography, proportions, colours and print layout of image 2. Do not substitute the Brand mountain logo. No extra text, no watermark, no header, no price, no panel labels. The product pair must match the website's existing front-left/back-right garment images.",
+      "generated": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-a595c466-3d05-4bbf-be78-1c59713d2686.png"
+    }
+  ]
+}

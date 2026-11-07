@@ -103,7 +103,7 @@ function escapeHtml(value = '') {
 function productById(id) { return PRODUCTS.find(product => product.id === id); }
 
 function sortedProducts() {
-  const seasonal={summer:['tee','polo'],winter:['hoodie','zip','varsity']};
+  const seasonal={summer:['tee','polo'],winter:['sweatshirt','hoodie','zip','bomber','varsity']};
   let list = currentFilter === 'all' ? [...PRODUCTS] : PRODUCTS.filter(product => seasonal[currentFilter]?.includes(product.category) || product.category === currentFilter);
   if (currentSort === 'price-asc') list.sort((a,b) => a.price - b.price);
   if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);

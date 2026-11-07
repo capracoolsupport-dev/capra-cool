@@ -7,10 +7,10 @@ import {orderTotals} from '../api/_shared.js';
 import ordersHandler from '../api/orders.js';
 
 test('every Campus garment has a separate Brand version with matching commercial details',()=>{
- assert.equal(BRAND_PRODUCTS.length,19);
+ assert.equal(BRAND_PRODUCTS.length,21);
  assert.equal(BRAND_ORIGINAL_PRODUCTS.length,5);
- assert.equal(BRAND_ADAPTED_PRODUCTS.length,14);
- assert.equal(new Set(BRAND_PRODUCTS.map(p=>p.id)).size,19);
+ assert.equal(BRAND_ADAPTED_PRODUCTS.length,16);
+ assert.equal(new Set(BRAND_PRODUCTS.map(p=>p.id)).size,21);
  assert.deepEqual(BRAND_ADAPTED_PRODUCTS.map(p=>p.sourceId).sort(),CAMPUS_DESIGNS.map(p=>p.id).sort());
  for(const product of BRAND_ADAPTED_PRODUCTS){
   const campus=CAMPUS_DESIGNS.find(p=>p.id===product.sourceId);
