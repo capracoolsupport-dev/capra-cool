@@ -2,11 +2,14 @@ import {test,expect} from '@playwright/test';
 import {STUDIO_RATES} from '../../designer/catalog.js';
 test.beforeEach(async({page})=>{await page.route('**/api/designer?*',route=>route.fulfill({json:{storageReady:false,rates:STUDIO_RATES}}));});
 test('custom product range filters, searches and opens the chosen product',async({page},testInfo)=>{
- await page.goto('/design-tips');await expect(page.locator('.custom-card')).toHaveCount(47);
+ await page.goto('/design-tips');await expect(page.locator('.custom-card')).toHaveCount(10);
+ await expect(page.locator('.custom-group')).not.toContainText(['Brand','Campus']);
  await page.getByRole('button',{name:'Mugs',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(1);
  await page.screenshot({path:`test-results/custom-products-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('searchbox').fill('mug');await expect(page.locator('.custom-card')).toHaveCount(1);
  await page.locator('.custom-card .text-link').click();await expect(page.getByLabel('Choose your product')).toHaveValue('ceramic-mug');
+ await expect(page.getByLabel('Choose your product').locator('option')).toHaveCount(10);
+ await expect(page.getByLabel('Choose your product').locator('optgroup[label="Brand"],optgroup[label="Campus"]')).toHaveCount(0);
  await expect(page.getByRole('button',{name:'Left sleeve',exact:true})).toHaveCount(0);
  await expect(page.getByLabel('Decoration method').locator('option')).toHaveCount(1);
  await expect(page.locator('.studio-estimate')).toContainText('Request a quote');
@@ -26,7 +29,7 @@ test('gift design can be previewed, downloaded and quoted without payment or clo
 });
 test('every new preview family renders and disallows incompatible options',async({page},testInfo)=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- for(const id of ['cap','tote-bag','water-bottle','cushion','notebook','capra-ridge-polo','capra-zip-hoodie','capra-varsity-black','capra-ridge-tracksuit','mandi-mountain-polo']){
+ for(const id of ['cap','tote-bag','water-bottle','cushion','notebook']){
   await page.goto('/design?product='+id);await expect(page.getByLabel('Choose your product')).toHaveValue(id);
   await page.getByRole('button',{name:/Add custom text/}).click();
   await expect(page.locator('.studio-board-container')).toHaveAttribute('data-view','front');
@@ -36,8 +39,8 @@ test('every new preview family renders and disallows incompatible options',async
  expect(errors).toEqual([]);await page.screenshot({path:`test-results/custom-catalog-${testInfo.project.name}.png`,fullPage:true});
 });
 test('custom section opens the selected garment with the correct price',async({page})=>{
- await page.goto('/design-tips');await page.getByRole('searchbox').fill('Brand Ridge Polo');await page.locator('.custom-card .text-link').first().click();
- await expect(page.getByLabel('Choose your product')).toHaveValue('capra-ridge-polo');
+ await page.goto('/design-tips');await page.getByRole('searchbox').fill('T-Shirt');await page.locator('.custom-card .text-link').first().click();
+ await expect(page.getByLabel('Choose your product')).toHaveValue('tshirt');
  await expect(page.locator('.studio-estimate')).toContainText('₹600');
  await page.getByRole('button',{name:/Add custom text/}).click();await expect(page.locator('.studio-estimate')).toContainText('₹700');
  await page.getByRole('button',{name:'Review your design',exact:true}).click();

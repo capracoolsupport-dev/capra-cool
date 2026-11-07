@@ -4,9 +4,16 @@ import {randomUUID} from 'node:crypto';
 import {existsSync} from 'node:fs';
 import {BRAND_PRODUCTS} from '../brand-catalog.js';
 import {CAMPUS_DESIGNS} from '../campus-catalog.js';
-import {GARMENTS,documentForProduct,productFaces,productSizes,productMethods,validateDocument,zoneFor,estimateDesign,STUDIO_RATES} from '../designer/catalog.js';
+import {GARMENTS,CUSTOM_PRODUCTS,documentForProduct,productFaces,productSizes,productMethods,validateDocument,zoneFor,estimateDesign,STUDIO_RATES} from '../designer/catalog.js';
 import {GIFT_PRODUCTS} from '../designer/products.js';
 const withText=id=>{const doc=documentForProduct(id),z=zoneFor(id,'front');return {...doc,elements:[{id:randomUUID(),kind:'text',text:'YOUR IDEA',font:'sans',fill:'#223322',face:'front',x:z.x+z.w/2,y:z.y+z.h/2,width:60,height:20,angle:0}]};};
+
+test('public custom range contains only four studio blanks and six gifts',()=>{
+ assert.equal(CUSTOM_PRODUCTS.length,10);
+ assert.equal(CUSTOM_PRODUCTS.filter(p=>!p.group).length,4);
+ assert.equal(CUSTOM_PRODUCTS.filter(p=>p.group==='Gifts').length,6);
+ assert.ok(CUSTOM_PRODUCTS.every(p=>!['Brand','Campus'].includes(p.group)));
+});
 test('all existing Brand and Campus products retain prices, stock, sizes and valid customization documents',()=>{
  assert.equal(GARMENTS.length,47);assert.equal(new Set(GARMENTS.map(p=>p.id)).size,47);
  for(const p of [...BRAND_PRODUCTS,...CAMPUS_DESIGNS]){

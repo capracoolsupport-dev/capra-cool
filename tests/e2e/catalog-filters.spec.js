@@ -24,8 +24,8 @@ test('Custom filters distinguish quote products, one-size products and sorted pr
  await check(root,'availability','Quote required');await expect(page.locator('.custom-card')).toHaveCount(6);
  await check(root,'sizes','One size');await check(root,'price','quote');await expect(page.locator('.custom-card')).toHaveCount(6);
  await page.screenshot({path:`test-results/custom-filters-${testInfo.project.name}.png`});
- await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(47);
- await page.getByLabel('Sort filtered products').selectOption('price-desc');await expect(page.locator('.custom-card').first()).toContainText('2,999');
+ await root.getByRole('button',{name:'Clear all',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(10);
+ await page.getByLabel('Sort filtered products').selectOption('price-desc');await expect(page.locator('.custom-card').first()).toContainText('1,200');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
 });
 test('Handmade availability stays unconfirmed and empty filters can be cleared',async({page})=>{

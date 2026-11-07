@@ -12,8 +12,8 @@ test('four sections have consistent navigation and keep custom products separate
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
   if(name!=='Custom Products')await expect(page.locator('#customGrid,.product-customize-link')).toHaveCount(0);
  }
- await page.getByRole('button',{name:'Clothing',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(41);
- await page.getByLabel('Custom product subcategory').selectOption('polo');await expect(page.locator('.custom-card')).toHaveCount(8);
+ await page.getByRole('button',{name:'Clothing',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(4);
+ await page.getByLabel('Custom product subcategory').selectOption('tee');await expect(page.locator('.custom-card')).toHaveCount(2);
  for(const category of ['Mugs','Caps','Bags','Bottles','Home gifts','Stationery']){await page.getByRole('button',{name:category,exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(1);}
  await page.screenshot({path:`test-results/four-sections-${testInfo.project.name}.png`});
 });

@@ -11,6 +11,9 @@ export const GARMENTS = [
   {id:'oversized-hoodie',name:'Oversized Hoodie',baseCents:hoodie,family:'hoodie',gsm:400},
   ...EXTENDED_PRODUCTS
 ];
+// Collection garments remain readable for saved orders and designs, but are
+// offered exclusively in their own storefront sections.
+export const CUSTOM_PRODUCTS = GARMENTS.filter(p=>!['Brand','Campus'].includes(p.group));
 export const COLOURS = [{id:'black',name:'Black',hex:'#242628'},{id:'white',name:'White',hex:'#f6f5ef'},{id:'beige',name:'Beige',hex:'#cfbea2'},{id:'grey',name:'Grey',hex:'#96999c'},{id:'navy',name:'Navy Blue',hex:'#29354c'}];
 COLOURS.push(...EXTENDED_PRODUCTS.map(p=>({id:p.colourId,name:p.colourName,hex:/ivory|white|natural|cream/i.test(p.colourName)?'#eee9df':'#292b2b'})));
 export const SIZES = ['XS','S','M','L','XL','XXL','XXXL','One size'];
