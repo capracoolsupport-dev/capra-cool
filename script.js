@@ -125,7 +125,6 @@ function renderProducts() {
         <p class="product-sub">${escapeHtml(product.color)} · ${escapeHtml(product.gsm)}</p>
         <p class="brand-launch-price" ${product.listPrice?'':'aria-hidden="true"'}>${product.listPrice?`<s>${money(product.listPrice)}</s><span>LAUNCH −20%</span>`:''}</p>
         <button class="product-detail-link" type="button" data-open-product="${product.id}">${product.inStock===false?'View details':'Choose size'} ↗</button>
-        <a class="product-customize-link" href="design.html?product=${encodeURIComponent(product.id)}">Customize ↗</a>
       </div>
     </article>
   `).join('');
@@ -134,10 +133,14 @@ function renderProducts() {
   prepareRevealElements(grid);
 }
 
+let handmadeCategory='all';
 function renderAccessories() {
   const grid = $('#accessoriesGrid');
   if (!grid) return;
-  grid.innerHTML = ACCESSORIES.map(item => `
+  const categoryFor=id=>id==='sunflower-keychain'?'keychains':id==='handmade-krishna'?'collectibles':'knits';
+  const items=ACCESSORIES.filter(item=>handmadeCategory==='all'||categoryFor(item.id)===handmadeCategory);
+  if($('#handmadeResultCount'))$('#handmadeResultCount').textContent=`${items.length} ${items.length===1?'piece':'pieces'}`;
+  grid.innerHTML = items.map(item => `
     <article class="accessory-card" data-lowres="${item.lowres ? 'true':'false'}" data-reveal>
       <div class="accessory-image">${pictureMarkup(item.image, item.name)}</div>
       <div class="accessory-copy"><strong><span>${escapeHtml(item.name)}</span></strong><p>${escapeHtml(item.note)}</p><a class="accessory-enquiry" href="mailto:${CONFIG.supportEmail}?subject=${encodeURIComponent(`Availability: ${item.name}`)}">Ask about availability ↗</a></div>
@@ -145,6 +148,11 @@ function renderAccessories() {
   `).join('');
   prepareRevealElements(grid);
 }
+$$('[data-handmade-category]').forEach(button=>button.addEventListener('click',()=>{
+  handmadeCategory=button.dataset.handmadeCategory;
+  $$('[data-handmade-category]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+  renderAccessories();
+}));
 
 function bindProductButtons() {
   $$('img[data-back-source]').forEach(image => image.addEventListener('error', () => { image.src = image.dataset.backSource; }, {once:true}));

@@ -51,11 +51,11 @@ test('search returns matching clothing', async ({ page }) => {
   await expect(page.locator('[data-search-product]')).toHaveCount(7);
 });
 
-test('all three stores share a stable header and handmade search works', async ({ page }, testInfo) => {
+test('all four stores share a stable header and handmade search works', async ({ page }, testInfo) => {
   let baseline;
-  for (const [section,url] of [['Brand','index.html'],['Campus','campus.html'],['Handmade','handmade.html']]) {
+  for (const [section,url] of [['Brand','index.html'],['Campus','campus.html'],['Handmade','handmade.html'],['Custom Products','design-tips.html']]) {
     await page.goto('/'+url);
-    await expect(page.locator('.store-switch a')).toHaveCount(3);
+    await expect(page.locator('.store-switch a')).toHaveCount(4);
     await expect(page.locator('.store-switch [aria-current="page"]')).toHaveText(section);
     for(const link of await page.locator('.store-switch a').all()) await expect(link).toBeInViewport();
     const box=await page.locator('.store-header').boundingBox();
@@ -63,6 +63,7 @@ test('all three stores share a stable header and handmade search works', async (
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBeTruthy();
     await page.screenshot({path:'test-results/'+section.toLowerCase()+'-consistent-'+testInfo.project.name+'.png'});
   }
+  await page.goto('/handmade.html');
   await page.locator('#searchOpen').click();
   await page.locator('#searchInput').fill('muffler');
   await expect(page.locator('#searchResults .search-result')).toHaveCount(1);

@@ -1,5 +1,7 @@
 # CAPRA COOL storefront
 
+The public navigation has four sections: Campus, Brand, Handmade and Custom Products. Campus and Brand use their six clothing subcategories (polos, tees, hoodies, zip hoodies, varsity jackets and tracksuits). Handmade filters Winter knits, Collectibles and Keychains. The separate Custom Products hub at `/design-tips` groups Clothing, Mugs, Caps, Bags, Bottles, Home gifts and Stationery, with a product-type selector for clothing. Normal collection cards keep their shopping flow; customization starts in Custom Products. All public headers, including the studio and policies, show the four sections.
+
 The Vite site has separate Brand (index.html), IIT Mandi Campus (campus.html), Handmade (handmade.html), Custom Studio (design.html), Policies and staff Admin pages. Brand and the studio use the original black identity; Campus and Handmade retain the supplied gold identity. Navigation and checkout remain consistent.
 
 ## Development

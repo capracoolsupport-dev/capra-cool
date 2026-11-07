@@ -3,7 +3,7 @@ import {STUDIO_RATES} from '../../designer/catalog.js';
 test.beforeEach(async({page})=>{await page.route('**/api/designer?*',route=>route.fulfill({json:{storageReady:false,rates:STUDIO_RATES}}));});
 test('custom product range filters, searches and opens the chosen product',async({page},testInfo)=>{
  await page.goto('/design-tips');await expect(page.locator('.custom-card')).toHaveCount(43);
- await page.getByRole('button',{name:'Mugs, caps & gifts',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(6);
+ await page.getByRole('button',{name:'Mugs',exact:true}).click();await expect(page.locator('.custom-card')).toHaveCount(1);
  await page.screenshot({path:`test-results/custom-products-${testInfo.project.name}.png`,fullPage:true});
  await page.getByRole('searchbox').fill('mug');await expect(page.locator('.custom-card')).toHaveCount(1);
  await page.locator('.custom-card .text-link').click();await expect(page.getByLabel('Choose your product')).toHaveValue('ceramic-mug');
@@ -35,8 +35,8 @@ test('every new preview family renders and disallows incompatible options',async
  }
  expect(errors).toEqual([]);await page.screenshot({path:`test-results/custom-catalog-${testInfo.project.name}.png`,fullPage:true});
 });
-test('product cards link to customization with the selected garment and correct price',async({page})=>{
- await page.goto('/');await page.locator('.product-card[data-product-id="capra-ridge-polo"] .product-customize-link').click();
+test('custom section opens the selected garment with the correct price',async({page})=>{
+ await page.goto('/design-tips');await page.getByRole('searchbox').fill('Brand Ridge Polo');await page.locator('.custom-card .text-link').first().click();
  await expect(page.getByLabel('Choose your product')).toHaveValue('capra-ridge-polo');
  await expect(page.locator('.studio-estimate')).toContainText('₹600');
  await page.getByRole('button',{name:/Add custom text/}).click();await expect(page.locator('.studio-estimate')).toContainText('₹700');
