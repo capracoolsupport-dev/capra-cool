@@ -1,3 +1,4 @@
+import {mountCatalogFilters,productCategory,colourValues} from './catalog-filters.js';
 import {BRAND_PRODUCTS as PRODUCTS, BRAND_CATEGORY_LABELS as CATEGORY_LABELS} from './brand-catalog.js';
 import {GARMENTS,COLOURS,FACE_NAMES,UUID} from './designer/catalog.js';
 import {initHomeHighlights} from './home-highlights.js';
@@ -42,6 +43,7 @@ const ACCESSORIES = [
   { id:'sunflower-keychain', name:'Sunflower Keychain', price:99, image:'assets/sunflower-keychain.jpg', note:'Handmade campus accessory', lowres:true }
 ];
 
+let brandFilters=null,handmadeFilters=null;
 let currentFilter = 'all';
 let currentSort = 'featured';
 let activeProduct = null;
@@ -105,7 +107,7 @@ function sortedProducts() {
   let list = currentFilter === 'all' ? [...PRODUCTS] : PRODUCTS.filter(product => seasonal[currentFilter]?.includes(product.category) || product.category === currentFilter);
   if (currentSort === 'price-asc') list.sort((a,b) => a.price - b.price);
   if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
-  return list;
+  return brandFilters?brandFilters.apply(list):list;
 }
 
 function renderProducts() {
@@ -138,7 +140,8 @@ function renderAccessories() {
   const grid = $('#accessoriesGrid');
   if (!grid) return;
   const categoryFor=id=>id==='sunflower-keychain'?'keychains':id==='handmade-krishna'?'collectibles':'knits';
-  const items=ACCESSORIES.filter(item=>handmadeCategory==='all'||categoryFor(item.id)===handmadeCategory);
+  let items=ACCESSORIES.filter(item=>handmadeCategory==='all'||categoryFor(item.id)===handmadeCategory);
+  if(handmadeFilters)items=handmadeFilters.apply(items);
   if($('#handmadeResultCount'))$('#handmadeResultCount').textContent=`${items.length} ${items.length===1?'piece':'pieces'}`;
   grid.innerHTML = items.map(item => `
     <article class="accessory-card" data-lowres="${item.lowres ? 'true':'false'}" data-reveal>
@@ -556,6 +559,9 @@ function bindEvents() {
 }
 
 function init() {
+  brandFilters=mountCatalogFilters({gridSelector:'#productsGrid',label:'Brand product filters',records:PRODUCTS.map(p=>({id:p.id,name:p.name,type:CATEGORY_LABELS[p.category],category:productCategory(p.category),sizes:p.sizes,colours:colourValues(p.color),price:p.price,availability:p.inStock===false?'Out of stock':'In stock',search:[p.name,p.color,p.fabric,p.fit,CATEGORY_LABELS[p.category]].join(' ')})),sortSelector:'#sortSelect',onChange:renderProducts,onClear:()=>{currentFilter='all';currentSort='featured';$$('.filter-button').forEach(b=>{b.classList.toggle('active',b.dataset.filter==='all');b.setAttribute('aria-pressed',String(b.dataset.filter==='all'));});}});
+  handmadeFilters=mountCatalogFilters({gridSelector:'#accessoriesGrid',label:'Handmade product filters',priceNote:'Handmade prices and availability are confirmed on enquiry.',records:ACCESSORIES.map(p=>({id:p.id,name:p.name,type:p.id==='handmade-muffler'?'Mufflers':p.id==='handmade-winter-cap'?'Winter caps':p.id==='handmade-krishna'?'Collectibles':'Keychains',category:['handmade-muffler','handmade-winter-cap'].includes(p.id)?'Winter knits':p.id==='handmade-krishna'?'Collectibles':'Keychains',sizes:[],colours:[],price:p.price,availability:'Confirm availability',search:p.name+' '+p.note})),onChange:renderAccessories,onClear:()=>{handmadeCategory='all';$$('[data-handmade-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.handmadeCategory==='all')));}});
+
   const collection=new URLSearchParams(location.search).get('collection');
   if(['summer','winter'].includes(collection))currentFilter=collection;
   renderProducts();

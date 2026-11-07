@@ -1,3 +1,4 @@
+import {mountCatalogFilters,productCategory,colourValues} from './catalog-filters.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const sourceImages = import.meta.glob(['/assets/campus-approved/*.png','/assets/campus-cream/*.png','/assets/campus-new/*.png','/assets/campus-acid-black/*.png','/assets/tracksuit/iit-mandi-tracksuit-front.png','/assets/tracksuit/iit-mandi-tracksuit-back.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-front-v2.png','/assets/tracksuit/iit-mandi-tracksuit-minimal-back.png'], { eager:true, query:'?url', import:'default' });
@@ -8,6 +9,7 @@ const categories = {polo:'Polo',hoodie:'Hoodie',zip:'Zip hoodie',tee:'T-shirt',t
 import {CAMPUS_DESIGNS, CAMPUS_SIZES, PERSONALISATION_CENTS, campusUnitCents, CAMPUS_COMBOS, campusComboSavings, CAMPUS_ARTWORKS} from './campus-catalog.js';
 const money = cents => `₹${(cents / 100).toLocaleString('en-IN',{minimumFractionDigits:cents % 100 ? 2 : 0, maximumFractionDigits:2})}`;
 
+let campusFilters=null;
 let category = 'all';
 let query = '';
 let washedOnly = false;
@@ -54,7 +56,7 @@ function matchingDesigns(search = query, selectedCategory = category) {
   return sort === 'name' ? designs.sort((a,b) => a.name.localeCompare(b.name)) : designs;
 }
 function renderProducts() {
-  const designs = matchingDesigns();
+  let designs = matchingDesigns();if(campusFilters)designs=campusFilters.apply(designs);
   $('#campusProducts').innerHTML = designs.map(design => `<article class="campus-product" data-design-id="${design.id}">
     <div class="product-art"><a class="product-image-link" href="#design/${design.id}" data-open-design="${design.id}" aria-label="View ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}">${artMarkup(design,{overview:design.overview,hoverPreview:true})}<span class="image-view-label">${design.overview ? 'ALL VIEWS' : 'FRONT / BACK'}</span></a>${design.inStock === false ? '<span class="stock-badge">Out of stock</span>' : ''}<button class="card-save" type="button" data-quick-save="${design.id}" ${design.inStock === false ? 'disabled' : ''} aria-label="Save ${escapeHtml(design.name)} in ${escapeHtml(design.colour)}" aria-pressed="${bag.some(item=>item.id === design.id)}">${bag.some(item=>item.id === design.id) ? '♥' : '♡'}</button></div>
     <div class="product-meta"><span>IIT MANDI / ${categories[design.category].toUpperCase()}</span>${design.collection === 'Washed' ? '<span>WASHED EDIT</span>' : ''}</div>
@@ -318,6 +320,7 @@ $('#campusCheckoutForm').addEventListener('submit',async event=>{
   } finally {button.disabled=false;button.innerHTML='Place order · Pay on delivery <span aria-hidden="true">↗</span>';}
 });
 window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#design/'))openDesign(location.hash.slice(8),false);});
+campusFilters=mountCatalogFilters({gridSelector:'#campusProducts',label:'Campus product filters',records:CAMPUS_DESIGNS.map(p=>({id:p.id,name:p.name,type:categories[p.category],category:productCategory(p.category),sizes:CAMPUS_SIZES,colours:colourValues(p.colour),price:p.priceCents/100,availability:p.inStock===false?'Out of stock':'In stock',search:[p.name,p.colour,p.collection,categories[p.category],'IIT Mandi'].join(' ')})),sortSelector:'#campusSort',onChange:renderProducts,onClear:()=>{category='all';query='';washedOnly=false;sort='featured';}});
 renderProducts();
 renderBag();
 if(location.hash.startsWith('#design/'))openDesign(location.hash.slice(8),false);
