@@ -1,0 +1,41 @@
+{
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "id": "ceramic-mug",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-93885911-1e0e-489e-95ab-b619236d1f3e.png",
+      "savedPath": "assets/designer/ceramic-mug.png",
+      "prompt": "Use case product-mockup. Create a high-quality photographic blank product cutout sheet for an online customization editor: white ceramic coffee mug, classic straight-sided 330 ml cylinder, curved C handle. Left view shows handle on right, right view shows opposite face with handle on left. One single landscape 3:2 PNG, EXACT two equal panels, front view centered in left half and back/opposite view centered in right half. mug body centered at x about 300 within each half, large plain print surface. Both objects occupy the same proportions: item fits within each half with 10 percent horizontal margin, centered vertically, fully visible with comfortable padding. Neutral soft studio illumination, realistic fabric/material texture. Completely blank: no logos, no text, no artwork, no labels, no watermark, no panel borders. Genuine transparent alpha background, no scene, no tabletop, no cast floor shadow. Both objects straight-on camera, not oblique, suitable for placing customer's uploaded artwork on the surface."
+    },
+    {
+      "id": "cap",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-ec87d2c6-d822-4fed-92f4-bd3530a58eff.png",
+      "savedPath": "assets/designer/cap.png",
+      "prompt": "Use case product-mockup. Create a high-quality photographic blank product cutout sheet for an online customization editor: black six-panel cotton baseball cap with curved brim, left panel front view, right panel rear view with adjustable strap. One single landscape 3:2 PNG, EXACT two equal panels, front view centered in left half and back/opposite view centered in right half. front crown large enough for a small centered embroidery area. Both objects occupy the same proportions: item fits within each half with 10 percent horizontal margin, centered vertically, fully visible with comfortable padding. Neutral soft studio illumination, realistic fabric/material texture. Completely blank: no logos, no text, no artwork, no labels, no watermark, no panel borders. Genuine transparent alpha background, no scene, no tabletop, no cast floor shadow. Both objects straight-on camera, not oblique, suitable for placing customer's uploaded artwork on the surface."
+    },
+    {
+      "id": "tote-bag",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-931c9c67-4584-453a-8bc9-25c63d02d5be.png",
+      "savedPath": "assets/designer/tote-bag.png",
+      "prompt": "Use case product-mockup. Create a high-quality photographic blank product cutout sheet for an online customization editor: natural cream cotton tote bag with two long matching handles, completely blank. One single landscape 3:2 PNG, EXACT two equal panels, front view centered in left half and back/opposite view centered in right half. front and back centered and same scale, bag body below handles. Both objects occupy the same proportions: item fits within each half with 10 percent horizontal margin, centered vertically, fully visible with comfortable padding. Neutral soft studio illumination, realistic fabric/material texture. Completely blank: no logos, no text, no artwork, no labels, no watermark, no panel borders. Genuine transparent alpha background, no scene, no tabletop, no cast floor shadow. Both objects straight-on camera, not oblique, suitable for placing customer's uploaded artwork on the surface."
+    },
+    {
+      "id": "water-bottle",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-d295ad56-511f-4c40-8de5-04fbaf914ab0.png",
+      "savedPath": "assets/designer/water-bottle.png",
+      "prompt": "Use case product-mockup. Create a high-quality photographic blank product cutout sheet for an online customization editor: white powder-coated cylindrical stainless steel water bottle with plain silver screw cap, 750 ml, no handle. One single landscape 3:2 PNG, EXACT two equal panels, front view centered in left half and back/opposite view centered in right half. front and opposite face views identical neutral blank body. Both objects occupy the same proportions: item fits within each half with 10 percent horizontal margin, centered vertically, fully visible with comfortable padding. Neutral soft studio illumination, realistic fabric/material texture. Completely blank: no logos, no text, no artwork, no labels, no watermark, no panel borders. Genuine transparent alpha background, no scene, no tabletop, no cast floor shadow. Both objects straight-on camera, not oblique, suitable for placing customer's uploaded artwork on the surface."
+    },
+    {
+      "id": "cushion",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-4de8e44a-d302-4749-a932-37a658e505e4.png",
+      "savedPath": "assets/designer/cushion.png",
+      "prompt": "Use case product-mockup. Create a high-quality photographic blank product cutout sheet for an online customization editor: ivory square cotton cushion, 40 cm square, soft full shape with subtle stitched edge. One single landscape 3:2 PNG, EXACT two equal panels, front view centered in left half and back/opposite view centered in right half. front and back centered, clean square blank faces. Both objects occupy the same proportions: item fits within each half with 10 percent horizontal margin, centered vertically, fully visible with comfortable padding. Neutral soft studio illumination, realistic fabric/material texture. Completely blank: no logos, no text, no artwork, no labels, no watermark, no panel borders. Genuine transparent alpha background, no scene, no tabletop, no cast floor shadow. Both objects straight-on camera, not oblique, suitable for placing customer's uploaded artwork on the surface."
+    },
+    {
+      "id": "notebook",
+      "generatedPath": "C:\\Users\\hp\\.codex\\generated_images\\01a1b08a-2c45-7a93-8532-2259a70dd37d\\exec-177b2c89-873c-43f5-8605-c463257afbeb.png",
+      "savedPath": "assets/designer/notebook.png",
+      "prompt": "Use case product-mockup. Create a high-quality photographic blank product cutout sheet for an online customization editor: matte ivory A5 hardcover notebook with gently rounded corners and black spine, no elastic or branding. One single landscape 3:2 PNG, EXACT two equal panels, front view centered in left half and back/opposite view centered in right half. front cover view in left half and rear cover view in right half. Both objects occupy the same proportions: item fits within each half with 10 percent horizontal margin, centered vertically, fully visible with comfortable padding. Neutral soft studio illumination, realistic fabric/material texture. Completely blank: no logos, no text, no artwork, no labels, no watermark, no panel borders. Genuine transparent alpha background, no scene, no tabletop, no cast floor shadow. Both objects straight-on camera, not oblique, suitable for placing customer's uploaded artwork on the surface."
+    }
+  ]
+}

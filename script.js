@@ -125,6 +125,7 @@ function renderProducts() {
         <p class="product-sub">${escapeHtml(product.color)} · ${escapeHtml(product.gsm)}</p>
         <p class="brand-launch-price" ${product.listPrice?'':'aria-hidden="true"'}>${product.listPrice?`<s>${money(product.listPrice)}</s><span>LAUNCH −20%</span>`:''}</p>
         <button class="product-detail-link" type="button" data-open-product="${product.id}">${product.inStock===false?'View details':'Choose size'} ↗</button>
+        <a class="product-customize-link" href="design.html?product=${encodeURIComponent(product.id)}">Customize ↗</a>
       </div>
     </article>
   `).join('');

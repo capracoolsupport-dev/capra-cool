@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         main: resolve(root, 'index.html'),
         design: resolve(root, 'design.html'),
+        customProducts: resolve(root, 'design-tips.html'),
         campus: resolve(root, 'campus.html'),
         handmade: resolve(root, 'handmade.html'),
         policies: resolve(root, 'policies.html'),

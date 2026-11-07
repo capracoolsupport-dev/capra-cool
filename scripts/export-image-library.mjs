@@ -45,6 +45,7 @@ await copy('BRAND_COLLECTION_IMAGE_PROMPTS.json','BRAND_COLLECTION_IMAGE_PROMPTS
 await copy('BRAND_MOUNTAIN_IMAGE_PROMPTS.json','BRAND_MOUNTAIN_IMAGE_PROMPTS.json');
 await copy('BRAND_COLLECTION_PLAN.md','BRAND_COLLECTION_PLAN.md');
 await copy('DESIGNER_IMAGE_PROMPTS.json','DESIGNER_IMAGE_PROMPTS.json');
+await copy('CUSTOM_GIFT_IMAGE_PROMPTS.json','CUSTOM_GIFT_IMAGE_PROMPTS.json');
 await copy('DESIGNER_SLEEVE_IMAGE_PROMPTS.json','DESIGNER_SLEEVE_IMAGE_PROMPTS.json');
 await copy('CAMPAIGN_IMAGE_PROMPTS.json','CAMPAIGN_IMAGE_PROMPTS.json');
 await fs.writeFile(path.join(destination,'image-manifest.json'),JSON.stringify(entries,null,2));

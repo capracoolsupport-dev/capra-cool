@@ -122,6 +122,9 @@ export async function normalizeCustomItems(req,res,items){
   for(const item of items){
     if(!item?.designId&&!String(item?.id||'').startsWith('custom:')){output.push(item);continue;}
     const saved=await ownedRow(client,'custom_studio_designs',item.designId,owner),doc=validateDocument(saved.document),quote=estimateDesign(doc,rates);
+    const selectedProduct=GARMENTS.find(p=>p.id===doc.productId);
+    if(selectedProduct.quoteOnly)throw studioError('This custom product requires a quote before ordering.',400);
+    if(selectedProduct.inStock===false)throw studioError('This product is out of stock. Request availability before ordering.',409);
     if(!quote.complete)throw studioError('Custom pricing is temporarily unavailable.',503);
     // A changed quote requires another review in the editor rather than silently charging more.
     if(quote.totalCents!==saved.quote.totalCents||quote.version!==saved.quote.version)throw studioError('Custom pricing has changed. Open your design to review the new price.',409);

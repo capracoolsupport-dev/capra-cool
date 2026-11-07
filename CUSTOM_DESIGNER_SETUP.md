@@ -1,5 +1,9 @@
 # Enable the custom clothing studio
 
+## Expanded product range
+
+The studio now includes all Brand/Campus garments and six new gifts. Existing catalog garments use their actual price, colour, stock and sizes from the shared catalogs. Their front/back artwork stays visible beneath customer additions. The original four studio basics retain four views and five colours. The gift range is deliberately quote-only until retail prices are approved: no guessed prices and no checkout bypass. Customers can download the review and design brief locally even if private cloud storage is unavailable, then prepare a quote email and attach their files. Quote drafts do not submit automatically. All direct custom orders still require the private save/upload setup below.
+
 The studio is a React / Fabric.js entry in the current Vite website at `/design`. Existing shopping pages and checkout remain in place. Node 24 is pinned in package.json, matching the tested local runtime.
 
 ## 1. Private database and artwork storage

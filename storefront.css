@@ -80,6 +80,7 @@ button,a,input,textarea,select,summary { -webkit-tap-highlight-color:transparent
 .editorial-copy > p { font-size:14px; line-height:1.7; color:var(--stone); max-width:420px; }
 .text-link { border-bottom:1px solid var(--line); color:inherit; font-size:12px; letter-spacing:0; text-transform:none; font-weight:500; padding:8px 0; }
 .editorial-copy .text-link { margin-top:24px; }
+.product-customize-link{display:inline-block;font-size:11px;margin:12px 0 0 18px;text-decoration:underline;text-underline-offset:4px}
 .atelier { background:var(--paper); color:var(--ink); }
 .atelier-head { max-width:none; margin-bottom:28px; }
 .section-heading.light,.section-heading.light .eyebrow { color:var(--ink); }

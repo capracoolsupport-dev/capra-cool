@@ -46,7 +46,7 @@ test('real canvas upload, transforms, colour, views, history and local draft rec
   await page.reload();
   await expect(page.locator('.studio-layers>button')).toHaveCount(3);
   await expect(page.locator('.studio-layers')).toContainText('HIMALAYAN DAYS');
-  await page.getByLabel('Choose your fit').selectOption('oversized-hoodie');
+  await page.getByLabel('Choose your product').selectOption('oversized-hoodie');
   await expect(page.locator('.studio-estimate')).toContainText('₹1,400');
   await page.getByRole('button',{name:'Review your design'}).click();
   await expect(page.locator('.studio-review')).toBeVisible();
@@ -130,8 +130,8 @@ test('SVG, JPEG and WEBP artwork works on all four priced areas',async({page},te
 });
 
 test('each garment shows distinct left/right side angles with a larger editable sleeve surface',async({page},testInfo)=>{
-  for(const garment of GARMENTS){
-    await page.getByLabel('Choose your fit').selectOption(garment.id);
+  for(const garment of GARMENTS.filter(p=>!p.photo)){
+    await page.getByLabel('Choose your product').selectOption(garment.id);
     const images=[];
     for(const face of ['leftSleeve','rightSleeve']){
       await page.getByRole('button',{name:face==='leftSleeve'?'Left sleeve':'Right sleeve',exact:true}).click();

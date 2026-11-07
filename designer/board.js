@@ -1,6 +1,6 @@
 import {Canvas,FabricImage,FabricText,Rect,Shadow} from 'fabric';
-import {COLOURS,FONTS,zoneFor,fitElement,isSleeve,displayZoneFor,projectElement} from './catalog.js';
-const imageURLs=import.meta.glob('/assets/designer/*.png',{eager:true,query:'?url',import:'default'});
+import {GARMENTS,COLOURS,FONTS,zoneFor,fitElement,isSleeve,displayZoneFor,projectElement} from './catalog.js';
+const imageURLs=import.meta.glob(['/assets/designer/*.png','/assets/brand-mountain/*.png','/assets/brand-hover/*.png','/assets/campus-approved/*.png','/assets/campus-new/*.png','/assets/campus-cream/*.png','/assets/campus-acid-black/*.png','/assets/tracksuit/*.png'],{eager:true,query:'?url',import:'default'});
 const photoCache=new Map();
 function photo(productId,face){
   const name=productId+(isSleeve(face)?'-sides-v1':'');
@@ -8,6 +8,19 @@ function photo(productId,face){
   return photoCache.get(name);
 }
 async function garmentImage(document,face){
+  const product=GARMENTS.find(p=>p.id===document.productId);
+  if(product.photo){
+    const src=(face==='back'?product.backPhoto:product.photo)||product.photo;
+    const original=src.replace(/^optimized\//,'assets/').replace(/\.webp$/,'.png');
+    const key=original;
+    if(!photoCache.has(key))photoCache.set(key,new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error('Product preview could not load. Please refresh.'));image.src=imageURLs['/'+original]||'/'+src;}));
+    const image=await photoCache.get(key),board=documentCanvas(),ctx=board.getContext('2d'),w=product.paired?image.naturalWidth/(product.panels||2):image.naturalWidth;
+    const sx=product.paired&&face==='back'?w:0;
+    ctx.fillStyle='#f2f0e9';ctx.fillRect(0,0,600,800);
+    const scale=Math.min(600/w,800/image.naturalHeight),width=w*scale,height=image.naturalHeight*scale;
+    ctx.drawImage(image,sx,0,w,image.naturalHeight,(600-width)/2,(800-height)/2,width,height);
+    return new FabricImage(board,{originX:'left',originY:'top',left:0,top:0,selectable:false,evented:false,excludeFromExport:true});
+  }
   const image=await photo(document.productId,face),board=documentCanvas(),ctx=board.getContext('2d'),half=image.naturalWidth/2;
   ctx.drawImage(image,face==='back'||face==='rightSleeve'?half:0,0,half,image.naturalHeight,0,0,600,800);
   // Tint the alpha cutout while retaining the photographic fabric luminance.

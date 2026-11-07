@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import {randomUUID} from 'node:crypto';
-import {defaultDocument,estimateDesign,STUDIO_RATES,validateDocument,fitElement,zoneFor,upgradeDocument,projectElement} from '../designer/catalog.js';
+import {defaultDocument,documentForProduct,estimateDesign,STUDIO_RATES,validateDocument,fitElement,zoneFor,upgradeDocument,projectElement} from '../designer/catalog.js';
 import {validateUpload,safeSvg,guestOwner} from '../api/_studio.js';
 import {orderTotals} from '../api/_shared.js';
 import designer from '../api/designer.js';
@@ -97,5 +97,12 @@ test('private upload → immutable design → trusted checkout preserves artwork
     assert.equal(result.code,200);assert.equal(result.data.subtotal,700);assert.equal(result.data.grand_total,799);
     const item=rows.customer_orders[0].items[0];assert.equal(item.size,'M');assert.equal(item.unit_price,700);assert.equal(item.customisation.document.elements[0].assetId,uploaded.data.id);assert.equal(item.customisation.preview_id,preview.data.id);
     assert.equal(JSON.stringify(result.data).includes('test-only-service-key'),false);
+    for(const [productId,status] of [['ceramic-mug',400],['capra-varsity-black',409]]){
+      const restrictedDoc={...documentForProduct(productId),elements:[fitElement(textElement(),zoneFor(productId,'front'))]};
+      const restricted=response();await designer({method:'POST',headers,query:{action:'save'},body:{document:restrictedDoc,previewId:preview.data.id}},restricted);
+      assert.equal(restricted.code,201);assert.equal(restricted.data.quote.complete,false);
+      const attempted=response();await orders({method:'POST',headers,body:{customer:{name:'Test Customer',phone:'9999999999',email:'test@example.test',address:'No dispatch',city:'Mandi',state:'HP',pincode:'175001'},items:[{id:`custom:${restricted.data.id}`,designId:restricted.data.id,qty:1,custom:{price:1}}]}},attempted);
+      assert.equal(attempted.code,status);assert.equal(rows.customer_orders.length,1);
+    }
   }finally{globalThis.fetch=originalFetch;for(const key of Object.keys(process.env))if(!(key in oldEnv))delete process.env[key];Object.assign(process.env,oldEnv);}
 });

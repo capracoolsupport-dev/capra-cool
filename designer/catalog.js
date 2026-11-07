@@ -1,15 +1,21 @@
 // Shared by the studio and API. Geometry uses a 600 × 800 design board.
 import { CAMPUS_DESIGNS } from '../campus-catalog.js';
+import {EXTENDED_PRODUCTS,productFaces,productSizes,productMethods,productZone} from './products.js';
+export {productFaces,productSizes,productMethods} from './products.js';
 const tee = CAMPUS_DESIGNS.find(p => p.id === 'mandi-mountain-polo').priceCents;
 const hoodie = CAMPUS_DESIGNS.find(p => p.id === 'mandi-mountain-hoodie').priceCents;
 export const GARMENTS = [
   {id:'tshirt',name:'T-Shirt',baseCents:tee,family:'tee',gsm:230},
   {id:'oversized-tshirt',name:'Oversized T-Shirt',baseCents:tee,family:'tee',gsm:230},
   {id:'hoodie',name:'Hoodie',baseCents:hoodie,family:'hoodie',gsm:400},
-  {id:'oversized-hoodie',name:'Oversized Hoodie',baseCents:hoodie,family:'hoodie',gsm:400}
+  {id:'oversized-hoodie',name:'Oversized Hoodie',baseCents:hoodie,family:'hoodie',gsm:400},
+  ...EXTENDED_PRODUCTS
 ];
 export const COLOURS = [{id:'black',name:'Black',hex:'#242628'},{id:'white',name:'White',hex:'#f6f5ef'},{id:'beige',name:'Beige',hex:'#cfbea2'},{id:'grey',name:'Grey',hex:'#96999c'},{id:'navy',name:'Navy Blue',hex:'#29354c'}];
-export const SIZES = ['XS','S','M','L','XL','XXL'];
+COLOURS.push(...EXTENDED_PRODUCTS.map(p=>({id:p.colourId,name:p.colourName,hex:/ivory|white|natural|cream/i.test(p.colourName)?'#eee9df':'#292b2b'})));
+export const SIZES = ['XS','S','M','L','XL','XXL','XXXL','One size'];
+export function productColours(product){return product?.colourId?COLOURS.filter(c=>c.id===product.colourId):COLOURS.filter(c=>!c.id.startsWith('product-'));}
+export function documentForProduct(productId){const product=GARMENTS.find(p=>p.id===productId);if(!product)throw new Error('Choose a valid product.');return {...defaultDocument(),productId,colour:productColours(product)[0].id,size:productSizes(product).includes('M')?'M':productSizes(product)[0],method:productMethods(product)[0]};}
 export const FONTS = [{id:'sans',name:'Modern sans',family:'Arial'},{id:'serif',name:'Classic serif',family:'Georgia'},{id:'mono',name:'Studio mono',family:'Courier New'},{id:'bold',name:'Athletic',family:'Impact'}];
 export const FACES = ['front','back','leftSleeve','rightSleeve'];
 export const FACE_NAMES = {front:'Front',back:'Back',leftSleeve:'Left sleeve',rightSleeve:'Right sleeve'};
@@ -18,6 +24,7 @@ export const MAX_ELEMENTS = 24;
 export const MAX_ASSETS = 12;
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function zoneFor(productId,face,version=2) {
+  const specific=productZone(GARMENTS.find(p=>p.id===productId),face);if(specific)return specific;
   const hood=productId.includes('hoodie');
   if(version===1){
     if(face==='leftSleeve')return {x:480,y:240,w:45,h:85};
@@ -51,7 +58,8 @@ export function upgradeDocument(document){
     return fitElement({...e,x:next.x+(e.x-old.x)*next.w/old.w,y:next.y+(e.y-old.y)*next.h/old.h,width:e.width*scale,height:e.height*scale},next);
   })};
 }
-export function placementsFor(face) {
+export function placementsFor(face,productId) {
+  if(GARMENTS.find(p=>p.id===productId)?.quoteOnly)return [{id:'centre',name:'Centre design',x:.5,y:.5,w:.65},{id:'upper',name:'Upper design',x:.5,y:.25,w:.5},{id:'large',name:'Large design',x:.5,y:.5,w:.9}];
   if(face==='front')return [{id:'leftChest',name:'Left chest',x:.76,y:.17,w:.27},{id:'centreChest',name:'Centre chest',x:.5,y:.24,w:.55},{id:'largeFront',name:'Large front print',x:.5,y:.5,w:.85}];
   if(face==='back')return [{id:'upperBack',name:'Upper back',x:.5,y:.18,w:.62},{id:'centreBack',name:'Centre back',x:.5,y:.48,w:.65},{id:'largeBack',name:'Large back print',x:.5,y:.5,w:.88}];
   return [{id:face,name:FACE_NAMES[face],x:.5,y:.5,w:.8}];
@@ -73,14 +81,14 @@ export function estimateDesign(document,rates=EMPTY_RATES) {
   if(!product)throw new Error('Choose a valid garment.');
   const areas=FACES.filter(face=>document.elements?.some(e=>e.face===face));
   const valid=validateRates(rates);
-  const lines=[{label:product.name,cents:product.baseCents}];
+  const lines=[{label:product.name,cents:product.baseCents||0}];
   for(const [label,cents] of [['Colour',valid.colours[document.colour]||0],['Size',valid.sizes[document.size]||0],['Fit',valid.fits[document.productId]||0]])if(cents)lines.push({label,cents});
   if(valid.confirmed){
     lines.push({label:`${document.method==='embroidery'?'Embroidery':'Print'} · ${areas.length} area${areas.length===1?'':'s'}`,cents:areas.length*(document.method==='embroidery'?valid.embroideryAreaCents:valid.printAreaCents)});
     const extras=Math.max(0,(document.elements?.length||0)-areas.length);
     if(extras&&valid.extraElementCents)lines.push({label:`Additional elements · ${extras}`,cents:extras*valid.extraElementCents});
   }
-  return {lines,areas,totalCents:lines.reduce((sum,l)=>sum+l.cents,0),complete:valid.confirmed,version:valid.version};
+  return {lines,areas,totalCents:lines.reduce((sum,l)=>sum+l.cents,0),complete:valid.confirmed&&!product.quoteOnly&&product.inStock!==false,quoteOnly:Boolean(product.quoteOnly),unavailable:product.inStock===false,version:valid.version};
 }
 export function defaultDocument(){return {version:2,productId:'tshirt',colour:'black',size:'M',method:'print',elements:[]};}
 export function elementBounds(element){
@@ -97,10 +105,13 @@ export function fitElement(element,zone) {
 }
 export function validateDocument(raw) {
   if(!raw||![1,2].includes(raw.version)||!GARMENTS.some(g=>g.id===raw.productId)||!COLOURS.some(c=>c.id===raw.colour)||!SIZES.includes(raw.size)||!['print','embroidery'].includes(raw.method))throw new Error('Invalid garment options.');
+  const product=GARMENTS.find(g=>g.id===raw.productId);
+  if(!productSizes(product).includes(raw.size)||!productColours(product).some(c=>c.id===raw.colour)||!productMethods(product).includes(raw.method))throw new Error('Invalid product options.');
   if(!Array.isArray(raw.elements)||raw.elements.length<1||raw.elements.length>MAX_ELEMENTS)throw new Error(`Add 1–${MAX_ELEMENTS} design elements.`);
   const ids=new Set();
   const elements=raw.elements.map(e=>{
     if(!e||!UUID.test(e.id)||ids.has(e.id)||!FACES.includes(e.face)||!['image','text'].includes(e.kind))throw new Error('Invalid design element.');
+    if(!productFaces(product).includes(e.face))throw new Error('This placement is unavailable on the selected product.');
     ids.add(e.id);
     if(![e.x,e.y,e.width,e.height,e.angle].every(Number.isFinite)||e.width<4||e.height<4||Math.abs(e.angle)>360)throw new Error('Invalid design dimensions.');
     const zone=zoneFor(raw.productId,e.face,raw.version), b=elementBounds(e);
